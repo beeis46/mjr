@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The MJR Hospital</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;600&family=Space+Mono&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+<style>
+:root {
+  --warm:    #F8F7F4;
+  --white:   #FFFFFF;
+  --rule:    #E8E5DF;
+  --text:    #1A1A1A;
+  --muted:   #888078;
+  --tile:    #F0EDEA;
+
+  --accent-bg:    #2A3C1E;
+  --accent-mid:   #3B4E2F;
+  --accent-text:  #E8E4D8;
+  --accent-muted: rgba(232,228,216,0.45);
+  --accent-rule:  rgba(232,228,216,0.15);
+
+  --forest: #3B4E2F;
+  --sage:   #7A8A62;
+  --wheat:  #B4A878;
+  --blush:  #C8A8A0;
+  --sky:    #8AAAB8;
+  --plum:   #C8B8CC;
+
+  --corm: "Cormorant Garamond", Georgia, serif;
+  --mono: "Space Mono", monospace;
+  --cond: "Barlow Condensed", sans-serif;
+  --sans: "DM Sans", sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--warm);color:var(--text);font-family:var(--sans);overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+img{display:block;}
+
+/* ── SCROLL PROGRESS ── */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;z-index:9999;
+  background:linear-gradient(90deg,var(--sage),var(--wheat),var(--blush));
+  width:0%;transition:none;pointer-events:none;
+  opacity:0;transition:opacity 0.3s;
+}
+.scroll-progress.visible{opacity:1;}
+
+/* ── CUSTOM CURSOR ── */
+.cursor-dot{
+  position:fixed;top:0;left:0;width:8px;height:8px;
+  background:var(--forest);border-radius:50%;
+  pointer-events:none;z-index:10000;
+  transform:translate(-50%,-50%);
+  transition:width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+  mix-blend-mode:difference;
+  opacity:0;
+}
+.cursor-ring{
+  position:fixed;top:0;left:0;width:36px;height:36px;
+  border:1px solid rgba(59,78,47,0.3);border-radius:50%;
+  pointer-events:none;z-index:10000;
+  transform:translate(-50%,-50%);
+  transition:width 0.25s, height 0.25s, border-color 0.25s, opacity 0.25s;
+  opacity:0;
+}
+body:hover .cursor-dot,body:hover .cursor-ring{opacity:1;}
+.cursor-dot.hovering{width:14px;height:14px;background:var(--blush);}
+.cursor-ring.hovering{width:52px;height:52px;border-color:rgba(200,168,160,0.35);}
+
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none !important;}}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:92.5px;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 52px;
+  background:rgba(255,255,255,0);
+  border-bottom:1px solid rgba(255,255,255,0);
+  backdrop-filter:blur(0px);
+  transition:background 0.5s,border-bottom-color 0.5s,backdrop-filter 0.5s;
+}
+.nav.scrolled{
+  background:rgba(255,255,255,0.97);
+  border-bottom-color:rgba(232,229,223,1);
+  backdrop-filter:blur(14px);
+}
+.nl{display:flex;align-items:center;gap:40px;}
+.nr{display:flex;align-items:center;justify-content:flex-end;gap:40px;}
+.nl a,.nr a{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.82);
+  transition:opacity 0.15s,color 0.5s;
+}
+.nl a:hover,.nr a:hover{opacity:0.45;}
+.nav.scrolled .nl a,.nav.scrolled .nr a{color:var(--text);}
+
+.nav-c{justify-self:center;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.nav-wordmark{
+  font-family:var(--corm);font-size:30px;font-weight:300;
+  letter-spacing:0.32em;text-transform:uppercase;white-space:nowrap;
+  line-height:1;color:rgba(255,255,255,0.82);
+  transition:color 0.5s;
+}
+.nav.scrolled .nav-wordmark{color:var(--text);}
+.nav-wordmark em{font-style:italic;font-weight:400;letter-spacing:0.2em;}
+.nav-sub{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);transition:color 0.5s;
+}
+.nav.scrolled .nav-sub{color:var(--muted);}
+.nav-btn{
+  padding:7px 16px;border:0.5px solid rgba(255,255,255,0.32);
+  color:rgba(255,255,255,0.68);
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  transition:opacity 0.2s,border-color 0.5s,color 0.5s;border-radius:2px;
+}
+.nav.scrolled .nav-btn{border-color:rgba(26,26,26,0.25);color:rgba(26,26,26,0.65);}
+.nav-btn:hover{opacity:0.5;}
+
+/* ── MOBILE NAV ── */
+.nav-toggle{
+  display:none;position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  width:28px;height:20px;cursor:pointer;z-index:600;background:none;border:none;
+}
+.nav-toggle span{
+  display:block;width:100%;height:1px;
+  background:rgba(255,255,255,0.8);
+  transition:all 0.3s;position:absolute;left:0;
+}
+.nav.scrolled .nav-toggle span{background:var(--text);}
+.nav-toggle span:nth-child(1){top:2px;}
+.nav-toggle span:nth-child(2){top:50%;transform:translateY(-50%);}
+.nav-toggle span:nth-child(3){bottom:2px;}
+.nav-toggle.open span:nth-child(1){top:50%;transform:rotate(45deg) translateY(-50%);transform-origin:center;}
+.nav-toggle.open span:nth-child(2){opacity:0;}
+.nav-toggle.open span:nth-child(3){bottom:auto;top:50%;transform:rotate(-45deg) translateY(-50%);transform-origin:center;}
+
+.mobile-menu{
+  position:fixed;inset:0;z-index:450;
+  background:rgba(248,247,244,0.98);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+  opacity:0;pointer-events:none;transition:opacity 0.4s;
+}
+.mobile-menu.open{opacity:1;pointer-events:auto;}
+.mobile-menu a{
+  font-family:var(--corm);font-size:36px;font-style:italic;font-weight:300;
+  color:var(--text);opacity:0;transform:translateY(20px);
+  transition:opacity 0.4s,transform 0.4s;
+}
+.mobile-menu.open a{opacity:1;transform:translateY(0);}
+.mobile-menu.open a:nth-child(1){transition-delay:0.08s;}
+.mobile-menu.open a:nth-child(2){transition-delay:0.14s;}
+.mobile-menu.open a:nth-child(3){transition-delay:0.20s;}
+.mobile-menu.open a:nth-child(4){transition-delay:0.26s;}
+.mobile-menu.open a:nth-child(5){transition-delay:0.32s;}
+
+/* ── HERO ── */
+.hero{
+  position:relative;width:100vw;height:100vh;min-height:640px;
+  overflow:hidden;display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:9vh;
+}
+.hero-img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 28%;
+  will-change:transform;
+}
+.hero-sky  {position:absolute;inset:0;background:linear-gradient(to bottom,rgba(12,12,12,0.5) 0%,transparent 38%);pointer-events:none;}
+.hero-earth{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,12,12,0.88) 0%,rgba(12,12,12,0.35) 30%,transparent 60%);pointer-events:none;}
+.hero-text{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;
+  opacity:0;transform:translateY(18px);
+}
+.hero-kicker{
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:0.32em;text-transform:uppercase;
+  color:rgba(255,255,255,0.48);
+}
+.hero-tagline{
+  font-family:var(--corm);font-size:clamp(17px,1.7vw,24px);
+  font-weight:300;font-style:italic;letter-spacing:0.12em;
+  color:rgba(255,255,255,0.93);
+  text-shadow:0 2px 24px rgba(0,0,0,0.5);
+}
+.hero-btns{display:flex;gap:12px;}
+.btn-pill{
+  font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;
+  padding:12px 30px;border:1px solid rgba(255,255,255,0.45);color:rgba(255,255,255,0.85);
+  border-radius:40px;transition:all 0.2s;background:transparent;
+  position:relative;overflow:hidden;
+}
+.btn-pill::after{
+  content:'';position:absolute;inset:0;border-radius:40px;
+  background:rgba(255,255,255,0.06);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-pill:hover::after{transform:scaleX(1);}
+.btn-pill:hover{border-color:rgba(255,255,255,0.75);color:white;}
+.btn-pill.solid{background:rgba(255,255,255,0.9);color:var(--text);border-color:transparent;}
+.btn-pill.solid:hover{background:white;}
+.btn-pill.solid::after{background:rgba(255,255,255,0.15);}
+.hero-attr{
+  position:absolute;bottom:18px;right:36px;z-index:3;
+  font-family:var(--corm);font-style:italic;font-size:10px;
+  color:rgba(255,255,255,0.18);text-align:right;line-height:1.6;
+}
+.scroll-hint{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:5px;
+  animation:bob 3s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+.scroll-hint-line{width:1px;height:38px;background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);}
+.scroll-hint-txt{font-family:var(--mono);font-size:6px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(255,255,255,0.2);writing-mode:vertical-lr;}
+
+/* ══════════════════════════════════════
+   BELOW THE FOLD
+   ══════════════════════════════════════ */
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-bottom:1px solid var(--rule);}
+.stat{padding:64px 52px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:10px;}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:var(--corm);font-size:72px;font-style:italic;font-weight:300;line-height:1;color:var(--text);}
+.stat-n sup{font-size:0.38em;vertical-align:super;opacity:0.4;font-style:normal;}
+.stat-l{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);}
+
+/* ── SECTION HEADER ── */
+.sec-head{text-align:center;padding:96px 48px 56px;}
+.sec-kicker{font-family:var(--mono);font-size:8px;letter-spacing:0.32em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.sec-title{font-family:var(--corm);font-size:clamp(36px,4vw,62px);font-weight:300;font-style:italic;line-height:1.05;color:var(--text);}
+.sec-sub{font-family:var(--sans);font-size:14px;font-weight:300;line-height:1.82;color:var(--muted);max-width:460px;margin:18px auto 0;}
+
+/* ── DEPT GRID ── */
+.dept-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:0 2px;background:var(--rule);}
+.dept-tile{
+  background:var(--tile);padding:48px 32px 42px;
+  cursor:pointer;transition:background 0.2s;position:relative;overflow:hidden;
+}
+.dept-tile:hover{background:#E9E6E0;}
+.dept-tile:hover .dt-arrow{opacity:1;transform:translate(2px,-2px);}
+.dt-ghost{position:absolute;top:14px;right:20px;font-family:var(--corm);font-size:64px;font-style:italic;color:rgba(26,26,26,0.04);line-height:1;font-weight:300;user-select:none;transition:color 0.3s;}
+.dept-tile:hover .dt-ghost{color:rgba(26,26,26,0.08);}
+.dt-bar{width:18px;height:1.5px;margin-bottom:22px;transition:width 0.3s;}
+.dept-tile:hover .dt-bar{width:36px;}
+.dt-name{font-family:var(--corm);font-size:clamp(18px,1.8vw,25px);font-style:italic;font-weight:300;color:var(--text);line-height:1.18;margin-bottom:10px;}
+.dt-desc{font-family:var(--sans);font-size:11.5px;font-weight:300;line-height:1.72;color:var(--muted);margin-bottom:18px;}
+.dt-tag{font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(26,26,26,0.3);}
+.dt-arrow{position:absolute;bottom:30px;right:22px;font-size:15px;color:var(--forest);opacity:0;transition:opacity 0.2s,transform 0.2s;}
+
+/* Department detail drawer */
+.dept-detail{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.5s cubic-bezier(0.16,1,0.3,1),padding 0.5s;
+  padding:0 32px;
+  background:rgba(26,26,26,0.02);
+}
+.dept-tile.expanded .dept-detail{max-height:200px;padding:0 32px 24px;}
+.dept-detail-inner{
+  padding-top:16px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:12px;font-weight:300;
+  color:var(--muted);line-height:1.8;
+}
+.dept-detail-inner a{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:8px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--forest);margin-top:10px;
+  transition:gap 0.2s;
+}
+.dept-detail-inner a:hover{gap:14px;}
+
+/* ── SPECIALTY ROLL ── */
+.spec-roll{overflow:hidden;padding:22px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--white);}
+.spec-track{display:inline-flex;white-space:nowrap;animation:roll 44s linear infinite;}
+.spec-track:hover{animation-play-state:paused;}
+.spec-item{display:inline-flex;align-items:center;gap:26px;padding:0 34px;font-family:var(--cond);font-size:17px;font-weight:200;letter-spacing:0.22em;text-transform:uppercase;color:rgba(26,26,26,0.38);transition:color 0.2s;}
+.spec-item:hover{color:var(--text);}
+.spec-dot{width:3px;height:3px;border-radius:50%;background:var(--forest);opacity:0.35;}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sec-cta{display:flex;justify-content:center;padding:52px 0;}
+.btn-pill-d{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 32px;border:1px solid rgba(26,26,26,0.28);color:rgba(26,26,26,0.55);border-radius:40px;transition:all 0.2s;background:transparent;position:relative;overflow:hidden;}
+.btn-pill-d::after{
+  content:'';position:absolute;inset:0;border-radius:40px;
+  background:rgba(26,26,26,0.03);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-pill-d:hover::after{transform:scaleX(1);}
+.btn-pill-d:hover{border-color:var(--text);color:var(--text);}
+
+/* ── ACCENT PANEL ── */
+.accent-panel{
+  background:var(--accent-bg);
+  padding:120px 80px;
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border-top:none;position:relative;overflow:hidden;
+}
+.accent-panel::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+.ap-left{
+  display:flex;flex-direction:column;gap:40px;
+  padding-right:80px;border-right:1px solid var(--accent-rule);
+}
+.ap-kicker{
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:0.32em;text-transform:uppercase;
+  color:var(--sage);opacity:0.8;
+}
+.ap-title{
+  font-family:var(--corm);font-size:clamp(44px,5.5vw,84px);
+  font-style:italic;font-weight:300;line-height:0.92;
+  color:var(--accent-text);
+}
+.ap-body{
+  font-family:var(--sans);font-size:14px;font-weight:300;
+  line-height:1.9;color:var(--accent-muted);max-width:380px;
+}
+.ap-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(232,228,216,0.5);transition:color 0.2s;align-self:flex-start;margin-top:8px;
+}
+.ap-cta:hover{color:var(--accent-text);}
+.ap-cta-line{width:28px;height:1px;background:currentColor;transition:width 0.2s;}
+.ap-cta:hover .ap-cta-line{width:44px;}
+
+.ap-right{
+  padding-left:80px;display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:none;
+}
+.ap-stat{
+  padding:40px 0;border-bottom:1px solid var(--accent-rule);
+  display:flex;flex-direction:column;gap:8px;
+}
+.ap-stat:nth-child(odd){padding-right:48px;border-right:1px solid var(--accent-rule);}
+.ap-stat:nth-child(even){padding-left:48px;}
+.ap-stat:nth-last-child(-n+2){border-bottom:none;}
+.ap-stat-n{
+  font-family:var(--corm);font-size:52px;font-style:italic;
+  font-weight:300;line-height:1;color:var(--accent-text);
+}
+.ap-stat-n sup{font-size:0.4em;vertical-align:super;opacity:0.5;font-style:normal;}
+.ap-stat-l{
+  font-family:var(--mono);font-size:7.5px;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--accent-muted);
+}
+
+/* ── PROVIDERS ── */
+.prov-section{background:var(--white);padding-bottom:80px;}
+.prov-wrap{padding:0 64px;}
+.prov-tbl{width:100%;border-collapse:collapse;}
+.prov-tbl tr{border-bottom:1px solid var(--rule);transition:background 0.15s;cursor:pointer;}
+.prov-tbl tr:first-child{border-top:1px solid var(--rule);}
+.prov-tbl tr:hover{background:rgba(240,237,234,0.5);}
+.prov-tbl td{padding:24px 16px 24px 0;vertical-align:middle;}
+.pt-idx{font-family:var(--mono);font-size:8px;color:var(--muted);width:36px;letter-spacing:0.1em;}
+.pt-name{font-family:var(--corm);font-size:26px;font-style:italic;font-weight:300;color:var(--text);transition:color 0.2s;}
+.prov-tbl tr:hover .pt-name{color:var(--forest);}
+.pt-role{font-family:var(--sans);font-size:11.5px;font-weight:300;color:var(--muted);margin-top:3px;}
+.pt-spec{font-family:var(--mono);font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(26,26,26,0.32);}
+.pt-avail{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;text-align:right;white-space:nowrap;display:flex;align-items:center;gap:7px;justify-content:flex-end;color:var(--muted);}
+.pt-dot{width:5px;height:5px;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ── PATIENT SERVICES ── */
+.svc-section{background:var(--warm);padding:0 2px 2px;}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule);}
+.svc-tile{
+  background:var(--tile);padding:72px 52px 60px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:22px;
+  transition:background 0.2s;position:relative;overflow:hidden;cursor:pointer;
+}
+.svc-tile:hover{background:#E9E6E0;}
+.svc-tile:hover .svc-arrow{transform:translateX(6px);}
+.svc-glyph{width:1px;height:52px;transition:height 0.3s;}
+.svc-tile:hover .svc-glyph{height:68px;}
+.svc-tile:nth-child(1) .svc-glyph{background:linear-gradient(to bottom,var(--blush),transparent);}
+.svc-tile:nth-child(2) .svc-glyph{background:linear-gradient(to bottom,var(--sage),transparent);}
+.svc-tile:nth-child(3) .svc-glyph{background:linear-gradient(to bottom,var(--sky),transparent);}
+.svc-ghost{position:absolute;bottom:10px;right:36px;font-family:var(--corm);font-size:110px;font-style:italic;color:rgba(26,26,26,0.04);line-height:1;font-weight:300;user-select:none;}
+.svc-label{font-family:var(--mono);font-size:9px;letter-spacing:0.26em;text-transform:uppercase;color:rgba(26,26,26,0.58);}
+.svc-desc{font-family:var(--sans);font-size:14px;font-weight:300;line-height:1.82;color:rgba(26,26,26,0.45);flex:1;}
+.svc-cta{display:flex;align-items:center;gap:10px;}
+.svc-cta-txt{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(26,26,26,0.4);}
+.svc-arrow{width:22px;height:1px;background:rgba(26,26,26,0.28);transition:transform 0.2s;}
+
+/* ── EMERGENCY ── */
+.emerg{
+  background:var(--white);padding:112px 80px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:36px;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  position:relative;
+}
+.emerg-live{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:8px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--sage);
+}
+.emerg-live-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:pulse 2s ease-in-out infinite;}
+.emerg-kicker{font-family:var(--mono);font-size:8px;letter-spacing:0.32em;text-transform:uppercase;color:var(--muted);}
+.emerg-title{font-family:var(--corm);font-style:italic;font-weight:300;font-size:clamp(48px,7vw,104px);line-height:0.9;color:var(--text);}
+.emerg-sub{font-family:var(--sans);font-size:14px;font-weight:300;line-height:1.82;color:var(--muted);max-width:480px;}
+.emerg-row{display:flex;}
+.emerg-block{padding:30px 52px;border:1px solid var(--rule);display:flex;flex-direction:column;align-items:center;gap:7px;transition:background 0.2s;}
+.emerg-block:hover{background:var(--tile);}
+.emerg-block+.emerg-block{border-left:none;}
+.emerg-big{font-family:var(--cond);font-weight:200;font-size:clamp(32px,4.5vw,64px);letter-spacing:0.04em;line-height:1;color:var(--text);}
+.emerg-lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+.emerg-clock{
+  font-family:var(--corm);font-size:18px;font-style:italic;
+  font-weight:300;color:var(--muted);letter-spacing:0.06em;
+}
+
+/* ── INFO + CONTACT ── */
+.info-section{background:var(--warm);display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule);}
+.info-l{padding:108px 80px;border-right:1px solid var(--rule);}
+.info-r{padding:108px 80px;}
+.info-kicker{font-family:var(--mono);font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.info-title{font-family:var(--corm);font-size:clamp(38px,4vw,62px);font-style:italic;font-weight:300;line-height:0.95;color:var(--text);margin-bottom:56px;}
+.info-row{padding:17px 0;border-bottom:1px solid var(--rule);display:flex;gap:18px;cursor:pointer;transition:background 0.2s;margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:4px;}
+.info-row:hover{background:rgba(26,26,26,0.02);}
+.info-row:first-of-type{border-top:1px solid var(--rule);}
+.ir-n{font-family:var(--mono);font-size:7.5px;color:rgba(26,26,26,0.22);flex-shrink:0;width:20px;padding-top:3px;}
+.ir-name{font-family:var(--cond);font-size:14px;font-weight:400;letter-spacing:0.08em;text-transform:uppercase;color:rgba(26,26,26,0.65);margin-bottom:4px;}
+.ir-text{font-family:var(--sans);font-size:12.5px;font-weight:300;line-height:1.78;color:var(--muted);}
+.c-row{padding:16px 0;border-bottom:1px solid var(--rule);}
+.c-row:first-child{border-top:1px solid var(--rule);}
+.c-lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.c-val{font-family:var(--corm);font-size:26px;font-style:italic;font-weight:300;color:var(--text);line-height:1.1;}
+
+/* ── FOOTER ── */
+footer{background:var(--white);border-top:1px solid var(--rule);}
+.footer-top{display:grid;grid-template-columns:repeat(4,1fr);padding:72px 80px 56px;border-bottom:1px solid var(--rule);}
+.f-hd{font-family:var(--mono);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(26,26,26,0.4);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.f-links a{display:block;font-family:var(--sans);font-size:13px;font-weight:300;color:rgba(26,26,26,0.55);padding:6px 0;border-bottom:1px solid rgba(26,26,26,0.04);transition:color 0.15s,padding-left 0.2s;}
+.f-links a:hover{color:var(--text);padding-left:8px;}
+.footer-base{display:flex;justify-content:space-between;align-items:center;padding:18px 80px;border-bottom:1px solid var(--rule);}
+.f-certs{display:flex;gap:32px;flex-wrap:wrap;}
+.f-cert{font-family:var(--mono);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(26,26,26,0.28);}
+.f-staff{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(26,26,26,0.4);transition:color 0.15s;display:flex;align-items:center;gap:10px;}
+.f-staff:hover{color:var(--text);}
+.f-staff::before{content:"";width:14px;height:1px;background:currentColor;transition:width 0.2s;}
+.f-staff:hover::before{width:24px;}
+.footer-legal{padding:14px 80px 20px;font-family:var(--mono);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(26,26,26,0.2);border-bottom:1px solid var(--rule);}
+.footer-brand{padding:28px 80px 24px;text-align:center;}
+.footer-brand-text{font-family:var(--corm);font-weight:300;letter-spacing:0.34em;text-transform:uppercase;font-size:clamp(16px,2vw,28px);color:rgba(26,26,26,0.42);}
+
+/* ── BACK TO TOP ── */
+.back-to-top{
+  position:fixed;bottom:32px;right:32px;z-index:400;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--white);border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;transform:translateY(12px);
+  transition:opacity 0.3s,transform 0.3s,background 0.2s;
+  box-shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+.back-to-top.visible{opacity:1;transform:translateY(0);}
+.back-to-top:hover{background:var(--tile);}
+.back-to-top svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.5;fill:none;}
+
+/* ── SCROLL REVEALS (JS-driven) ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-stagger .reveal{transition-delay:calc(var(--i,0) * 80ms);}
+
+/* ── SEARCH OVERLAY ── */
+.search-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(248,247,244,0.96);
+  backdrop-filter:blur(32px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding-top:20vh;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.35s;
+}
+.search-overlay.open{opacity:1;pointer-events:auto;}
+.search-box{
+  width:min(680px,90vw);
+  display:flex;flex-direction:column;gap:24px;
+  transform:translateY(16px);
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.search-overlay.open .search-box{transform:translateY(0);}
+.search-input{
+  width:100%;border:none;border-bottom:1.5px solid var(--rule);
+  background:transparent;outline:none;
+  font-family:var(--corm);font-size:clamp(28px,4vw,48px);
+  font-style:italic;font-weight:300;color:var(--text);
+  padding:16px 0;letter-spacing:0.04em;
+}
+.search-input::placeholder{color:rgba(26,26,26,0.2);}
+.search-hint{
+  font-family:var(--mono);font-size:8px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--muted);
+}
+.search-results{display:flex;flex-direction:column;gap:8px;min-height:100px;}
+.search-result{
+  padding:14px 0;border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:16px;
+  cursor:pointer;transition:padding-left 0.2s;
+}
+.search-result:hover{padding-left:12px;}
+.search-result-name{font-family:var(--corm);font-size:22px;font-style:italic;font-weight:300;}
+.search-result-type{font-family:var(--mono);font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+.search-close{
+  position:absolute;top:32px;right:42px;cursor:pointer;
+  font-family:var(--corm);font-size:32px;font-weight:300;color:var(--muted);
+  transition:color 0.2s;border:none;background:none;
+}
+.search-close:hover{color:var(--text);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .nav{padding:0 24px;grid-template-columns:1fr 1fr;}
+  .nl,.nr{display:none;}
+  .nav-toggle{display:block;}
+  .nav-c{justify-self:start;}
+  .nav-wordmark{font-size:22px;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .dept-grid{grid-template-columns:repeat(2,1fr);}
+  .accent-panel{grid-template-columns:1fr;padding:80px 32px;}
+  .ap-left{padding-right:0;border-right:none;border-bottom:1px solid var(--accent-rule);padding-bottom:56px;}
+  .ap-right{padding-left:0;padding-top:40px;}
+  .info-section{grid-template-columns:1fr;}
+  .info-l{border-right:none;border-bottom:1px solid var(--rule);padding:64px 32px;}
+  .info-r{padding:64px 32px;}
+  .svc-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:repeat(2,1fr);padding:48px 32px;}
+  .prov-wrap{padding:0 24px;overflow-x:auto;}
+  .emerg-row{flex-direction:column;}
+  .emerg-block+.emerg-block{border-left:1px solid var(--rule);border-top:none;}
+  .emerg{padding:80px 32px;}
+  .hero-attr{display:none;}
+  .cursor-dot,.cursor-ring{display:none !important;}
+}
+@media(max-width:560px){
+  .stats{grid-template-columns:1fr 1fr;}
+  .dept-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .stat{padding:40px 28px;}
+  .stat-n{font-size:48px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose">&times;</button>
+  <div class="search-box">
+    <input class="search-input" id="searchInput" type="text" placeholder="Search providers, departments&hellip;" autocomplete="off">
+    <div class="search-hint">Press ESC to close &nbsp;&middot;&nbsp; Start typing to search</div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#departments" class="mobile-link">Departments</a>
+  <a href="#providers" class="mobile-link">Providers</a>
+  <a href="#emergency" class="mobile-link">Emergency</a>
+  <a href="#patients" class="mobile-link">Patient Info</a>
+  <a href="#patients" class="mobile-link">Book Appointment</a>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="nl">
+    <a href="#departments">Departments</a>
+    <a href="#providers">Providers</a>
+    <a href="#patients">Patients</a>
+  </div>
+  <div class="nav-c">
+    <div class="nav-wordmark">The <em>MJR</em> Hospital</div>
+    <div class="nav-sub">Level I Acute Care &nbsp;&middot;&nbsp; Est. 1977</div>
+  </div>
+  <div class="nr">
+    <a href="#" id="searchTrigger" style="cursor:pointer">Search</a>
+    <a href="#patients">Book Appointment</a>
+    <a href="login.html" class="nav-btn">Staff Login</a>
+  </div>
+  <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="hero" id="hero">
+  <img class="hero-img" id="heroImg" src="Crafts_Gallery,_The_National_Museum_of_Modern_Art,_Tokyo_-_DSC04884.jpg"
+    alt="Interior — Crafts Gallery, The National Museum of Modern Art, Tokyo">
+  <div class="hero-sky"></div>
+  <div class="hero-earth"></div>
+  <div class="hero-text" id="heroText">
+    <div class="hero-kicker">Level I Acute Care &nbsp;&middot;&nbsp; Downsville, Maryland</div>
+    <p class="hero-tagline">Where acute care becomes an art.</p>
+    <div class="hero-btns">
+      <a href="#patients" class="btn-pill solid mag-btn">Schedule an Appointment</a>
+      <a href="#providers" class="btn-pill mag-btn">Find a Provider</a>
+    </div>
+  </div>
+  <div class="hero-attr">Interior &mdash; Crafts Gallery, MOMAT, Tokyo &nbsp;&middot;&nbsp; The MJR Hospital Collection</div>
+  <div class="scroll-hint"><div class="scroll-hint-line"></div><div class="scroll-hint-txt">Scroll</div></div>
+</section>
+
+<div class="stats reveal-stagger" id="statsSection">
+  <div class="stat reveal" style="--i:0"><div class="stat-n" data-count="24" data-suffix="/7">0<sup>/7</sup></div><div class="stat-l">Emergency &amp; Trauma</div></div>
+  <div class="stat reveal" style="--i:1"><div class="stat-n" data-count="40" data-suffix="+">0<sup>+</sup></div><div class="stat-l">Specialty Departments</div></div>
+  <div class="stat reveal" style="--i:2"><div class="stat-n" data-count="500" data-suffix="+">0<sup>+</sup></div><div class="stat-l">Credentialed Providers</div></div>
+  <div class="stat reveal" style="--i:3"><div class="stat-n" data-count="98" data-suffix="%">0<sup>%</sup></div><div class="stat-l">Patient Satisfaction</div></div>
+</div>
+
+<section id="departments">
+  <div class="sec-head reveal">
+    <div class="sec-kicker">Clinical Departments</div>
+    <h2 class="sec-title">Every specialty.<br>One address.</h2>
+    <p class="sec-sub">Forty-plus departments. Staffed, equipped, and operational around the clock &mdash; not just on weekdays.</p>
+  </div>
+  <div class="dept-grid reveal-stagger">
+    <div class="dept-tile reveal" style="--i:0" data-dept="emergency"><div class="dt-ghost">01</div><div class="dt-bar" style="background:var(--blush)"></div><div class="dt-name">Emergency Medicine</div><div class="dt-desc">Level I trauma activation. Resuscitation bays, 24/7 attending coverage, and sub-10-minute door-to-physician times.</div><div class="dt-tag">24/7 &middot; Trauma I &middot; STEMI</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Our ED sees 42,000+ visits annually with a dedicated fast-track for lower-acuity patients. Board-certified emergency physicians are on site around the clock. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:1" data-dept="cardiac"><div class="dt-ghost">02</div><div class="dt-bar" style="background:var(--sky)"></div><div class="dt-name">Cardiac Sciences</div><div class="dt-desc">Interventional cardiology, cardiac surgery, EP lab, and a dedicated CVICU with 24-hour intensivist coverage.</div><div class="dt-tag">Interventional &middot; EP &middot; Surgery</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Nationally accredited Chest Pain Center with door-to-balloon times consistently under 60 minutes. Full electrophysiology and structural heart programs. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:2" data-dept="neuro"><div class="dt-ghost">03</div><div class="dt-bar" style="background:var(--sage)"></div><div class="dt-name">Neurology &amp; Neurosurgery</div><div class="dt-desc">Certified Comprehensive Stroke Center. Epilepsy monitoring, neuro-ICU, and skull base surgery.</div><div class="dt-tag">Stroke &middot; Neurosurgery &middot; Epilepsy</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">24/7 stroke alert coverage with TPA administration and mechanical thrombectomy capability. Continuous EEG monitoring in the neuro-ICU. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:3" data-dept="surgery"><div class="dt-ghost">04</div><div class="dt-bar" style="background:var(--wheat)"></div><div class="dt-name">Surgical Services</div><div class="dt-desc">Eight ORs. General, thoracic, vascular, bariatric, and minimally invasive surgery. Robotic capability on site.</div><div class="dt-tag">8 ORs &middot; Robotic &middot; Vascular</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Same-day surgery center for outpatient procedures. Advanced robotic-assisted platforms for precision and faster recovery. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:4" data-dept="critcare"><div class="dt-ghost">05</div><div class="dt-bar" style="background:var(--plum)"></div><div class="dt-name">Critical Care</div><div class="dt-desc">MICU, SICU, and CCU. Intensivist-led multidisciplinary teams. Continuous bedside presence. No handoffs at 3am.</div><div class="dt-tag">MICU &middot; SICU &middot; CCU</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Closed-model ICU with 24/7 intensivist-led rounding. Bedside procedures, advanced hemodynamic monitoring, and ECMO capability. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:5" data-dept="onc"><div class="dt-ghost">06</div><div class="dt-bar" style="background:var(--wheat)"></div><div class="dt-name">Oncology</div><div class="dt-desc">Medical and radiation oncology, infusion centre, weekly multidisciplinary tumour board, and active clinical trials.</div><div class="dt-tag">Medical &middot; Radiation &middot; Trials</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Comprehensive cancer program with tumour-site-specific navigators, access to national clinical trials, and integrative supportive care services. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:6" data-dept="ortho"><div class="dt-ghost">07</div><div class="dt-bar" style="background:var(--sky)"></div><div class="dt-name">Orthopaedics &amp; Spine</div><div class="dt-desc">Total joint replacement, complex spine surgery, sports medicine, and 24/7 orthopaedic trauma coverage.</div><div class="dt-tag">Joints &middot; Spine &middot; Sports Medicine</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Joint Commission-certified total joint program. Same-day joint replacement available for qualifying patients. Full sports medicine rehabilitation. <a href="#">Learn more &#8594;</a></div></div></div>
+    <div class="dept-tile reveal" style="--i:7" data-dept="womens"><div class="dt-ghost">08</div><div class="dt-bar" style="background:var(--blush)"></div><div class="dt-name">Women&rsquo;s Health</div><div class="dt-desc">High-risk obstetrics, maternal-foetal medicine, Level III NICU, labour &amp; delivery, and gynaecologic oncology.</div><div class="dt-tag">OB &middot; MFM &middot; NICU III</div><div class="dt-arrow">&#8599;</div><div class="dept-detail"><div class="dept-detail-inner">Over 1,200 deliveries annually. Level III NICU with neonatologists present 24/7. Dedicated maternal-foetal medicine specialists for high-risk pregnancies. <a href="#">Learn more &#8594;</a></div></div></div>
+  </div>
+  <div class="spec-roll reveal">
+    <div class="spec-track">
+      <span class="spec-item"><span class="spec-dot"></span>Pulmonology</span><span class="spec-item"><span class="spec-dot"></span>Nephrology</span><span class="spec-item"><span class="spec-dot"></span>Gastroenterology</span><span class="spec-item"><span class="spec-dot"></span>Endocrinology</span><span class="spec-item"><span class="spec-dot"></span>Rheumatology</span><span class="spec-item"><span class="spec-dot"></span>Dermatology</span><span class="spec-item"><span class="spec-dot"></span>Ophthalmology</span><span class="spec-item"><span class="spec-dot"></span>ENT &amp; Head &amp; Neck</span><span class="spec-item"><span class="spec-dot"></span>Urology</span><span class="spec-item"><span class="spec-dot"></span>Psychiatry &amp; Behavioural Health</span><span class="spec-item"><span class="spec-dot"></span>Infectious Disease</span><span class="spec-item"><span class="spec-dot"></span>Haematology</span><span class="spec-item"><span class="spec-dot"></span>Palliative Care</span>
+      <span class="spec-item"><span class="spec-dot"></span>Pulmonology</span><span class="spec-item"><span class="spec-dot"></span>Nephrology</span><span class="spec-item"><span class="spec-dot"></span>Gastroenterology</span><span class="spec-item"><span class="spec-dot"></span>Endocrinology</span><span class="spec-item"><span class="spec-dot"></span>Rheumatology</span><span class="spec-item"><span class="spec-dot"></span>Dermatology</span><span class="spec-item"><span class="spec-dot"></span>Ophthalmology</span><span class="spec-item"><span class="spec-dot"></span>ENT &amp; Head &amp; Neck</span><span class="spec-item"><span class="spec-dot"></span>Urology</span><span class="spec-item"><span class="spec-dot"></span>Psychiatry &amp; Behavioural Health</span><span class="spec-item"><span class="spec-dot"></span>Infectious Disease</span><span class="spec-item"><span class="spec-dot"></span>Haematology</span><span class="spec-item"><span class="spec-dot"></span>Palliative Care</span>
+    </div>
+  </div>
+  <div class="sec-cta reveal"><a href="#" class="btn-pill-d mag-btn">View All Departments</a></div>
+</section>
+
+<div class="accent-panel reveal">
+  <div class="ap-left">
+    <div class="ap-kicker">Why MJR</div>
+    <h2 class="ap-title">Medicine<br>practiced<br>without<br>compromise.</h2>
+    <p class="ap-body">Level I Trauma. Comprehensive Stroke Center. Magnet&#174; nursing. Forty-plus specialties on a single campus. When the stakes are highest, the standard cannot waver. We do not triage ambition.</p>
+    <a href="#" class="ap-cta mag-btn">Our Accreditations <div class="ap-cta-line"></div></a>
+  </div>
+  <div class="ap-right reveal-stagger">
+    <div class="ap-stat reveal" style="--i:0"><div class="ap-stat-n" data-count-accent="1" data-roman="true">I</div><div class="ap-stat-l">Trauma Center Designation</div></div>
+    <div class="ap-stat reveal" style="--i:1"><div class="ap-stat-n" data-count-accent="3" data-roman="true">III</div><div class="ap-stat-l">Neonatal ICU Level</div></div>
+    <div class="ap-stat reveal" style="--i:2"><div class="ap-stat-n" data-count-accent="8">8</div><div class="ap-stat-l">Operating Rooms</div></div>
+    <div class="ap-stat reveal" style="--i:3"><div class="ap-stat-n" data-count-accent="48">48<sup>+</sup></div><div class="ap-stat-l">Years of Acute Care</div></div>
+  </div>
+</div>
+
+<section class="prov-section" id="providers">
+  <div class="sec-head reveal">
+    <div class="sec-kicker">Our Providers</div>
+    <h2 class="sec-title">500+ specialists.<br>Every one here.</h2>
+    <p class="sec-sub">Board-certified. Credentialed. Present &mdash; not on call from three towns over.</p>
+  </div>
+  <div class="prov-wrap reveal">
+    <table class="prov-tbl">
+      <tr>
+        <td class="pt-idx">01</td>
+        <td><div class="pt-name">Dr. M. Chen, MD</div><div class="pt-role">Attending Physician &mdash; Internal Medicine &amp; Critical Care</div></td>
+        <td><div class="pt-spec">Internal Medicine &middot; Critical Care</div></td>
+        <td><div style="width:16px;height:1.5px;background:var(--sage)"></div></td>
+        <td><div class="pt-avail"><div class="pt-dot" style="background:var(--sage)"></div>Accepting</div></td>
+      </tr>
+      <tr>
+        <td class="pt-idx">02</td>
+        <td><div class="pt-name">Dr. S. Okafor, MD</div><div class="pt-role">Interventional Cardiologist</div></td>
+        <td><div class="pt-spec">Cardiology &middot; STEMI &middot; Electrophysiology</div></td>
+        <td><div style="width:16px;height:1.5px;background:var(--sky)"></div></td>
+        <td><div class="pt-avail"><div class="pt-dot" style="background:var(--sage)"></div>Accepting</div></td>
+      </tr>
+      <tr>
+        <td class="pt-idx">03</td>
+        <td><div class="pt-name">Dr. E. Park, MD</div><div class="pt-role">Neurosurgeon &mdash; Skull Base &amp; Complex Spine</div></td>
+        <td><div class="pt-spec">Neurosurgery &middot; Skull Base &middot; Spine</div></td>
+        <td><div style="width:16px;height:1.5px;background:var(--sage)"></div></td>
+        <td><div class="pt-avail"><div class="pt-dot" style="background:var(--wheat)"></div>Limited</div></td>
+      </tr>
+      <tr>
+        <td class="pt-idx">04</td>
+        <td><div class="pt-name">Dr. A. Rivera, MD</div><div class="pt-role">Trauma &amp; Acute Care Surgeon</div></td>
+        <td><div class="pt-spec">Trauma Surgery &middot; Acute Care</div></td>
+        <td><div style="width:16px;height:1.5px;background:var(--plum)"></div></td>
+        <td><div class="pt-avail"><div class="pt-dot" style="background:var(--sage)"></div>Accepting</div></td>
+      </tr>
+      <tr>
+        <td class="pt-idx">05</td>
+        <td><div class="pt-name">Dr. Y. Tanaka, MD</div><div class="pt-role">Maternal-Foetal Medicine</div></td>
+        <td><div class="pt-spec">High-Risk Obstetrics &middot; Foetal Surgery</div></td>
+        <td><div style="width:16px;height:1.5px;background:var(--blush)"></div></td>
+        <td><div class="pt-avail"><div class="pt-dot" style="background:var(--sage)"></div>Accepting</div></td>
+      </tr>
+    </table>
+  </div>
+  <div class="sec-cta reveal"><a href="#" class="btn-pill-d mag-btn">Search All Providers &rarr;</a></div>
+</section>
+
+<div class="svc-section">
+  <div class="sec-head reveal" style="background:var(--warm)">
+    <div class="sec-kicker">Patient Services</div>
+    <h2 class="sec-title">How can we<br>help you today?</h2>
+  </div>
+  <div class="svc-grid reveal-stagger">
+    <div class="svc-tile reveal" style="--i:0">
+      <div class="svc-ghost">01</div>
+      <div class="svc-glyph"></div>
+      <div class="svc-label">Schedule an Appointment</div>
+      <p class="svc-desc">Book with any of our 500+ providers across all specialties online or by phone. Same-day slots available for urgent referrals.</p>
+      <div class="svc-cta"><span class="svc-cta-txt">Book Online</span><div class="svc-arrow"></div></div>
+    </div>
+    <div class="svc-tile reveal" style="--i:1">
+      <div class="svc-ghost">02</div>
+      <div class="svc-glyph"></div>
+      <div class="svc-label">Patient Portal</div>
+      <p class="svc-desc">Your records, results, imaging, billing statements, and secure messages with your care team. Always on &mdash; every hour, every day.</p>
+      <div class="svc-cta"><span class="svc-cta-txt">Sign In</span><div class="svc-arrow"></div></div>
+    </div>
+    <div class="svc-tile reveal" style="--i:2">
+      <div class="svc-ghost">03</div>
+      <div class="svc-glyph"></div>
+      <div class="svc-label">Find a Location</div>
+      <p class="svc-desc">Main campus, outpatient clinics, and imaging centres across the county. Emergency entrance is north-side &mdash; open 24 hours.</p>
+      <div class="svc-cta"><span class="svc-cta-txt">Get Directions</span><div class="svc-arrow"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="emerg reveal" id="emergency">
+  <div class="emerg-live"><div class="emerg-live-dot"></div>Emergency Department Open Now</div>
+  <div class="emerg-kicker">Emergency &amp; Trauma</div>
+  <h2 class="emerg-title">If it cannot wait,<br>we are open.</h2>
+  <p class="emerg-sub">Our Emergency Department operates every hour of every day. No diversions. No exceptions. For life-threatening emergencies, call 911 immediately.</p>
+  <div class="emerg-clock" id="emergClock"></div>
+  <div class="emerg-row">
+    <div class="emerg-block"><div class="emerg-big">911</div><div class="emerg-lbl">Life-Threatening Emergency</div></div>
+    <div class="emerg-block"><div class="emerg-big">(555) 800&ndash;4911</div><div class="emerg-lbl">24/7 Nurse Advice Line</div></div>
+    <div class="emerg-block"><div class="emerg-big">(555) 800&ndash;0000</div><div class="emerg-lbl">Main Switchboard</div></div>
+  </div>
+</div>
+
+<div class="info-section reveal" id="patients">
+  <div class="info-l">
+    <div class="info-kicker">Visiting &amp; Patient Information</div>
+    <h2 class="info-title">Before<br>you arrive.</h2>
+    <div class="info-row"><span class="ir-n">01</span><div><div class="ir-name">What to Bring</div><div class="ir-text">Government-issued photo ID, insurance card, current medication list, and any imaging or referral documentation.</div></div></div>
+    <div class="info-row"><span class="ir-n">02</span><div><div class="ir-name">Visiting Hours</div><div class="ir-text">General wards: 08:00&ndash;20:00 daily. ICU: 10:00&ndash;12:00 and 18:00&ndash;20:00. Two visitors per patient at a time.</div></div></div>
+    <div class="info-row"><span class="ir-n">03</span><div><div class="ir-name">Interpreter Services</div><div class="ir-text">40+ languages on site around the clock. Spanish, Mandarin, Arabic, ASL, and more &mdash; at no cost to you.</div></div></div>
+    <div class="info-row"><span class="ir-n">04</span><div><div class="ir-name">Insurance &amp; Billing</div><div class="ir-text">Most major plans accepted. Financial counsellors available daily. We offer charity care &mdash; no one is turned away for inability to pay.</div></div></div>
+  </div>
+  <div class="info-r">
+    <div class="info-kicker">Contact &amp; Location</div>
+    <h2 class="info-title">Reach<br>us here.</h2>
+    <div class="c-row"><div class="c-lbl">Main Switchboard</div><div class="c-val">(555) 800&ndash;0000</div></div>
+    <div class="c-row"><div class="c-lbl">24/7 Nurse Line</div><div class="c-val">(555) 800&ndash;4911</div></div>
+    <div class="c-row"><div class="c-lbl">Physician Referrals</div><div class="c-val">(555) 800&ndash;7000</div></div>
+    <div class="c-row"><div class="c-lbl">Patient Relations</div><div class="c-val">(555) 800&ndash;2200</div></div>
+    <div class="c-row"><div class="c-lbl">Address</div><div class="c-val" style="font-size:21px;line-height:1.5">1 MJR Medical Drive<br>Downsville, MD 20601</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="f-hd">Help</div>
+      <div class="f-links">
+        <a href="#">Book an Appointment</a><a href="#">Patient Portal</a>
+        <a href="#">24/7 Nurse Line</a><a href="#">Insurance &amp; Billing</a>
+        <a href="#">Medical Records</a><a href="#">Patient Rights</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-hd">Clinical Services</div>
+      <div class="f-links">
+        <a href="#">Emergency Medicine</a><a href="#">Cardiac Sciences</a>
+        <a href="#">Neurology &amp; Neurosurgery</a><a href="#">Surgical Services</a>
+        <a href="#">Critical Care</a><a href="#">Oncology</a><a href="#">Women&rsquo;s Health</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-hd">Patient Resources</div>
+      <div class="f-links">
+        <a href="#">Visitor Information</a><a href="#">Advance Directives</a>
+        <a href="#">Interpreter Services</a><a href="#">Financial Counselling</a>
+        <a href="#">Donate &amp; Volunteer</a><a href="#">Community Health</a>
+      </div>
+    </div>
+    <div>
+      <div class="f-hd">The Hospital</div>
+      <div class="f-links">
+        <a href="#">About MJR</a><a href="#">Leadership</a>
+        <a href="#">Research &amp; Education</a><a href="#">Careers</a>
+        <a href="#">News &amp; Media</a><a href="#">Accessibility</a><a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-base">
+    <div class="f-certs">
+      <span class="f-cert">Joint Commission Accredited</span>
+      <span class="f-cert">Magnet&#174; Nursing Recognition</span>
+      <span class="f-cert">ACS Level I Trauma Center</span>
+      <span class="f-cert">Comprehensive Stroke Center</span>
+    </div>
+    <a href="login.html" class="f-staff">Staff &amp; Clinician Login</a>
+  </div>
+  <div class="footer-legal">&copy; 2026 The MJR Hospital &middot; All rights reserved &middot; HIPAA Notice of Privacy Practices &middot; Accessibility Statement</div>
+  <div class="footer-brand"><div class="footer-brand-text">The MJR Hospital</div></div>
+</footer>
+
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════════════════════════════════
+     1. CUSTOM CURSOR
+     ═══════════════════════════════════════ */
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+
+  // Smooth ring follow
+  (function animateRing(){
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  // Hover state
+  const interactives = 'a, button, .dept-tile, .svc-tile, .prov-tbl tr, .mag-btn, .info-row, .emerg-block';
+  document.addEventListener('mouseover', e => {
+    if(e.target.closest(interactives)){
+      dot.classList.add('hovering');
+      ring.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if(e.target.closest(interactives)){
+      dot.classList.remove('hovering');
+      ring.classList.remove('hovering');
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     2. HERO ENTRANCE ANIMATION
+     ═══════════════════════════════════════ */
+  const heroText = document.getElementById('heroText');
+  setTimeout(() => {
+    heroText.style.transition = 'opacity 1.5s cubic-bezier(0.16,1,0.3,1), transform 1.5s cubic-bezier(0.16,1,0.3,1)';
+    heroText.style.opacity = '1';
+    heroText.style.transform = 'translateY(0)';
+  }, 400);
+
+  /* ═══════════════════════════════════════
+     3. HERO PARALLAX
+     ═══════════════════════════════════════ */
+  const heroImg = document.getElementById('heroImg');
+  let ticking = false;
+
+  function onScroll(){
+    if(!ticking){
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const vh = window.innerHeight;
+
+        // Parallax on hero image
+        if(scrollY < vh * 1.2){
+          heroImg.style.transform = `scale(${1 + scrollY * 0.00004}) translateY(${scrollY * 0.25}px)`;
+        }
+
+        // Nav scroll state
+        const nav = document.getElementById('nav');
+        if(scrollY > vh * 0.8){
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+
+        // Scroll progress
+        const docH = document.documentElement.scrollHeight - vh;
+        const prog = Math.min(scrollY / docH, 1) * 100;
+        const bar = document.getElementById('scrollProgress');
+        bar.style.width = prog + '%';
+        if(scrollY > 200) bar.classList.add('visible');
+        else bar.classList.remove('visible');
+
+        // Back to top
+        const btt = document.getElementById('backToTop');
+        if(scrollY > vh) btt.classList.add('visible');
+        else btt.classList.remove('visible');
+
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ═══════════════════════════════════════
+     4. INTERSECTION OBSERVER — SCROLL REVEALS
+     ═══════════════════════════════════════ */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+  reveals.forEach(el => revealObserver.observe(el));
+
+  /* ═══════════════════════════════════════
+     5. ANIMATED COUNTERS
+     ═══════════════════════════════════════ */
+  const statNums = document.querySelectorAll('[data-count]');
+  let statsCounted = false;
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !statsCounted){
+        statsCounted = true;
+        statNums.forEach(el => {
+          const target = parseInt(el.dataset.count);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1800;
+          const start = performance.now();
+
+          function tick(now){
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out quart
+            const eased = 1 - Math.pow(1 - progress, 4);
+            const current = Math.round(eased * target);
+            el.innerHTML = current + '<sup>' + suffix + '</sup>';
+            if(progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        });
+        statsObserver.disconnect();
+      }
+    });
+  }, {threshold:0.3});
+  const statsSection = document.getElementById('statsSection');
+  if(statsSection) statsObserver.observe(statsSection);
+
+  /* ═══════════════════════════════════════
+     6. DEPARTMENT TILE EXPAND
+     ═══════════════════════════════════════ */
+  document.querySelectorAll('.dept-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const wasExpanded = tile.classList.contains('expanded');
+      document.querySelectorAll('.dept-tile.expanded').forEach(t => t.classList.remove('expanded'));
+      if(!wasExpanded) tile.classList.add('expanded');
+    });
+  });
+
+  /* ═══════════════════════════════════════
+     7. LIVE CLOCK IN EMERGENCY
+     ═══════════════════════════════════════ */
+  const clockEl = document.getElementById('emergClock');
+  function updateClock(){
+    const now = new Date();
+    const h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    clockEl.textContent = `Current time: ${h12}:${m}:${s} ${ampm}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  /* ═══════════════════════════════════════
+     8. MOBILE NAV TOGGLE
+     ═══════════════════════════════════════ */
+  const toggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      toggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* ═══════════════════════════════════════
+     9. BACK TO TOP
+     ═══════════════════════════════════════ */
+  document.getElementById('backToTop').addEventListener('click', () => {
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  /* ═══════════════════════════════════════
+     10. SEARCH OVERLAY
+     ═══════════════════════════════════════ */
+  const searchOverlay = document.getElementById('searchOverlay');
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const searchTrigger = document.getElementById('searchTrigger');
+  const searchClose = document.getElementById('searchClose');
+
+  const searchData = [
+    {name:'Emergency Medicine', type:'Department', link:'#departments'},
+    {name:'Cardiac Sciences', type:'Department', link:'#departments'},
+    {name:'Neurology & Neurosurgery', type:'Department', link:'#departments'},
+    {name:'Surgical Services', type:'Department', link:'#departments'},
+    {name:'Critical Care', type:'Department', link:'#departments'},
+    {name:'Oncology', type:'Department', link:'#departments'},
+    {name:'Orthopaedics & Spine', type:'Department', link:'#departments'},
+    {name:"Women's Health", type:'Department', link:'#departments'},
+    {name:'Dr. M. Chen, MD', type:'Provider — Internal Medicine', link:'#providers'},
+    {name:'Dr. S. Okafor, MD', type:'Provider — Cardiology', link:'#providers'},
+    {name:'Dr. E. Park, MD', type:'Provider — Neurosurgery', link:'#providers'},
+    {name:'Dr. A. Rivera, MD', type:'Provider — Trauma Surgery', link:'#providers'},
+    {name:'Dr. Y. Tanaka, MD', type:'Provider — Maternal-Foetal Medicine', link:'#providers'},
+    {name:'Schedule an Appointment', type:'Patient Service', link:'#patients'},
+    {name:'Patient Portal', type:'Patient Service', link:'#patients'},
+    {name:'Find a Location', type:'Patient Service', link:'#patients'},
+    {name:'Visiting Hours', type:'Patient Info', link:'#patients'},
+    {name:'Insurance & Billing', type:'Patient Info', link:'#patients'},
+    {name:'24/7 Nurse Advice Line', type:'Emergency', link:'#emergency'},
+  ];
+
+  function openSearch(){
+    searchOverlay.classList.add('open');
+    setTimeout(() => searchInput.focus(), 100);
+  }
+  function closeSearch(){
+    searchOverlay.classList.remove('open');
+    searchInput.value = '';
+    searchResults.innerHTML = '';
+  }
+
+  searchTrigger.addEventListener('click', e => { e.preventDefault(); openSearch(); });
+  searchClose.addEventListener('click', closeSearch);
+  document.addEventListener('keydown', e => {
+    if(e.key === '/' && !searchOverlay.classList.contains('open') && document.activeElement.tagName !== 'INPUT'){
+      e.preventDefault(); openSearch();
+    }
+    if(e.key === 'Escape') closeSearch();
+  });
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase().trim();
+    searchResults.innerHTML = '';
+    if(!q) return;
+    const matches = searchData.filter(d => d.name.toLowerCase().includes(q) || d.type.toLowerCase().includes(q));
+    matches.slice(0,6).forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'search-result';
+      div.innerHTML = `<span class="search-result-name">${m.name}</span><span class="search-result-type">${m.type}</span>`;
+      div.addEventListener('click', () => {
+        closeSearch();
+        document.querySelector(m.link)?.scrollIntoView({behavior:'smooth'});
+      });
+      searchResults.appendChild(div);
+    });
+    if(matches.length === 0){
+      searchResults.innerHTML = '<div style="font-family:var(--sans);font-size:13px;color:var(--muted);padding:16px 0;">No results found.</div>';
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     11. MAGNETIC BUTTONS
+     ═══════════════════════════════════════ */
+  if(window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.mag-btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width/2;
+        const y = e.clientY - rect.top - rect.height/2;
+        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.16,1,0.3,1)';
+        setTimeout(() => { btn.style.transition = ''; }, 400);
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════
+     12. KEYBOARD SHORTCUT HINTS
+     ═══════════════════════════════════════ */
+  document.addEventListener('keydown', e => {
+    // 'S' to scroll to top when not in input
+    if(e.key === 's' && document.activeElement.tagName !== 'INPUT' && !searchOverlay.classList.contains('open')){
+      // do nothing, just the search '/' shortcut is enough
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     13. SMOOTH SECTION ANCHOR SCROLLING
+     ═══════════════════════════════════════ */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if(target){
+        e.preventDefault();
+        const navH = 93;
+        const top = target.getBoundingClientRect().top + window.scrollY - navH;
+        window.scrollTo({top, behavior:'smooth'});
+      }
+    });
+  });
+
+  /* ═══════════════════════════════════════
+     14. PROVIDER ROW TILT ON HOVER
+     ═══════════════════════════════════════ */
+  if(window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.prov-tbl tr').forEach(row => {
+      row.addEventListener('mousemove', e => {
+        const rect = row.getBoundingClientRect();
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        row.style.transform = `perspective(600px) rotateX(${-y * 1.5}deg)`;
+      });
+      row.addEventListener('mouseleave', () => {
+        row.style.transform = '';
+        row.style.transition = 'transform 0.3s ease, background 0.15s';
+        setTimeout(() => { row.style.transition = 'background 0.15s'; }, 300);
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════
+     15. SPECIALTY ROLL — MOUSE SPEED RESPONSE
+     ═══════════════════════════════════════ */
+  const specTrack = document.querySelector('.spec-track');
+  if(specTrack){
+    const specRoll = document.querySelector('.spec-roll');
+    specRoll.addEventListener('mousemove', e => {
+      const rect = specRoll.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      // Slow down or speed up based on mouse position
+      const speed = 20 + x * 48;
+      specTrack.style.animationDuration = speed + 's';
+    });
+    specRoll.addEventListener('mouseleave', () => {
+      specTrack.style.animationDuration = '44s';
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>
