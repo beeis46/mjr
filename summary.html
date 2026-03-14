@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The MJR Hospital — Harmon, Eleanor D.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;600&family=Space+Mono&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+<style>
+:root {
+  --warm:#F7F4EB;--white:#FFFFFF;--rule:#E4DED0;--text:#1A1A1A;--muted:#8A7E6E;--tile:#EDEAE0;
+  --forest:#4A3F30;--accent-bg:#342C20;--accent-text:#EBE4D0;--accent-rule:rgba(235,228,208,0.14);--accent-muted:rgba(235,228,208,0.45);
+  --sage:#8A7A5E;--wheat:#C4A860;--blush:#C8AE82;--sky:#8C9AA0;--plum:#B5ADA4;
+  --crit:#7D3030;--warn:#6B5218;--ok:var(--forest);
+  --corm:"Cormorant Garamond",Georgia,serif;--mono:"Space Mono",monospace;--cond:"Barlow Condensed",sans-serif;--sans:"DM Sans",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;height:auto;}
+body{background:var(--warm);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:32px;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+
+/* ── DARK MODE ── */
+body.dark{--warm:#141410;--white:#1C1C18;--rule:#2E2D28;--text:#F0EFE8;--muted:#7A7870;--tile:#222219;}
+body.dark .pt-block,body.dark .pull-quote{filter:brightness(0.9);}
+body.dark .dm-pip{background:var(--forest);border-color:var(--forest);}
+body.dark .dm-pip::after{transform:translateX(10px);background:var(--warm);}
+body.dark .search-overlay{background:rgba(20,20,16,.96);}
+body.dark .hf-red{background:rgba(200,168,120,.15);}
+body.dark .hf-amber{background:rgba(180,148,80,.15);}
+body.dark .hf-sky{background:rgba(140,154,160,.15);}
+
+/* ── CURSOR ── */
+.cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;background:var(--sage);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .15s;mix-blend-mode:difference;opacity:0;}
+.cursor-ring{position:fixed;top:0;left:0;width:30px;height:30px;border:1px solid rgba(138,122,94,0.25);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;opacity:0;}
+body:hover .cursor-dot,body:hover .cursor-ring{opacity:1;}
+.cursor-dot.hovering{width:12px;height:12px;background:var(--blush);}
+.cursor-ring.hovering{width:44px;height:44px;border-color:rgba(200,174,130,0.3);}
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none!important;}}
+
+/* ── SCROLL PROGRESS ── */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;z-index:9999;background:linear-gradient(90deg,var(--sage),var(--wheat),var(--blush));width:0;pointer-events:none;opacity:0;transition:opacity .3s;}
+.scroll-progress.visible{opacity:1;}
+
+/* ── NAV ── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;height:58px;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  background:rgba(248,247,244,0.97);border-bottom:1px solid var(--rule);
+  backdrop-filter:blur(14px);transition:background .4s,border-color .4s;
+}
+.nav-left{display:flex;align-items:center;gap:28px;padding:0 36px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.nav-left a{transition:opacity .15s;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.nav-left a:hover{opacity:.45;}
+.nav-stat{display:flex;align-items:center;gap:6px;}
+.nav-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 40px;border-left:1px solid var(--rule);border-right:1px solid var(--rule);height:100%;justify-content:center;}
+.nav-wordmark{font-family:var(--corm);font-size:22px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;white-space:nowrap;line-height:1;color:var(--text);}
+.nav-wordmark em{font-style:italic;font-weight:400;letter-spacing:.2em;}
+.nav-sub{font-family:var(--mono);font-size:6.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.nav-right{display:flex;align-items:center;justify-content:flex-end;gap:24px;padding:0 36px;}
+.nav-act{display:flex;align-items:center;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:opacity .15s;white-space:nowrap;cursor:pointer;border:none;background:none;}
+.nav-act:hover{opacity:.45;}
+.nav-act.primary{color:var(--text);}
+.nav-act-btn{padding:6px 14px;border:1px solid rgba(26,26,26,.25);border-radius:2px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,26,26,.65);transition:all .2s;white-space:nowrap;cursor:pointer;background:none;}
+.nav-act-btn:hover{border-color:var(--text);color:var(--text);}
+.dm-label{display:flex;align-items:center;gap:7px;cursor:pointer;}
+.dm-pip{width:22px;height:12px;border:1px solid var(--rule);border-radius:6px;position:relative;transition:background .2s;}
+.dm-pip::after{content:'';position:absolute;left:2px;top:2px;width:6px;height:6px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s;}
+
+/* ── TABS ── */
+.stabs{position:sticky;top:58px;z-index:499;display:flex;align-items:stretch;background:var(--white);border-bottom:1px solid var(--rule);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.stab{padding:0 20px;height:36px;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none;color:var(--muted);border-right:1px solid var(--rule);border-bottom:2px solid transparent;transition:color .15s,background .15s,border-bottom-color .2s;flex-shrink:0;}
+.stab:hover{color:var(--text);background:var(--tile);}
+.stab.active{color:var(--text);background:var(--warm);border-bottom-color:var(--text);}
+.stab-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.stab-pt-group{margin-left:auto;display:flex;align-items:stretch;border-left:1px solid var(--rule);}
+.stab-pt{padding:0 16px;height:36px;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;flex-shrink:0;}
+.stab-pt:hover{opacity:.6;}
+.stab-pt.active{color:var(--text);background:var(--warm);border-bottom-color:var(--text);}
+
+/* ── PANELS ── */
+.panel{display:none;animation:panelIn .4s cubic-bezier(.16,1,.3,1);}
+.panel.active{display:block;}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PATIENT HERO ── */
+.pt-block{background:var(--forest);width:100%;position:relative;overflow:hidden;}
+.pt-block::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-size:200px;}
+.pt-block-ident{padding:80px 72px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;}
+.pt-issue{font-family:var(--mono);font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,228,216,.45);margin-bottom:14px;}
+.pt-name{font-family:var(--corm);font-size:clamp(42px,5vw,72px);font-weight:300;font-style:italic;line-height:.92;color:var(--accent-text);}
+
+.pt-demogrid{display:grid;grid-template-columns:repeat(4,1fr);margin:24px 40px 0;border-top:1px solid var(--accent-rule);border-left:1px solid var(--accent-rule);position:relative;z-index:1;}
+.pt-demo{padding:14px 24px;border-right:1px solid var(--accent-rule);border-bottom:1px solid var(--accent-rule);}
+.pt-demo-lbl{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,228,216,.38);margin-bottom:5px;}
+.pt-demo-val{font-family:var(--cond);font-size:15px;font-weight:300;letter-spacing:.04em;color:var(--accent-text);}
+.pt-demo-val.crit{color:#D4B87A;}.pt-demo-val.warn{color:#D4C07A;}
+
+.pt-flags{display:flex;gap:6px;flex-wrap:wrap;padding:16px 72px;justify-content:center;border-top:1px solid var(--accent-rule);position:relative;z-index:1;}
+.hflag{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;white-space:nowrap;cursor:default;position:relative;transition:transform .15s;}
+.hflag:hover{transform:translateY(-1px);}
+.hf-red{background:rgba(200,168,120,.22);color:#D4B87A;}.hf-amber{background:rgba(180,148,80,.22);color:#D4C07A;}.hf-sky{background:rgba(140,154,160,.22);color:#C4B8A0;}
+.hflag-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:var(--accent-bg);color:var(--accent-text);font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;padding:6px 10px;white-space:nowrap;z-index:200;border:1px solid var(--accent-rule);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.hflag:hover .hflag-tip{display:block;}
+
+.pt-vitals{display:grid;grid-template-columns:repeat(5,1fr);margin:0 40px 32px;border:1px solid var(--accent-rule);position:relative;z-index:1;}
+.pt-vit{padding:16px 24px;display:flex;flex-direction:column;align-items:center;gap:5px;border-right:1px solid var(--accent-rule);cursor:pointer;transition:background .2s;}
+.pt-vit:last-child{border-right:none;}
+.pt-vit:hover{background:rgba(232,228,216,.04);}
+.pv-lbl{font-family:var(--mono);font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,228,216,.38);white-space:nowrap;}
+.pv-val{font-family:var(--corm);font-size:32px;font-style:italic;font-weight:300;line-height:1;color:var(--accent-text);transition:transform .2s;}
+.pt-vit:hover .pv-val{transform:scale(1.04);}
+.pv-val.crit{color:#D4B87A;}.pv-val.warn{color:#D4C07A;}.pv-val.ok{color:rgba(232,228,216,.92);}
+
+/* ── PULL QUOTE ── */
+.pull-quote{background:var(--accent-bg);padding:26px 72px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border-bottom:3px solid var(--forest);position:relative;}
+.pull-quote::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-size:200px;}
+.pq-body{font-family:var(--corm);font-size:15px;font-style:italic;font-weight:300;line-height:1.7;color:rgba(232,228,216,.88);max-width:860px;position:relative;z-index:1;}
+.pq-body strong{font-style:normal;font-weight:400;color:#D4B87A;}
+.pq-meta{text-align:center;position:relative;z-index:1;}
+.pq-who{font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,228,216,.5);}
+.pq-when{font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;color:rgba(232,228,216,.28);margin-top:3px;}
+
+/* ── CANVAS INNER ── */
+.canvas-inner{padding:24px 48px 48px;}
+
+/* ── MODULES ── */
+.mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule);margin-bottom:2px;}
+.mod-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--rule);margin-bottom:2px;}
+.mod-grid-1{display:grid;grid-template-columns:1fr;gap:2px;background:var(--rule);margin-bottom:2px;}
+.mod{background:var(--white);overflow:hidden;}
+.mod-hd{display:flex;align-items:center;gap:10px;padding:12px 18px 10px;border-bottom:1px solid var(--rule);cursor:pointer;user-select:none;transition:background .12s;}
+.mod-hd:hover{background:var(--tile);}
+.mod-bar{width:2px;height:14px;flex-shrink:0;transition:height .2s;}
+.mod-hd:hover .mod-bar{height:18px;}
+.mod-title{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--text);flex:1;}
+.mod-sub{font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:var(--muted);}
+.mod-action{font-family:var(--mono);font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,26,26,.3);white-space:nowrap;transition:color .12s;}
+.mod-action:hover{color:var(--text);}
+.mod-chevron{font-size:7px;color:var(--muted);transition:transform .25s cubic-bezier(.16,1,.3,1);display:inline-block;margin-left:4px;}
+.mod.collapsed .mod-chevron{transform:rotate(-90deg);}
+.mod-body{padding:0 18px 14px;max-height:2000px;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),padding .3s,opacity .3s;}
+.mod.collapsed .mod-body{max-height:0;padding-top:0;padding-bottom:0;opacity:0;}
+
+/* ── ROW TYPES ── */
+.dx-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);transition:background .1s,padding-left .15s;cursor:default;}
+.dx-item:last-child{border-bottom:none;}
+.dx-item:hover{background:var(--tile);margin:0 -18px;padding-left:18px;padding-right:18px;}
+.dx-n{font-family:var(--mono);font-size:6.5px;color:rgba(26,26,26,.2);flex-shrink:0;padding-top:3px;width:16px;}
+.dx-content{flex:1;}
+.dx-name{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text);line-height:1.35;}
+.dx-code{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:var(--muted);margin-top:3px;line-height:1.6;}
+.dx-chip{font-family:var(--mono);font-size:6px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:3px;}
+.dc-primary{background:rgba(200,174,130,.2);color:var(--crit);}.dc-active{background:rgba(180,168,120,.2);color:var(--warn);}.dc-hx{background:rgba(26,26,26,.05);color:var(--muted);}
+
+.med-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);transition:background .12s;cursor:default;}
+.med-item:last-child{border-bottom:none;}.med-item:hover{background:var(--tile);}
+.med-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}.med-info{flex:1;}
+.med-name{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text);}
+.med-dose{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:var(--muted);margin-top:3px;line-height:1.6;}
+.med-tag{font-family:var(--mono);font-size:6px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
+.ms-drip{background:rgba(200,174,130,.2);color:var(--crit);}.ms-new{background:rgba(140,154,160,.2);color:#1A3A6A;}.ms-active{background:rgba(138,122,94,.2);color:var(--forest);}.ms-hold{background:rgba(180,168,120,.2);color:var(--warn);}
+
+.lab-hdr{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(26,26,26,.3);padding:8px 0 4px;border-bottom:1px solid var(--rule);margin-bottom:2px;}
+.lab-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule);transition:background .1s;cursor:default;}
+.lab-row:last-child{border-bottom:none;}.lab-row:hover{background:var(--tile);}
+.lab-name{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text);}
+.lab-val{font-family:var(--mono);font-size:11px;font-weight:700;text-align:right;letter-spacing:.04em;}
+.lab-val.crit{color:var(--crit);}.lab-val.warn{color:var(--warn);}.lab-val.ok{color:var(--ok);}
+.lab-ref{font-family:var(--mono);font-size:6.5px;color:rgba(26,26,26,.28);text-align:right;white-space:nowrap;letter-spacing:.04em;}
+
+.team-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule);position:relative;transition:background .12s;cursor:pointer;}
+.team-row:last-child{border-bottom:none;}.team-row:hover{background:var(--tile);}
+.team-av{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:6.5px;font-weight:700;flex-shrink:0;border-radius:2px;}
+.team-info{flex:1;}.team-name{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text);}
+.team-role{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:var(--muted);margin-top:2px;line-height:1.6;}
+.team-ext{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:rgba(26,26,26,.35);}
+.team-card{display:none;position:absolute;right:0;top:-8px;z-index:100;background:var(--white);border:1px solid var(--rule);padding:14px 18px;min-width:220px;box-shadow:0 8px 32px rgba(0,0,0,.1);border-radius:2px;animation:cardIn .2s ease;}
+@keyframes cardIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.team-row:hover .team-card{display:block;}
+.tc-name{font-family:var(--corm);font-size:18px;font-style:italic;font-weight:300;margin-bottom:8px;color:var(--text);}
+.tc-row{font-family:var(--mono);font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;line-height:1.7;}
+.tc-row span{color:var(--text);margin-left:8px;text-transform:none;}
+
+.pend-row{display:flex;gap:14px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule);transition:background .12s,opacity .3s;cursor:pointer;position:relative;}
+.pend-row:last-child{border-bottom:none;}.pend-row:hover{background:var(--tile);}
+.pend-row.done{opacity:.4;}
+.pend-row.done .pend-val::before{content:'✓ ';color:var(--ok);font-weight:700;}
+.pend-time{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:var(--muted);width:50px;flex-shrink:0;}
+.pend-val{font-family:var(--sans);font-size:13px;font-weight:300;color:var(--text);line-height:1.4;}
+.pend-val strong{font-weight:400;color:var(--crit);}
+.date-rule{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:8px 0 4px;border-bottom:1px solid var(--rule);margin-bottom:2px;}
+
+/* Note expand */
+.note-preview{font-family:var(--mono);font-size:7px;letter-spacing:.07em;color:var(--muted);line-height:1.6;margin-bottom:4px;}
+.note-toggle{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);cursor:pointer;transition:color .12s;display:inline-block;margin-top:4px;border:none;background:none;padding:0;}
+.note-toggle:hover{color:var(--text);}
+.note-full{display:none;font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.7;color:rgba(26,26,26,.78);margin-top:8px;border-top:1px solid var(--rule);padding-top:8px;}
+.note-full.open{display:block;animation:panelIn .3s ease;}
+
+/* Vitals expanded cards */
+.vit-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--rule);margin-bottom:2px;}
+.vit-card{background:var(--white);padding:20px 18px;cursor:pointer;transition:box-shadow .2s;}
+.vit-card:hover{box-shadow:inset 0 0 0 1px var(--rule);}
+.vit-card.expanded{box-shadow:inset 0 0 0 1px var(--sage);}
+.vc-lbl{font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.vc-val{font-family:var(--corm);font-size:32px;font-style:italic;font-weight:300;line-height:1;}
+.vc-val.crit{color:var(--crit);}.vc-val.warn{color:var(--warn);}.vc-val.ok{color:var(--ok);}
+.vc-unit{font-family:var(--mono);font-size:6.5px;color:var(--muted);margin-top:5px;letter-spacing:.08em;}
+.vc-trend{font-family:var(--mono);font-size:6.5px;color:rgba(26,26,26,.3);margin-top:8px;letter-spacing:.06em;}
+.vc-detail{display:none;margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:6.5px;letter-spacing:.07em;color:var(--muted);line-height:1.9;}
+.vit-card.expanded .vc-detail{display:block;animation:panelIn .3s ease;}
+
+/* Lab filters */
+.lab-filters{display:flex;align-items:center;border-bottom:1px solid var(--rule);background:var(--white);flex-shrink:0;margin-bottom:2px;}
+.lf-tab{padding:8px 18px;font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--rule);cursor:pointer;transition:color .12s,background .12s;user-select:none;}
+.lf-tab:hover{color:var(--text);background:var(--tile);}
+.lf-tab.active{color:var(--text);background:var(--warm);border-bottom:2px solid var(--text);}
+.lab-sub-panel{display:none;}.lab-sub-panel.active{display:block;}
+
+/* Imaging */
+.img-study{padding:12px 0;border-bottom:1px solid var(--rule);transition:background .12s;cursor:default;}
+.img-study:last-child{border-bottom:none;}.img-study:hover{background:var(--tile);margin:0 -18px;padding-left:18px;padding-right:18px;}
+.img-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;gap:8px;}
+.img-type{font-family:var(--cond);font-size:13px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;}
+.img-date{font-family:var(--mono);font-size:6.5px;color:rgba(26,26,26,.3);letter-spacing:.07em;}
+.img-body{font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.65;color:rgba(26,26,26,.72);}
+.img-body .hi{color:var(--crit);font-weight:400;}.img-body .hi-w{color:var(--warn);font-weight:400;}
+
+/* ── STATUS BAR ── */
+.status-bar{position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--white);border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:center;height:28px;gap:32px;}
+.sbar-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.sbar-dot{width:4px;height:4px;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ── SEARCH OVERLAY ── */
+.search-overlay{position:fixed;inset:0;z-index:9000;background:rgba(248,247,244,.96);backdrop-filter:blur(32px);display:flex;align-items:flex-start;justify-content:center;padding-top:18vh;opacity:0;pointer-events:none;transition:opacity .3s;}
+.search-overlay.open{opacity:1;pointer-events:auto;}
+.search-box{width:min(600px,90vw);display:flex;flex-direction:column;gap:20px;transform:translateY(12px);transition:transform .35s cubic-bezier(.16,1,.3,1);}
+.search-overlay.open .search-box{transform:translateY(0);}
+.search-input{width:100%;border:none;border-bottom:1.5px solid var(--rule);background:transparent;outline:none;font-family:var(--corm);font-size:clamp(24px,3.5vw,42px);font-style:italic;font-weight:300;color:var(--text);padding:12px 0;letter-spacing:.04em;}
+.search-input::placeholder{color:rgba(26,26,26,.2);}
+.search-hint{font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.search-results{display:flex;flex-direction:column;gap:4px;}
+.search-result{padding:10px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:padding-left .2s;}
+.search-result:hover{padding-left:10px;}
+.search-result-name{font-family:var(--corm);font-size:20px;font-style:italic;font-weight:300;}
+.search-result-type{font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:12px;}
+.search-close{position:absolute;top:28px;right:36px;cursor:pointer;font-family:var(--corm);font-size:28px;font-weight:300;color:var(--muted);transition:color .2s;border:none;background:none;}
+.search-close:hover{color:var(--text);}
+
+/* ── KEYBOARD SHORTCUT TOAST ── */
+.toast{position:fixed;bottom:48px;left:50%;transform:translateX(-50%) translateY(20px);z-index:8000;background:var(--accent-bg);color:var(--accent-text);font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;padding:8px 20px;border-radius:2px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .top-nav{grid-template-columns:1fr;justify-items:center;height:auto;padding:10px 16px;}
+  .nav-left,.nav-right{display:none;}
+  .nav-center{border:none;padding:0;}
+  .pt-demogrid{grid-template-columns:repeat(2,1fr);margin:20px 16px 0;}
+  .pt-vitals{grid-template-columns:repeat(3,1fr);margin:0 16px 24px;}
+  .pt-flags{padding:14px 16px;}
+  .mod-grid,.mod-grid-2{grid-template-columns:1fr;}
+  .vit-grid{grid-template-columns:repeat(2,1fr);}
+  .canvas-inner{padding:16px 12px 40px;}
+  .stabs{overflow-x:auto;}
+  .stab-pt-group{display:none;}
+  .pull-quote{padding:20px 24px;}
+  .pt-block-ident{padding:70px 24px 20px;}
+  .pt-name{font-size:clamp(32px,8vw,48px);}
+  .cursor-dot,.cursor-ring{display:none!important;}
+  .status-bar{gap:16px;}
+  .sbar-item{font-size:5.5px;}
+  .team-card{display:none!important;}
+}
+@media(max-width:560px){
+  .pt-demogrid{grid-template-columns:1fr 1fr;margin:16px 8px 0;}
+  .pt-vitals{grid-template-columns:repeat(2,1fr);margin:0 8px 16px;}
+  .pt-flags{flex-direction:column;align-items:center;}
+  .vit-grid{grid-template-columns:1fr;}
+  .canvas-inner{padding:12px 8px 32px;}
+  .stab{padding:0 14px;font-size:7px;}
+  .pq-body{font-size:13px;}
+  .status-bar{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="toast" id="toast"></div>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-close" id="searchClose">&times;</button>
+  <div class="search-box">
+    <input class="search-input" id="searchInput" type="text" placeholder="Search chart&hellip;" autocomplete="off">
+    <div class="search-hint">Press ESC to close &nbsp;&middot;&nbsp; / to open search</div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<div class="top-nav">
+  <div class="nav-left">
+    <div class="nav-stat"><div class="nav-dot" style="background:var(--sage)"></div>Systems Operational</div>
+    <div class="nav-stat"><div class="nav-dot" style="background:var(--sky)"></div>HIPAA</div>
+    <div class="nav-stat" id="navSync"><div class="nav-dot" style="background:var(--wheat)"></div>Sync <span id="syncTime">07:55</span></div>
+  </div>
+  <div class="nav-center">
+    <a href="index.html" class="nav-wordmark">The <em>MJR</em> Hospital</a>
+    <div class="nav-sub">EMR &nbsp;&middot;&nbsp; v4.1</div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-act dm-label" id="dmToggle"><div class="dm-pip"></div>Dark</button>
+    <button class="nav-act" id="searchTrigger" style="gap:6px;">&#8984; / &nbsp;Search</button>
+    <a href="index.html" class="nav-act">&larr; Home</a>
+    <button class="nav-act-btn">Sign Note</button>
+    <button class="nav-act-btn">New Order</button>
+    <span class="nav-act primary">Dr. M. Chen</span>
+    <a href="login.html" class="nav-act" style="opacity:.5">&times; Sign Out</a>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<div class="stabs" id="stabs">
+  <div class="stab active" data-tab="p-sum"><span class="stab-dot" style="background:var(--muted);opacity:.5"></span>Summary</div>
+  <div class="stab" data-tab="p-vit"><span class="stab-dot" style="background:var(--blush)"></span>Vitals</div>
+  <div class="stab" data-tab="p-lab"><span class="stab-dot" style="background:var(--sage)"></span>Labs</div>
+  <a href="mar.html" class="stab" style="text-decoration:none"><span class="stab-dot" style="background:var(--sky)"></span>MAR</a>
+  <a href="notes.html" class="stab" style="text-decoration:none"><span class="stab-dot" style="background:var(--wheat)"></span>Notes</a>
+  <div class="stab" data-tab="p-ord"><span class="stab-dot" style="background:var(--plum)"></span>Orders</div>
+  <div class="stab" data-tab="p-img"><span class="stab-dot" style="background:var(--sky)"></span>Imaging</div>
+  <div class="stab-pt-group">
+    <div class="stab-pt active"><span class="stab-dot" style="background:var(--sage)"></span>Harmon, E.</div>
+    <div class="stab-pt"><span class="stab-dot" style="background:var(--muted);opacity:.4"></span>Patel, R.</div>
+    <div class="stab-pt"><span class="stab-dot" style="background:var(--muted);opacity:.4"></span>Osei, D.</div>
+    <div class="stab-pt" style="color:var(--muted);opacity:.55">+ Add</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SUMMARY PANEL
+     ═══════════════════════════════════════ -->
+<div id="p-sum" class="panel active">
+  <!-- PATIENT HERO -->
+  <div class="pt-block">
+    <div class="pt-block-ident">
+      <div class="pt-issue">Patient Record &middot; Admission 03/01/2026 &middot; HD#5</div>
+      <div class="pt-name" id="ptName">Harmon, <em>Eleanor D.</em></div>
+    </div>
+    <div class="pt-demogrid">
+      <div class="pt-demo"><div class="pt-demo-lbl">MRN</div><div class="pt-demo-val">847-293-1</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">DOB &middot; Age &middot; Sex</div><div class="pt-demo-val">04/12/1968 &middot; 57y &middot; F</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Room &middot; Bed</div><div class="pt-demo-val">5 West &middot; Rm 514</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Attending</div><div class="pt-demo-val">Dr. Marcus Chen &middot; Cardiology</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Admit Weight</div><div class="pt-demo-val">84 kg</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Code Status</div><div class="pt-demo-val crit">Full Code</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Primary Dx</div><div class="pt-demo-val warn">ADHF &middot; EF 30%</div></div>
+      <div class="pt-demo"><div class="pt-demo-lbl">Allergies</div><div class="pt-demo-val crit">PCN &middot; Sulfa &middot; Iodine</div></div>
+    </div>
+    <div class="pt-flags">
+      <div class="hflag hf-red">&#9679; MRSA Contact Precautions<div class="hflag-tip">Gown + gloves required &middot; Private room &middot; Dedicated equipment</div></div>
+      <div class="hflag hf-amber">&#9651; Fall Risk &mdash; Moderate<div class="hflag-tip">Bed alarm active &middot; Non-slip socks &middot; Call light in reach</div></div>
+      <div class="hflag hf-sky">LVAD Candidacy Evaluation<div class="hflag-tip">MCS consult active &middot; Dr. Okonkwo &middot; Rounding 11:00</div></div>
+      <div class="hflag hf-amber">Dobutamine Drip Active</div>
+    </div>
+    <div class="pt-vitals" id="heroVitals">
+      <div class="pt-vit" data-tab="p-vit"><div class="pv-lbl">BP mmHg</div><div class="pv-val crit">94/62</div></div>
+      <div class="pt-vit" data-tab="p-vit"><div class="pv-lbl">HR bpm</div><div class="pv-val warn">108</div></div>
+      <div class="pt-vit" data-tab="p-vit"><div class="pv-lbl">SpO&#8322;</div><div class="pv-val warn">94%</div></div>
+      <div class="pt-vit" data-tab="p-vit"><div class="pv-lbl">Temp &deg;C</div><div class="pv-val ok">37.4</div></div>
+      <div class="pt-vit" data-tab="p-vit"><div class="pv-lbl">UO mL/hr</div><div class="pv-val ok">42</div></div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <div class="pq-body">HD#5 &mdash; patient hemodynamically tenuous. <strong>BP 94/62</strong>, dobutamine-dependent. Net fluid balance <strong>+1,180 mL</strong> in 24h. BNP <strong>2,840</strong>. Advanced HF / MCS reassessing LVAD candidacy today. Goals of care meeting scheduled 03/07.</div>
+    <div class="pq-meta"><div class="pq-who">Dr. M. Chen, MD</div><div class="pq-when">Attending &middot; Cardiology &middot; 03/06 07:42</div></div>
+  </div>
+
+  <div class="canvas-inner">
+    <!-- Row 1: Problems / Meds / Labs -->
+    <div class="mod-grid">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--blush)"></div><div class="mod-title">Active Problems</div><div class="mod-sub">3 Primary &middot; 4 Historical</div><div class="mod-action">All &rsaquo;</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="dx-item"><div class="dx-n">01</div><div class="dx-content"><div class="dx-name">Acute Decompensated Heart Failure</div><div class="dx-code">I50.9 &middot; INTERMACS Profile 3 &middot; EF 30%</div></div><div class="dx-chip dc-primary">Primary</div></div>
+        <div class="dx-item"><div class="dx-n">02</div><div class="dx-content"><div class="dx-name">Dilated Cardiomyopathy, Ischemic</div><div class="dx-code">I42.0 &middot; Mod MR &middot; Mod TR &middot; PASP 42 mmHg</div></div><div class="dx-chip dc-active">Active</div></div>
+        <div class="dx-item"><div class="dx-n">03</div><div class="dx-content"><div class="dx-name">Community-Acquired Pneumonia, r/o</div><div class="dx-code">J18.9 &middot; RLL infiltrate on CXR 03/06</div></div><div class="dx-chip dc-active">Active</div></div>
+        <div class="dx-item"><div class="dx-n">04</div><div class="dx-content"><div class="dx-name">Type 2 Diabetes Mellitus</div><div class="dx-code">E11.9 &middot; A1c 8.4% &middot; Metformin held</div></div><div class="dx-chip dc-hx">PMHx</div></div>
+        <div class="dx-item"><div class="dx-n">05</div><div class="dx-content"><div class="dx-name">Hypertension, Chronic</div><div class="dx-code">I10 &middot; ACEI held &mdash; hypotension</div></div><div class="dx-chip dc-hx">PMHx</div></div>
+        <div class="dx-item"><div class="dx-n">06</div><div class="dx-content"><div class="dx-name">Dyslipidemia</div><div class="dx-code">E78.5 &middot; On atorvastatin</div></div><div class="dx-chip dc-hx">PMHx</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">Medications</div><div class="mod-sub">12 Active &middot; 2 On Hold</div><div class="mod-action">MAR &rsaquo;</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="med-item"><div class="med-dot" style="background:var(--crit)"></div><div class="med-info"><div class="med-name">Dobutamine</div><div class="med-dose">5 mcg/kg/min IV &middot; Continuous infusion</div></div><div class="med-tag ms-drip">Drip</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Furosemide</div><div class="med-dose">20 mg/hr IV &middot; Continuous &mdash; titrate UO</div></div><div class="med-tag ms-drip">Drip</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--sky)"></div><div class="med-info"><div class="med-name">KCl 40 mEq PO</div><div class="med-dose">Repletion &middot; K 2.9 &middot; &times;2 doses ordered</div></div><div class="med-tag ms-new">New</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Enoxaparin</div><div class="med-dose">40 mg SQ daily &middot; DVT prophylaxis</div></div><div class="med-tag ms-active">Active</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Atorvastatin</div><div class="med-dose">40 mg PO QHS</div></div><div class="med-tag ms-active">Active</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--wheat)"></div><div class="med-info"><div class="med-name">Metformin</div><div class="med-dose">1000 mg PO BID &middot; HOME &middot; Held</div></div><div class="med-tag ms-hold">Hold</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--wheat)"></div><div class="med-info"><div class="med-name">Lisinopril</div><div class="med-dose">10 mg PO daily &middot; HOME &middot; Held</div></div><div class="med-tag ms-hold">Hold</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Insulin Lispro SS</div><div class="med-dose">Per sliding scale &middot; AC + bedtime</div></div><div class="med-tag ms-new">New</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sage)"></div><div class="mod-title">Current Labs</div><div class="mod-sub">AM Draw &middot; 03/06 &middot; 05:30</div><div class="mod-action">All Results &rsaquo;</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="lab-hdr">Basic Metabolic Panel</div>
+        <div class="lab-row"><div class="lab-name">Sodium</div><div class="lab-val warn">132</div><div class="lab-ref">136&ndash;145</div></div>
+        <div class="lab-row"><div class="lab-name">Potassium</div><div class="lab-val crit">2.9</div><div class="lab-ref">3.5&ndash;5.0</div></div>
+        <div class="lab-row"><div class="lab-name">BUN / Creatinine</div><div class="lab-val warn">34 / 1.6</div><div class="lab-ref">8&ndash;20 / 0.6&ndash;1.2</div></div>
+        <div class="lab-row"><div class="lab-name">Glucose</div><div class="lab-val warn">162</div><div class="lab-ref">70&ndash;100</div></div>
+        <div class="lab-hdr" style="margin-top:8px">Cardiac &amp; Special</div>
+        <div class="lab-row"><div class="lab-name">BNP</div><div class="lab-val crit">2,840</div><div class="lab-ref">&lt;100 pg/mL</div></div>
+        <div class="lab-row"><div class="lab-name">Troponin I</div><div class="lab-val ok">0.06</div><div class="lab-ref">&lt;0.04</div></div>
+        <div class="lab-row"><div class="lab-name">Lactate</div><div class="lab-val warn">2.4</div><div class="lab-ref">0.5&ndash;2.0</div></div>
+        <div class="lab-row"><div class="lab-name">Hgb / Hct</div><div class="lab-val warn">9.8 / 30</div><div class="lab-ref">12&ndash;16 / 36&ndash;46</div></div>
+      </div></div>
+    </div>
+
+    <!-- Row 2: Medical Hx / Surgical Hx / Social Hx -->
+    <div class="mod-grid">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--wheat)"></div><div class="mod-title">Medical History</div><div class="mod-sub">Chronic &middot; PMHx</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="dx-item"><div class="dx-n">01</div><div class="dx-content"><div class="dx-name">Type 2 Diabetes Mellitus</div><div class="dx-code">E11.9 &middot; Dx 2014 &middot; A1c 8.4% &middot; Metformin (home)</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+        <div class="dx-item"><div class="dx-n">02</div><div class="dx-content"><div class="dx-name">Hypertension</div><div class="dx-code">I10 &middot; Dx 2011 &middot; Lisinopril 10mg daily (home, held)</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+        <div class="dx-item"><div class="dx-n">03</div><div class="dx-content"><div class="dx-name">Dyslipidemia</div><div class="dx-code">E78.5 &middot; Dx 2013 &middot; Atorvastatin 40mg QHS</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+        <div class="dx-item"><div class="dx-n">04</div><div class="dx-content"><div class="dx-name">Ischemic Cardiomyopathy</div><div class="dx-code">I25.5 &middot; Dx 2019 &middot; EF previously 40%</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+        <div class="dx-item"><div class="dx-n">05</div><div class="dx-content"><div class="dx-name">Obstructive Sleep Apnea</div><div class="dx-code">G47.33 &middot; CPAP non-compliant</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+        <div class="dx-item"><div class="dx-n">06</div><div class="dx-content"><div class="dx-name">Depression, Recurrent</div><div class="dx-code">F33.0 &middot; Sertraline 50mg (home)</div></div><div class="dx-chip dc-hx">Chronic</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">Surgical History</div><div class="mod-sub">PSHx</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="dx-item"><div class="dx-n">01</div><div class="dx-content"><div class="dx-name">Cardiac Catheterisation &times;2</div><div class="dx-code">2019 &middot; LAD 70% stenosis, stented &middot; 2021 &middot; Re-stented</div></div><div class="dx-chip dc-active">Cardiac</div></div>
+        <div class="dx-item"><div class="dx-n">02</div><div class="dx-content"><div class="dx-name">ICD Implantation</div><div class="dx-code">2021 &middot; Single-lead &middot; EF 35% at implant</div></div><div class="dx-chip dc-active">Cardiac</div></div>
+        <div class="dx-item"><div class="dx-n">03</div><div class="dx-content"><div class="dx-name">Appendectomy</div><div class="dx-code">1998 &middot; Laparoscopic &middot; No complications</div></div><div class="dx-chip dc-hx">Remote</div></div>
+        <div class="dx-item"><div class="dx-n">04</div><div class="dx-content"><div class="dx-name">Caesarean Section &times;1</div><div class="dx-code">1997 &middot; Low transverse &middot; No complications</div></div><div class="dx-chip dc-hx">Remote</div></div>
+        <div class="dx-item"><div class="dx-n">05</div><div class="dx-content"><div class="dx-name">Right Knee Arthroscopy</div><div class="dx-code">2016 &middot; Medial meniscus partial repair</div></div><div class="dx-chip dc-hx">Remote</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sage)"></div><div class="mod-title">Social History</div><div class="mod-sub">SHx</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Tobacco</div><div class="dx-code">Former &middot; 20 pack-year &middot; Quit 2010</div></div><div class="dx-chip dc-hx">Former</div></div>
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Alcohol</div><div class="dx-code">Social &middot; 2&ndash;3 drinks/week</div></div><div class="dx-chip dc-active">Social</div></div>
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Living Situation</div><div class="dx-code">Lives alone &middot; 2nd floor apt &middot; No elevator</div></div><div class="dx-chip dc-hx">Alone</div></div>
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Occupation</div><div class="dx-code">Retired elementary school teacher &middot; 2018</div></div><div class="dx-chip dc-hx">Retired</div></div>
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Support System</div><div class="dx-code">One adult daughter, local &middot; HCP on file</div></div><div class="dx-chip dc-active">Family</div></div>
+        <div class="dx-item"><div class="dx-n"></div><div class="dx-content"><div class="dx-name">Functional Baseline</div><div class="dx-code">NYHA Class II&ndash;III &middot; ADLs independent</div></div><div class="dx-chip dc-hx">Impaired</div></div>
+      </div></div>
+    </div>
+
+    <!-- Row 3: Team / Results -->
+    <div class="mod-grid-2">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--blush)"></div><div class="mod-title">Treatment Team</div><div class="mod-sub">5 Members</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="team-row"><div class="team-av" style="background:var(--tile);color:var(--forest)">MC</div><div class="team-info"><div class="team-name">Chen, Marcus MD</div><div class="team-role">Attending &middot; Cardiology</div></div><div class="team-ext">&#9742; 5-2210</div><div class="team-card"><div class="tc-name">Dr. Marcus Chen</div><div class="tc-row">Role<span>Attending &middot; Cardiology</span></div><div class="tc-row">Pager<span>5-2210</span></div><div class="tc-row">Service<span>5 West Cards</span></div><div class="tc-row">On Since<span>07:00 &middot; 03/06</span></div></div></div>
+        <div class="team-row"><div class="team-av" style="background:var(--tile);color:#1A3A6A">JO</div><div class="team-info"><div class="team-name">Okonkwo, James MD</div><div class="team-role">Consult &middot; Advanced HF / MCS</div></div><div class="team-ext">&#9742; 5-4401</div><div class="team-card"><div class="tc-name">Dr. James Okonkwo</div><div class="tc-row">Role<span>Consult &middot; Adv. HF/MCS</span></div><div class="tc-row">Active<span>LVAD Candidacy Eval</span></div><div class="tc-row">Rounding<span>11:00 &middot; 03/06</span></div></div></div>
+        <div class="team-row"><div class="team-av" style="background:var(--tile);color:var(--warn)">VT</div><div class="team-info"><div class="team-name">Tran, Vivian MD</div><div class="team-role">Consult &middot; Pulm / Critical Care</div></div><div class="team-ext">&#9742; 5-3389</div><div class="team-card"><div class="tc-name">Dr. Vivian Tran</div><div class="tc-row">Role<span>Consult &middot; Pulm/CC</span></div><div class="tc-row">Active<span>r/o CAP &middot; Pleural effusion</span></div></div></div>
+        <div class="team-row"><div class="team-av" style="background:var(--tile);color:var(--crit)">SL</div><div class="team-info"><div class="team-name">Student Lab</div><div class="team-role">Bedside RN &middot; Day Shift</div></div><div class="team-ext">&#9742; 5W-514</div><div class="team-card"><div class="tc-name">Student Lab, RN</div><div class="tc-row">Shift<span>07:00 &ndash; 19:00</span></div><div class="tc-row">Last Assess<span>03/06 &middot; 07:00</span></div></div></div>
+        <div class="team-row"><div class="team-av" style="background:var(--tile);color:var(--sky)">LA</div><div class="team-info"><div class="team-name">Lewis, Angela LCSW</div><div class="team-role">Social Work &middot; Case Management</div></div><div class="team-ext">&#9742; 5-6620</div><div class="team-card"><div class="tc-name">Angela Lewis, LCSW</div><div class="tc-row">Active<span>DC planning &middot; Home health</span></div></div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--plum)"></div><div class="mod-title">Results</div><div class="mod-sub">Pending &amp; recent &middot; 03/06</div><div class="mod-action">All &rsaquo;</div><span class="mod-chevron">&#9660;</span></div><div class="mod-body">
+        <div class="date-rule">Critical &middot; Action Required</div>
+        <div class="lab-row"><div class="lab-name">Potassium</div><div class="lab-val crit">2.9</div><div class="lab-ref">Repleting now &middot; KCl ordered</div></div>
+        <div class="lab-row"><div class="lab-name">BNP</div><div class="lab-val crit">2,840</div><div class="lab-ref">&darr; from 3,200 &middot; 03/04</div></div>
+        <div class="date-rule" style="margin-top:8px">Abnormal &middot; Monitoring</div>
+        <div class="lab-row"><div class="lab-name">Sodium</div><div class="lab-val warn">132</div><div class="lab-ref">Hyponatraemia &middot; Stable</div></div>
+        <div class="lab-row"><div class="lab-name">Creatinine</div><div class="lab-val warn">1.6</div><div class="lab-ref">&uarr; from baseline 1.1</div></div>
+        <div class="lab-row"><div class="lab-name">Lactate</div><div class="lab-val warn">2.4</div><div class="lab-ref">Mildly elevated</div></div>
+        <div class="date-rule" style="margin-top:8px">Pending</div>
+        <div class="pend-row" data-pend><div class="pend-time">Ordered</div><div class="pend-val">Sputum culture &middot; Not yet collected</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">Ordered</div><div class="pend-val">Blood culture &times;2 &middot; Not yet collected</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">10:00</div><div class="pend-val"><strong>BMP recheck</strong> &middot; Post-K repletion</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VITALS ═══ -->
+<div id="p-vit" class="panel">
+  <div class="canvas-inner">
+    <div class="vit-grid" id="vitGrid">
+      <div class="vit-card" data-vc><div class="vc-lbl">Blood Pressure</div><div class="vc-val crit">94/62</div><div class="vc-unit">mmHg</div><div class="vc-trend">&darr; 112/74 &rarr; 104/68 &rarr; 94/62</div><div class="vc-detail">22:00 &middot; 112/74<br>02:00 &middot; 104/68<br>06:00 &middot; 94/62<br><br>Goal: MAP &gt;65 &middot; Currently 73<br>On Dobutamine 5 mcg/kg/min</div></div>
+      <div class="vit-card" data-vc><div class="vc-lbl">Heart Rate</div><div class="vc-val warn">108</div><div class="vc-unit">bpm &middot; Sinus Tachycardia</div><div class="vc-trend">&uarr; 96 &rarr; 102 &rarr; 108</div><div class="vc-detail">22:00 &middot; 96 bpm<br>02:00 &middot; 102 bpm<br>06:00 &middot; 108 bpm<br><br>Rhythm: Sinus Tachycardia<br>No ectopy documented</div></div>
+      <div class="vit-card" data-vc><div class="vc-lbl">SpO&#8322;</div><div class="vc-val warn">94%</div><div class="vc-unit">2L Nasal Cannula</div><div class="vc-trend">Stable &rarr; 94% &rarr; 94%</div><div class="vc-detail">Stable at 94% on 2L NC<br>O&#8322; titration held<br><br>Bilateral effusions limit improvement</div></div>
+      <div class="vit-card" data-vc><div class="vc-lbl">Temperature</div><div class="vc-val ok">37.4&deg;</div><div class="vc-unit">Celsius &middot; Oral</div><div class="vc-trend">Stable</div><div class="vc-detail">22:00 &middot; 37.2&deg;<br>06:00 &middot; 37.4&deg;<br><br>Afebrile &middot; Cultures pending</div></div>
+      <div class="vit-card" data-vc><div class="vc-lbl">Urine Output</div><div class="vc-val ok">42</div><div class="vc-unit">mL / hr &middot; Foley</div><div class="vc-trend">&uarr; 18 &rarr; 28 &rarr; 42 mL/hr</div><div class="vc-detail">22:00 &middot; 18 mL/hr<br>02:00 &middot; 28 mL/hr<br>06:00 &middot; 42 mL/hr<br><br>Goal: &gt;50 mL/hr<br>Furosemide drip: 20 mg/hr</div></div>
+    </div>
+    <div class="mod-grid-2">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--blush)"></div><div class="mod-title">Fluid Balance &middot; 24h</div></div><div class="mod-body">
+        <div class="lab-row"><div class="lab-name">Total Intake</div><div class="lab-val warn">2,340 mL</div><div class="lab-ref"></div></div>
+        <div class="lab-row"><div class="lab-name">Total Output</div><div class="lab-val ok">1,160 mL</div><div class="lab-ref"></div></div>
+        <div class="lab-row"><div class="lab-name">Net Balance</div><div class="lab-val crit">+1,180 mL</div><div class="lab-ref">Positive — diuresis ongoing</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">Haemodynamics</div></div><div class="mod-body">
+        <div class="lab-row"><div class="lab-name">Dobutamine</div><div class="lab-val warn">5 mcg/kg/min</div><div class="lab-ref">Continuous drip</div></div>
+        <div class="lab-row"><div class="lab-name">MAP</div><div class="lab-val crit">73</div><div class="lab-ref">Goal &gt;65 mmHg</div></div>
+        <div class="lab-row"><div class="lab-name">Lactate</div><div class="lab-val warn">2.4</div><div class="lab-ref">0.5&ndash;2.0 mmol/L</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LABS ═══ -->
+<div id="p-lab" class="panel">
+  <div class="lab-filters" id="labFilters">
+    <div class="lf-tab active" data-lf="all">All Results</div>
+    <div class="lf-tab" data-lf="bmp">Metabolic</div>
+    <div class="lf-tab" data-lf="card">Cardiac &amp; Special</div>
+    <div class="lf-tab" data-lf="liver">Liver &amp; Coag</div>
+  </div>
+  <div class="canvas-inner">
+    <div class="lab-sub-panel active" data-lfp="all" data-lfp2="bmp">
+      <div class="mod"><div class="mod-hd"><div class="mod-bar" style="background:var(--blush)"></div><div class="mod-title">Basic Metabolic Panel</div><div class="mod-sub">03/06 &middot; 05:30</div></div><div class="mod-body">
+        <div class="lab-row"><div class="lab-name">Sodium</div><div class="lab-val warn">132</div><div class="lab-ref">136&ndash;145 mEq/L</div></div>
+        <div class="lab-row"><div class="lab-name">Potassium</div><div class="lab-val crit">2.9</div><div class="lab-ref">3.5&ndash;5.0 mEq/L</div></div>
+        <div class="lab-row"><div class="lab-name">Chloride</div><div class="lab-val ok">98</div><div class="lab-ref">98&ndash;106 mEq/L</div></div>
+        <div class="lab-row"><div class="lab-name">CO&#8322;</div><div class="lab-val warn">20</div><div class="lab-ref">22&ndash;29 mEq/L</div></div>
+        <div class="lab-row"><div class="lab-name">BUN</div><div class="lab-val warn">34</div><div class="lab-ref">8&ndash;20 mg/dL</div></div>
+        <div class="lab-row"><div class="lab-name">Creatinine</div><div class="lab-val warn">1.6</div><div class="lab-ref">0.6&ndash;1.2 mg/dL</div></div>
+        <div class="lab-row"><div class="lab-name">Glucose</div><div class="lab-val warn">162</div><div class="lab-ref">70&ndash;100 mg/dL</div></div>
+      </div></div>
+    </div>
+    <div class="lab-sub-panel active" data-lfp="all" data-lfp2="card">
+      <div class="mod"><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">Cardiac &amp; Special</div><div class="mod-sub">03/06 &middot; 05:30</div></div><div class="mod-body">
+        <div class="lab-row"><div class="lab-name">BNP</div><div class="lab-val crit">2,840</div><div class="lab-ref">&lt;100 pg/mL</div></div>
+        <div class="lab-row"><div class="lab-name">Troponin I (serial)</div><div class="lab-val ok">0.06</div><div class="lab-ref">&lt;0.04 ng/mL</div></div>
+        <div class="lab-row"><div class="lab-name">Lactate</div><div class="lab-val warn">2.4</div><div class="lab-ref">0.5&ndash;2.0 mmol/L</div></div>
+        <div class="lab-row"><div class="lab-name">Hgb / Hct</div><div class="lab-val warn">9.8 / 30</div><div class="lab-ref">12&ndash;16 / 36&ndash;46</div></div>
+        <div class="lab-row"><div class="lab-name">Platelets</div><div class="lab-val ok">188</div><div class="lab-ref">150&ndash;400 K/&micro;L</div></div>
+      </div></div>
+    </div>
+    <div class="lab-sub-panel active" data-lfp="all" data-lfp2="liver">
+      <div class="mod"><div class="mod-hd"><div class="mod-bar" style="background:var(--sage)"></div><div class="mod-title">Liver &amp; Coag</div><div class="mod-sub">03/05 &middot; 06:00</div></div><div class="mod-body">
+        <div class="lab-row"><div class="lab-name">ALT / AST</div><div class="lab-val warn">62 / 55</div><div class="lab-ref">7&ndash;40 / 10&ndash;40</div></div>
+        <div class="lab-row"><div class="lab-name">Alk Phos</div><div class="lab-val ok">88</div><div class="lab-ref">44&ndash;147 U/L</div></div>
+        <div class="lab-row"><div class="lab-name">Total Bilirubin</div><div class="lab-val warn">1.8</div><div class="lab-ref">0.2&ndash;1.2 mg/dL</div></div>
+        <div class="lab-row"><div class="lab-name">INR</div><div class="lab-val ok">1.2</div><div class="lab-ref">0.9&ndash;1.1</div></div>
+        <div class="lab-row"><div class="lab-name">PTT</div><div class="lab-val ok">34</div><div class="lab-ref">25&ndash;35 sec</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MEDS ═══ -->
+<div id="p-med" class="panel">
+  <div class="canvas-inner">
+    <div class="mod-grid-2">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--crit)"></div><div class="mod-title">Active Drips</div><div class="mod-sub">2 Running</div></div><div class="mod-body">
+        <div class="med-item"><div class="med-dot" style="background:var(--crit)"></div><div class="med-info"><div class="med-name">Dobutamine</div><div class="med-dose">5 mcg/kg/min IV &middot; Continuous &middot; Cardiac drip pump</div></div><div class="med-tag ms-drip">Drip</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Furosemide</div><div class="med-dose">20 mg/hr IV &middot; Continuous &mdash; titrate to UO &gt;50 mL/hr</div></div><div class="med-tag ms-drip">Drip</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">New Orders</div><div class="mod-sub">Ordered today</div></div><div class="mod-body">
+        <div class="med-item"><div class="med-dot" style="background:var(--sky)"></div><div class="med-info"><div class="med-name">KCl 40 mEq PO</div><div class="med-dose">Repletion &middot; K 2.9 &middot; &times;2 doses today</div></div><div class="med-tag ms-new">New</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Insulin Lispro SS</div><div class="med-dose">Per sliding scale &middot; AC meals + bedtime</div></div><div class="med-tag ms-new">New</div></div>
+      </div></div>
+    </div>
+    <div class="mod-grid-2">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sage)"></div><div class="mod-title">Scheduled Medications</div><div class="mod-sub">8 Active</div></div><div class="mod-body">
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Enoxaparin</div><div class="med-dose">40 mg SQ daily &middot; DVT prophylaxis</div></div><div class="med-tag ms-active">Active</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Atorvastatin</div><div class="med-dose">40 mg PO QHS</div></div><div class="med-tag ms-active">Active</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--forest)"></div><div class="med-info"><div class="med-name">Pantoprazole</div><div class="med-dose">40 mg PO daily &middot; GI prophylaxis</div></div><div class="med-tag ms-active">Active</div></div>
+      </div></div>
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--wheat)"></div><div class="mod-title">On Hold</div><div class="mod-sub">2 Home medications held</div></div><div class="mod-body">
+        <div class="med-item"><div class="med-dot" style="background:var(--wheat)"></div><div class="med-info"><div class="med-name">Metformin</div><div class="med-dose">1000 mg PO BID &middot; HOME &middot; Held: renal insufficiency</div></div><div class="med-tag ms-hold">Hold</div></div>
+        <div class="med-item"><div class="med-dot" style="background:var(--wheat)"></div><div class="med-info"><div class="med-name">Lisinopril</div><div class="med-dose">10 mg PO daily &middot; HOME &middot; Held: hypotension</div></div><div class="med-tag ms-hold">Hold</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NOTES ═══ -->
+<div id="p-note" class="panel">
+  <div class="canvas-inner">
+    <div class="mod-grid-1">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sage)"></div><div class="mod-title">Progress Notes</div><div class="mod-sub">5 Notes &middot; This Admission</div></div><div class="mod-body">
+        <div class="dx-item"><div class="dx-n">1</div><div class="dx-content">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;"><div class="dx-name">Attending Progress Note</div><div class="lab-ref">03/06 &middot; 07:42 &middot; Dr. M. Chen</div></div>
+          <div class="note-preview">HD#5 &mdash; hemodynamically tenuous. BP 94/62, dobutamine-dependent. Net fluid balance +1,180 mL in 24h. BNP 2,840.</div>
+          <div class="note-full" id="nf-1">Assessment: ADHF with haemodynamic compromise. INTERMACS Profile 3. Dobutamine titrated overnight. Diuresis progressing but net positive. Renal function worsening &mdash; Cr 1.6 (baseline 1.1). BNP trend 3,200 &rarr; 2,840.<br><br>Plan: (1) Continue Dobutamine 5 mcg/kg/min &mdash; titrate per MAP. (2) Furosemide drip &mdash; target UO &gt;50 mL/hr. (3) Recheck BMP at 10:00 post-K repletion. (4) MCS team rounding 11:00 &mdash; LVAD candidacy decision. (5) Goals of care family meeting 03/07 with Palliative Care.</div>
+          <button class="note-toggle" data-note="nf-1">Expand Note</button>
+          <div class="dx-chip dc-primary" style="display:inline-block;margin-left:8px;">Final</div>
+        </div></div>
+        <div class="dx-item"><div class="dx-n">2</div><div class="dx-content">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;"><div class="dx-name">Cardiology Fellow Note</div><div class="lab-ref">03/06 &middot; 06:10 &middot; Dr. P. Santos</div></div>
+          <div class="note-preview">Overnight: BP nadir 88/58 at 02:30, Dobutamine uptitrated 3.5 &rarr; 5 mcg/kg/min. Diuresis progressing.</div>
+          <div class="note-full" id="nf-2">Overnight events: BP nadir 88/58 at approximately 02:30. Dobutamine uptitrated from 3.5 to 5 mcg/kg/min with improvement in MAP to 73 by 05:00. UO improving &mdash; 18 &rarr; 42 mL/hr. No arrhythmias on telemetry.</div>
+          <button class="note-toggle" data-note="nf-2">Expand Note</button>
+          <div class="dx-chip dc-primary" style="display:inline-block;margin-left:8px;">Final</div>
+        </div></div>
+        <div class="dx-item"><div class="dx-n">3</div><div class="dx-content"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;"><div class="dx-name">Pulmonology Consult Note</div><div class="lab-ref">03/05 &middot; 14:30 &middot; Dr. V. Tran</div></div><div class="note-preview">RLL infiltrate likely pulmonary oedema vs. early CAP. Cultures ordered. Empiric antibiotics deferred.</div><div class="dx-chip dc-active" style="display:inline-block;margin-top:4px;">Final</div></div></div>
+        <div class="dx-item"><div class="dx-n">4</div><div class="dx-content"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;"><div class="dx-name">Nursing Assessment</div><div class="lab-ref">03/06 &middot; 07:00 &middot; Student Lab</div></div><div class="note-preview">Patient alert and oriented &times;3. c/o mild dyspnoea at rest. LE oedema 2+ bilaterally. Foley patent, UO improving.</div><div class="dx-chip dc-active" style="display:inline-block;margin-top:4px;">Final</div></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ORDERS ═══ -->
+<div id="p-ord" class="panel">
+  <div class="canvas-inner">
+    <div class="mod-grid-1">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--wheat)"></div><div class="mod-title">Active Orders</div><div class="mod-sub">All orders &middot; 03/06/2026</div></div><div class="mod-body">
+        <div class="date-rule">Continuous</div>
+        <div class="pend-row" data-pend><div class="pend-time" style="color:var(--crit)">Drip</div><div class="pend-val"><strong>Dobutamine</strong> 5 mcg/kg/min IV &middot; Titrate per haemodynamics &middot; Dr. Chen</div></div>
+        <div class="pend-row" data-pend><div class="pend-time" style="color:var(--crit)">Drip</div><div class="pend-val"><strong>Furosemide</strong> 20 mg/hr IV &middot; Titrate to UO &gt;50 mL/hr &middot; Dr. Chen</div></div>
+        <div class="date-rule" style="margin-top:8px">Today &middot; 03/06</div>
+        <div class="pend-row" data-pend><div class="pend-time">07:00</div><div class="pend-val">KCl 40 mEq PO &middot; Repletion dose #1 &middot; Dr. Chen</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">10:00</div><div class="pend-val"><strong>Recheck BMP</strong> &middot; Post-K repletion &middot; Dr. Chen</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">13:00</div><div class="pend-val">KCl 40 mEq PO &middot; Repletion dose #2 &middot; Dr. Chen</div></div>
+        <div class="date-rule" style="margin-top:8px">Pending &middot; Awaiting</div>
+        <div class="pend-row" data-pend><div class="pend-time">Pending</div><div class="pend-val"><strong>Sputum culture &times;1</strong> &middot; Not yet collected &middot; Dr. Tran</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">Pending</div><div class="pend-val"><strong>Blood culture &times;2</strong> &middot; Not yet collected &middot; Dr. Tran</div></div>
+        <div class="pend-row" data-pend><div class="pend-time">Pending</div><div class="pend-val"><strong>Right heart catheterisation</strong> &middot; Pending MCS consult &middot; Dr. Okonkwo</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMAGING ═══ -->
+<div id="p-img" class="panel">
+  <div class="canvas-inner">
+    <div class="mod-grid-1">
+      <div class="mod" data-mod><div class="mod-hd"><div class="mod-bar" style="background:var(--sky)"></div><div class="mod-title">Imaging Studies</div><div class="mod-sub">This Admission</div></div><div class="mod-body">
+        <div class="img-study"><div class="img-hdr"><div class="img-type">CXR &middot; PA &amp; Lateral</div><div class="img-date">03/06/2026 &middot; 06:30</div></div><div class="img-body">Cardiomegaly. <span class="hi">Bilateral pleural effusions, R &gt; L.</span> <span class="hi-w">RLL infiltrate &mdash; cannot exclude early pneumonia.</span> Pulmonary vascular congestion consistent with volume overload.</div></div>
+        <div class="img-study"><div class="img-hdr"><div class="img-type">Echocardiogram &middot; TTE</div><div class="img-date">03/02/2026 &middot; 14:00</div></div><div class="img-body"><span class="hi">EF 30% (severely reduced).</span> Dilated LV, global hypokinesis. <span class="hi-w">Moderate MR. Moderate TR. PASP estimated 42 mmHg.</span> No pericardial effusion.</div></div>
+        <div class="img-study"><div class="img-hdr"><div class="img-type">CXR &middot; AP Portable</div><div class="img-date">03/03/2026 &middot; 08:00</div></div><div class="img-body">Cardiomegaly. Small bilateral pleural effusions. No focal consolidation. Improved compared to admission film.</div></div>
+        <div class="img-study"><div class="img-hdr"><div class="img-type">CXR &middot; AP Portable &middot; Admission</div><div class="img-date">03/01/2026 &middot; 22:15</div></div><div class="img-body"><span class="hi">Severe cardiomegaly.</span> <span class="hi-w">Moderate bilateral pleural effusions.</span> Pulmonary oedema pattern.</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATUS BAR ═══ -->
+<div class="status-bar">
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--sage)"></div>Systems Operational</div>
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--sky)"></div>HIPAA &middot; 256-bit Encrypted</div>
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--wheat)"></div>Last Sync <span id="sbarSync">07:55</span></div>
+  <div class="sbar-item" id="sbarClock"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══ 1. CUSTOM CURSOR ═══ */
+  const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+  let mx=-100,my=-100,rx=-100,ry=-100;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(aR)})();
+  const ints='a,button,.stab,.stab-pt,.mod-hd,.dx-item,.med-item,.lab-row,.team-row,.pend-row,.vit-card,.hflag,.lf-tab,.nav-act-btn,.pt-vit,.note-toggle';
+  document.addEventListener('mouseover',e=>{if(e.target.closest(ints)){dot.classList.add('hovering');ring.classList.add('hovering')}});
+  document.addEventListener('mouseout',e=>{if(e.target.closest(ints)){dot.classList.remove('hovering');ring.classList.remove('hovering')}});
+
+  /* ═══ 2. SCROLL PROGRESS ═══ */
+  const prog=document.getElementById('scrollProgress');
+  let ticking=false;
+  window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{const s=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=Math.min(s/h,1)*100+'%';if(s>100)prog.classList.add('visible');else prog.classList.remove('visible');ticking=false});ticking=true}},{passive:true});
+
+  /* ═══ 3. TAB SWITCHING ═══ */
+  const tabs=document.querySelectorAll('.stab[data-tab]');
+  const panels=document.querySelectorAll('.panel');
+  function switchTab(id){
+    if(id==='mar'){window.location.href='mar.html';return;}
+    if(id==='notes'){window.location.href='notes.html';return;}
+    tabs.forEach(t=>{t.classList.toggle('active',t.dataset.tab===id)});
+    panels.forEach(p=>{p.classList.toggle('active',p.id===id)});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+  // Hero vitals click → vitals tab
+  document.querySelectorAll('.pt-vit[data-tab]').forEach(v=>v.addEventListener('click',()=>switchTab(v.dataset.tab)));
+
+  /* ═══ 4. MODULE COLLAPSE/EXPAND ═══ */
+  document.querySelectorAll('[data-mod]').forEach(mod=>{
+    const hd=mod.querySelector('.mod-hd');
+    if(hd) hd.addEventListener('click',()=>mod.classList.toggle('collapsed'));
+  });
+
+  /* ═══ 5. DARK MODE ═══ */
+  document.getElementById('dmToggle').addEventListener('click',()=>{
+    document.body.classList.toggle('dark');
+    showToast(document.body.classList.contains('dark')?'Dark mode enabled':'Light mode enabled');
+  });
+
+  /* ═══ 6. LIVE CLOCK ═══ */
+  const sbarClock=document.getElementById('sbarClock');
+  function tick(){
+    const n=new Date(),h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');
+    const ap=h>=12?'PM':'AM';
+    sbarClock.textContent=(h%12||12)+':'+m+':'+s+' '+ap;
+  }
+  tick();setInterval(tick,1000);
+
+  // Sync time
+  function updateSync(){
+    const n=new Date(),h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0');
+    document.getElementById('syncTime').textContent=h+':'+m;
+    document.getElementById('sbarSync').textContent=h+':'+m;
+  }
+  updateSync();setInterval(updateSync,60000);
+
+  /* ═══ 7. VITALS CARD EXPAND ═══ */
+  document.querySelectorAll('[data-vc]').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const was=card.classList.contains('expanded');
+      document.querySelectorAll('[data-vc]').forEach(c=>c.classList.remove('expanded'));
+      if(!was)card.classList.add('expanded');
+    });
+  });
+
+  /* ═══ 8. LAB FILTER TABS ═══ */
+  const lfTabs=document.querySelectorAll('.lf-tab');
+  const lfPanels=document.querySelectorAll('.lab-sub-panel');
+  lfTabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      lfTabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const f=tab.dataset.lf;
+      lfPanels.forEach(p=>{
+        const matches=p.dataset.lfp===f||p.dataset.lfp2===f||(f==='all'&&p.dataset.lfp==='all');
+        p.classList.toggle('active',matches);
+      });
+    });
+  });
+
+  /* ═══ 9. NOTE EXPAND ═══ */
+  document.querySelectorAll('.note-toggle').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const nf=document.getElementById(btn.dataset.note);
+      const open=nf.classList.toggle('open');
+      btn.textContent=open?'Collapse Note':'Expand Note';
+    });
+  });
+
+  /* ═══ 10. PENDING ORDER CHECK-OFF ═══ */
+  document.querySelectorAll('[data-pend]').forEach(row=>{
+    row.addEventListener('click',()=>row.classList.toggle('done'));
+  });
+
+  /* ═══ 11. SEARCH ═══ */
+  const searchOverlay=document.getElementById('searchOverlay'),searchInput=document.getElementById('searchInput'),searchResults=document.getElementById('searchResults');
+  const searchData=[
+    {name:'Potassium 2.9 (Critical)',type:'Lab — BMP',tab:'p-lab'},
+    {name:'BNP 2,840 (Critical)',type:'Lab — Cardiac',tab:'p-lab'},
+    {name:'Dobutamine 5 mcg/kg/min',type:'Medication — MAR',tab:'mar'},
+    {name:'Furosemide 20 mg/hr',type:'Medication — MAR',tab:'mar'},
+    {name:'Attending Progress Note',type:'Note — Dr. Chen',tab:'notes'},
+    {name:'Cardiology Fellow Note',type:'Note — Dr. Santos',tab:'notes'},
+    {name:'CXR PA & Lateral',type:'Imaging — 03/06',tab:'p-img'},
+    {name:'Echocardiogram TTE',type:'Imaging — 03/02',tab:'p-img'},
+    {name:'Right Heart Catheterisation',type:'Order — Pending',tab:'p-ord'},
+    {name:'ADHF — INTERMACS Profile 3',type:'Problem — Primary',tab:'p-sum'},
+    {name:'Dr. Marcus Chen',type:'Team — Attending',tab:'p-sum'},
+    {name:'Dr. James Okonkwo',type:'Team — MCS Consult',tab:'p-sum'},
+    {name:'Blood Pressure 94/62',type:'Vital — Critical',tab:'p-vit'},
+    {name:'Heart Rate 108',type:'Vital — Warning',tab:'p-vit'},
+    {name:'Urine Output 42 mL/hr',type:'Vital — Trending',tab:'p-vit'},
+  ];
+  function openSearch(){searchOverlay.classList.add('open');setTimeout(()=>searchInput.focus(),100);}
+  function closeSearch(){searchOverlay.classList.remove('open');searchInput.value='';searchResults.innerHTML='';}
+  document.getElementById('searchTrigger').addEventListener('click',openSearch);
+  document.getElementById('searchClose').addEventListener('click',closeSearch);
+  searchOverlay.addEventListener('click',e=>{if(e.target===searchOverlay)closeSearch();});
+  document.addEventListener('keydown',e=>{
+    if(e.key==='/'&&!searchOverlay.classList.contains('open')&&document.activeElement.tagName!=='INPUT'){e.preventDefault();openSearch();}
+    if(e.key==='Escape')closeSearch();
+  });
+  searchInput.addEventListener('input',()=>{
+    const q=searchInput.value.toLowerCase().trim();searchResults.innerHTML='';if(!q)return;
+    const matches=searchData.filter(d=>d.name.toLowerCase().includes(q)||d.type.toLowerCase().includes(q));
+    matches.slice(0,8).forEach(m=>{
+      const div=document.createElement('div');div.className='search-result';
+      div.innerHTML=`<span class="search-result-name">${m.name}</span><span class="search-result-type">${m.type}</span>`;
+      div.addEventListener('click',()=>{closeSearch();switchTab(m.tab);});
+      searchResults.appendChild(div);
+    });
+    if(!matches.length)searchResults.innerHTML='<div style="font-family:var(--sans);font-size:12px;color:var(--muted);padding:12px 0;">No results found.</div>';
+  });
+
+  /* ═══ 12. KEYBOARD SHORTCUTS ═══ */
+  const tabNames={'p-sum':'Summary','p-vit':'Vitals','p-lab':'Labs','p-ord':'Orders','p-img':'Imaging'};
+  document.addEventListener('keydown',e=>{
+    if(document.activeElement.tagName==='INPUT'||searchOverlay.classList.contains('open'))return;
+    const map={'1':'p-sum','2':'p-vit','3':'p-lab','6':'p-ord','7':'p-img'};
+    if(e.key==='4'){window.location.href='mar.html';return;}
+    if(e.key==='5'){window.location.href='notes.html';return;}
+    if(map[e.key]){e.preventDefault();switchTab(map[e.key]);showToast('Switched to '+(tabNames[map[e.key]]||'tab'));}
+    if(e.key==='d'){document.body.classList.toggle('dark');showToast(document.body.classList.contains('dark')?'Dark mode':'Light mode');}
+  });
+
+  /* ═══ 13. TOAST ═══ */
+  const toast=document.getElementById('toast');let toastTimer;
+  function showToast(msg){
+    toast.textContent=msg;toast.classList.add('visible');
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('visible'),1800);
+  }
+
+  /* ═══ 14. PATIENT NAME ENTRANCE ═══ */
+  const ptName=document.getElementById('ptName');
+  ptName.style.opacity='0';ptName.style.transform='translateY(14px)';
+  setTimeout(()=>{ptName.style.transition='opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)';ptName.style.opacity='1';ptName.style.transform='translateY(0)';},200);
+
+  /* ═══ 15. CRITICAL LAB FLASH ═══ */
+  document.querySelectorAll('.lab-val.crit').forEach(el=>{
+    el.style.animation='critFlash 2.5s ease-in-out infinite';
+  });
+  const cs=document.createElement('style');
+  cs.textContent='@keyframes critFlash{0%,100%{opacity:1}50%{opacity:.6}}';
+  document.head.appendChild(cs);
+
+  /* ═══ 16. PATIENT TAB CLICK HANDLERS ═══ */
+  document.querySelectorAll('.stab-pt:not(.active)').forEach(pt=>{
+    pt.addEventListener('click',()=>{
+      const name=pt.textContent.trim();
+      if(name==='+ Add'){showToast('Patient search not available in demo');}
+      else{showToast(name+' — chart not loaded in demo');}
+    });
+  });
+
+  /* ═══ 17. ACTION BUTTON HANDLERS ═══ */
+  document.querySelectorAll('.nav-act-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      showToast(btn.textContent.trim()+' — not available in demo');
+    });
+  });
+
+  /* ═══ 18. MOD-ACTION LINK HANDLERS ═══ */
+  document.querySelectorAll('.mod-action').forEach(link=>{
+    link.addEventListener('click',e=>{
+      e.stopPropagation();
+      showToast('Full view not available in demo');
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
