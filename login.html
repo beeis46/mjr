@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Login — The MJR Hospital</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;600&family=Space+Mono&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+<style>
+:root {
+  --warm:    #F7F4EB;
+  --white:   #FFFFFF;
+  --rule:    #E4DED0;
+  --text:    #1A1A1A;
+  --muted:   #8A7E6E;
+  --tile:    #EDEAE0;
+
+  --accent-bg:    #342C20;
+  --accent-mid:   #4A3F30;
+  --accent-text:  #EBE4D0;
+  --accent-muted: rgba(235,228,208,0.45);
+  --accent-rule:  rgba(235,228,208,0.15);
+
+  --forest: #4A3F30;
+  --sage:   #8A7A5E;
+  --wheat:  #C4A860;
+  --blush:  #C8AE82;
+  --sky:    #8C9AA0;
+  --plum:   #B5ADA4;
+
+  --error:  #B85450;
+  --success:#8A7A5E;
+
+  --corm: "Cormorant Garamond", Georgia, serif;
+  --mono: "Space Mono", monospace;
+  --cond: "Barlow Condensed", sans-serif;
+  --sans: "DM Sans", sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{
+  background:var(--accent-bg);color:var(--text);font-family:var(--sans);
+  overflow-x:hidden;min-height:100%;display:flex;flex-direction:column;
+}
+a{color:inherit;text-decoration:none;}
+img{display:block;}
+input{font-family:inherit;}
+
+/* ── CUSTOM CURSOR ── */
+.cursor-dot{
+  position:fixed;top:0;left:0;width:8px;height:8px;
+  background:var(--wheat);border-radius:50%;
+  pointer-events:none;z-index:10000;
+  transform:translate(-50%,-50%);
+  transition:width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+  mix-blend-mode:difference;opacity:0;
+}
+.cursor-ring{
+  position:fixed;top:0;left:0;width:36px;height:36px;
+  border:1px solid rgba(232,228,216,0.2);border-radius:50%;
+  pointer-events:none;z-index:10000;
+  transform:translate(-50%,-50%);
+  transition:width 0.25s, height 0.25s, border-color 0.25s, opacity 0.25s;
+  opacity:0;
+}
+body:hover .cursor-dot,body:hover .cursor-ring{opacity:1;}
+.cursor-dot.hovering{width:14px;height:14px;background:var(--blush);}
+.cursor-ring.hovering{width:52px;height:52px;border-color:rgba(200,174,130,0.3);}
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none !important;}}
+
+/* ── GRAIN OVERLAY ── */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:0.03;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+
+/* ── AMBIENT LIGHT ── */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient-orb{
+  position:absolute;border-radius:50%;filter:blur(120px);opacity:0;
+  animation:orbFade 1.8s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.ambient-orb:nth-child(1){
+  width:600px;height:600px;top:-15%;right:-10%;
+  background:radial-gradient(circle,rgba(138,122,94,0.12),transparent 70%);
+  animation-delay:0.3s;
+}
+.ambient-orb:nth-child(2){
+  width:500px;height:500px;bottom:-10%;left:-8%;
+  background:radial-gradient(circle,rgba(140,154,160,0.08),transparent 70%);
+  animation-delay:0.6s;
+}
+.ambient-orb:nth-child(3){
+  width:300px;height:300px;top:40%;left:50%;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(200,174,130,0.06),transparent 70%);
+  animation-delay:0.9s;
+}
+@keyframes orbFade{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+
+/* ── LAYOUT ── */
+.login-page{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:100vh;flex:1;
+}
+
+/* ── LEFT PANEL — BRANDING ── */
+.brand-panel{
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:52px 64px;position:relative;overflow:hidden;
+  border-right:1px solid var(--accent-rule);
+}
+.brand-top{display:flex;flex-direction:column;gap:6px;}
+.brand-back{
+  font-family:var(--mono);font-size:8px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--accent-muted);
+  display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:40px;transition:color 0.2s,gap 0.2s;
+}
+.brand-back:hover{color:var(--accent-text);gap:14px;}
+.brand-back-line{width:20px;height:1px;background:currentColor;transition:width 0.2s;}
+.brand-back:hover .brand-back-line{width:30px;}
+.brand-wordmark{
+  font-family:var(--corm);font-size:28px;font-weight:300;
+  letter-spacing:0.32em;text-transform:uppercase;
+  color:var(--accent-text);line-height:1;
+}
+.brand-wordmark em{font-style:italic;font-weight:400;letter-spacing:0.2em;}
+.brand-sub{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.28em;
+  text-transform:uppercase;color:rgba(232,228,216,0.25);
+}
+
+.brand-center{
+  display:flex;flex-direction:column;gap:28px;
+  max-width:380px;
+}
+.brand-kicker{
+  font-family:var(--mono);font-size:7px;letter-spacing:0.32em;
+  text-transform:uppercase;color:var(--sage);opacity:0.7;
+}
+.brand-headline{
+  font-family:var(--corm);font-size:clamp(38px,4.5vw,68px);
+  font-style:italic;font-weight:300;line-height:0.92;
+  color:var(--accent-text);
+}
+.brand-body{
+  font-family:var(--sans);font-size:13px;font-weight:300;
+  line-height:1.9;color:var(--accent-muted);
+}
+
+.brand-bottom{
+  display:flex;flex-direction:column;gap:20px;
+}
+.brand-status{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 0;border-top:1px solid var(--accent-rule);
+}
+.brand-status-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--sage);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.brand-status-text{
+  font-family:var(--mono);font-size:7.5px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--accent-muted);
+}
+.brand-certs{
+  display:flex;gap:24px;flex-wrap:wrap;
+}
+.brand-cert{
+  font-family:var(--mono);font-size:6.5px;letter-spacing:0.1em;
+  text-transform:uppercase;color:rgba(232,228,216,0.15);
+}
+.brand-time{
+  font-family:var(--corm);font-size:15px;font-style:italic;
+  font-weight:300;color:rgba(232,228,216,0.2);letter-spacing:0.04em;
+}
+
+/* ── RIGHT PANEL — LOGIN FORM ── */
+.form-panel{
+  display:flex;align-items:center;justify-content:center;
+  padding:52px 64px;
+  background:var(--warm);
+  position:relative;overflow:hidden;
+}
+/* Subtle radial glow behind form */
+.form-panel::before{
+  content:'';position:absolute;
+  width:500px;height:500px;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,255,255,0.6),transparent 70%);
+  pointer-events:none;
+}
+
+.form-container{
+  position:relative;z-index:2;
+  width:100%;max-width:400px;
+  display:flex;flex-direction:column;gap:0;
+}
+
+/* ── FORM HEADER ── */
+.form-header{
+  margin-bottom:48px;
+  opacity:0;transform:translateY(16px);
+  animation:formIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s forwards;
+}
+@keyframes formIn{to{opacity:1;transform:translateY(0)}}
+
+.form-kicker{
+  font-family:var(--mono);font-size:8px;letter-spacing:0.32em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:14px;
+}
+.form-title{
+  font-family:var(--corm);font-size:clamp(32px,3.5vw,48px);
+  font-style:italic;font-weight:300;line-height:1;color:var(--text);
+  margin-bottom:12px;
+}
+.form-subtitle{
+  font-family:var(--sans);font-size:13px;font-weight:300;
+  line-height:1.7;color:var(--muted);
+}
+
+/* ── FORM FIELDS ── */
+.form-body{
+  display:flex;flex-direction:column;gap:0;
+  opacity:0;transform:translateY(16px);
+  animation:formIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+}
+
+.field{
+  position:relative;
+  padding:24px 0 20px;
+  border-bottom:1px solid var(--rule);
+}
+.field:first-child{border-top:1px solid var(--rule);}
+
+.field-label{
+  position:absolute;top:28px;left:0;
+  font-family:var(--mono);font-size:8px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--muted);
+  pointer-events:none;
+  transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+  transform-origin:left;
+}
+.field.focused .field-label,
+.field.filled .field-label{
+  top:8px;
+  font-size:6.5px;
+  color:var(--sage);
+}
+
+.field-input{
+  width:100%;border:none;outline:none;
+  background:transparent;
+  font-family:var(--corm);font-size:22px;font-weight:300;
+  font-style:italic;color:var(--text);
+  padding:8px 0 0;letter-spacing:0.02em;
+}
+.field-input::placeholder{color:transparent;}
+.field-input:focus{outline:none;}
+
+/* Active underline */
+.field-line{
+  position:absolute;bottom:-1px;left:0;
+  width:0;height:1.5px;
+  background:linear-gradient(90deg,var(--sage),var(--wheat));
+  transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.field.focused .field-line{width:100%;}
+
+/* Password visibility toggle */
+.field-toggle{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:7px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  transition:color 0.2s;padding:8px 0;
+}
+.field-toggle:hover{color:var(--text);}
+
+/* ── LOGIN ROW ── */
+.login-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:36px;
+  opacity:0;transform:translateY(16px);
+  animation:formIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+}
+
+.login-btn{
+  display:inline-flex;align-items:center;gap:16px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--white);
+  background:var(--accent-bg);
+  padding:16px 36px;border:none;border-radius:2px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:background 0.3s,transform 0.2s;
+}
+.login-btn:hover{background:var(--accent-mid);}
+.login-btn:active{transform:scale(0.98);}
+.login-btn-arrow{
+  width:24px;height:1px;background:var(--accent-muted);
+  position:relative;transition:width 0.3s;
+}
+.login-btn:hover .login-btn-arrow{width:36px;}
+.login-btn-arrow::after{
+  content:'';position:absolute;right:-1px;top:-3px;
+  width:7px;height:7px;border-right:1px solid var(--accent-muted);
+  border-top:1px solid var(--accent-muted);
+  transform:rotate(45deg);
+}
+/* Loading state */
+.login-btn .spinner{
+  display:none;width:14px;height:14px;
+  border:1.5px solid var(--accent-muted);
+  border-top-color:var(--accent-text);
+  border-radius:50%;
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-btn.loading .login-btn-text{opacity:0;}
+.login-btn.loading .login-btn-arrow{display:none;}
+.login-btn.loading .spinner{display:block;position:absolute;left:50%;top:50%;margin:-7px 0 0 -7px;}
+
+.forgot-link{
+  font-family:var(--mono);font-size:7.5px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);
+  transition:color 0.2s;
+}
+.forgot-link:hover{color:var(--text);}
+
+/* ── ERROR / SUCCESS STATE ── */
+.form-message{
+  margin-top:20px;padding:14px 18px;
+  border-radius:2px;
+  font-family:var(--sans);font-size:12px;font-weight:300;
+  line-height:1.6;
+  display:none;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 0.3s,transform 0.3s;
+}
+.form-message.visible{display:block;opacity:1;transform:translateY(0);}
+.form-message.error{
+  background:rgba(184,84,80,0.06);
+  border-left:2px solid var(--error);
+  color:var(--error);
+}
+.form-message.success{
+  background:rgba(90,138,98,0.06);
+  border-left:2px solid var(--success);
+  color:var(--success);
+}
+
+/* ── FORM FOOTER ── */
+.form-footer{
+  margin-top:56px;
+  padding-top:24px;
+  border-top:1px solid var(--rule);
+  opacity:0;transform:translateY(16px);
+  animation:formIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.0s forwards;
+}
+.form-footer-row{
+  display:flex;align-items:center;gap:24px;margin-bottom:14px;
+}
+.form-footer-item{
+  font-family:var(--mono);font-size:7px;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(26,26,26,0.28);
+  transition:color 0.2s;
+}
+.form-footer-item:hover{color:var(--muted);}
+.form-footer-legal{
+  font-family:var(--mono);font-size:6.5px;letter-spacing:0.1em;
+  text-transform:uppercase;color:rgba(26,26,26,0.15);line-height:2;
+}
+
+/* ── SECURITY BADGE ── */
+.security-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+  opacity:0;transform:translateY(16px);
+  animation:formIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+}
+.security-icon{
+  width:14px;height:14px;
+  stroke:var(--sage);stroke-width:1.5;fill:none;
+  opacity:0.6;
+}
+.security-text{
+  font-family:var(--mono);font-size:7px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--sage);opacity:0.7;
+}
+
+/* ── SUCCESS OVERLAY ── */
+.success-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--accent-bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.success-overlay.active{opacity:1;pointer-events:auto;}
+.success-check{
+  width:72px;height:72px;border-radius:50%;
+  border:1.5px solid var(--sage);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(0.7);
+  transition:opacity 0.5s 0.3s,transform 0.5s 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.success-overlay.active .success-check{opacity:1;transform:scale(1);}
+.success-check svg{
+  width:28px;height:28px;stroke:var(--sage);stroke-width:1.5;fill:none;
+  stroke-dasharray:40;stroke-dashoffset:40;
+  transition:stroke-dashoffset 0.6s 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.success-overlay.active .success-check svg{stroke-dashoffset:0;}
+.success-text{
+  text-align:center;
+  opacity:0;transform:translateY(14px);
+  transition:opacity 0.5s 0.6s,transform 0.5s 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.success-overlay.active .success-text{opacity:1;transform:translateY(0);}
+.success-greeting{
+  font-family:var(--corm);font-size:clamp(28px,3vw,42px);
+  font-style:italic;font-weight:300;color:var(--accent-text);
+  margin-bottom:8px;
+}
+.success-sub{
+  font-family:var(--sans);font-size:13px;font-weight:300;
+  color:var(--accent-muted);line-height:1.7;
+}
+.success-progress{
+  width:200px;height:1.5px;background:var(--accent-rule);
+  border-radius:2px;overflow:hidden;
+  opacity:0;transition:opacity 0.4s 0.8s;
+}
+.success-overlay.active .success-progress{opacity:1;}
+.success-progress-bar{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--sage),var(--wheat));
+  transition:width 2.2s 1s cubic-bezier(0.16,1,0.3,1);
+}
+.success-overlay.active .success-progress-bar{width:100%;}
+.success-redirect{
+  font-family:var(--mono);font-size:7px;letter-spacing:0.2em;
+  text-transform:uppercase;color:rgba(232,228,216,0.25);
+  opacity:0;transition:opacity 0.4s 1s;
+}
+.success-overlay.active .success-redirect{opacity:1;}
+
+/* ── SESSION AWARE ── */
+.session-info{
+  display:none;align-items:center;gap:12px;
+  padding:14px 18px;background:rgba(138,122,94,0.05);
+  border-left:2px solid var(--sage);border-radius:2px;
+  margin-bottom:24px;
+  font-family:var(--sans);font-size:12px;font-weight:300;color:var(--sage);
+}
+.session-info.visible{display:flex;}
+.session-info-icon{width:14px;height:14px;stroke:var(--sage);stroke-width:1.5;fill:none;flex-shrink:0;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .login-page{grid-template-columns:1fr;min-height:auto;}
+  .brand-panel{
+    padding:32px 28px;min-height:auto;
+    border-right:none;border-bottom:1px solid var(--accent-rule);
+  }
+  .brand-center{margin:40px 0;}
+  .brand-headline{font-size:36px;}
+  .form-panel{padding:48px 28px;}
+  .brand-certs{display:none;}
+  .cursor-dot,.cursor-ring{display:none !important;}
+}
+@media(max-width:560px){
+  .login-row{flex-direction:column;gap:20px;align-items:stretch;}
+  .login-btn{justify-content:center;}
+  .forgot-link{text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Ambient glow -->
+<div class="ambient">
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-check">
+    <svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>
+  </div>
+  <div class="success-text">
+    <div class="success-greeting" id="successGreeting">Welcome back.</div>
+    <div class="success-sub">Initializing your clinical workspace&hellip;</div>
+  </div>
+  <div class="success-progress"><div class="success-progress-bar"></div></div>
+  <div class="success-redirect">Redirecting to MJR EMR Dashboard</div>
+</div>
+
+<div class="login-page">
+
+  <!-- ── LEFT: BRANDING ── -->
+  <div class="brand-panel">
+    <div class="brand-top">
+      <a href="index.html" class="brand-back">
+        <div class="brand-back-line"></div>
+        Return to MJR Hospital
+      </a>
+      <div class="brand-wordmark">The <em>MJR</em> Hospital</div>
+      <div class="brand-sub">Electronic Medical Record System</div>
+    </div>
+
+    <div class="brand-center" id="brandCenter">
+      <div class="brand-kicker">Secure Clinical Access</div>
+      <h1 class="brand-headline">Care<br>starts<br>here.</h1>
+      <p class="brand-body">Access patient records, clinical documentation, order entry, and departmental workflows. This portal is restricted to credentialed staff, residents, and authorized personnel.</p>
+    </div>
+
+    <div class="brand-bottom">
+      <div class="brand-status">
+        <div class="brand-status-dot"></div>
+        <div class="brand-status-text">All systems operational</div>
+      </div>
+      <div class="brand-time" id="brandTime"></div>
+      <div class="brand-certs">
+        <span class="brand-cert">HIPAA Compliant</span>
+        <span class="brand-cert">256-bit TLS Encryption</span>
+        <span class="brand-cert">SOC 2 Type II</span>
+        <span class="brand-cert">Multi-Factor Enabled</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: LOGIN FORM ── -->
+  <div class="form-panel">
+    <div class="form-container">
+
+      <div class="security-row">
+        <svg class="security-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <div class="security-text">Encrypted Session &nbsp;&middot;&nbsp; HIPAA Secure</div>
+      </div>
+
+      <div class="session-info" id="sessionInfo">
+        <svg class="session-info-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="sessionInfoText">Your previous session expired. Please sign in again.</span>
+      </div>
+
+      <div class="form-header">
+        <div class="form-kicker">Staff &amp; Clinician Portal</div>
+        <h2 class="form-title">Sign in.</h2>
+        <p class="form-subtitle">Enter your MJR network credentials to access the clinical workspace.</p>
+      </div>
+
+      <div class="form-body" id="loginForm">
+        <div class="field" id="fieldUser">
+          <label class="field-label" for="username">Username or Employee ID</label>
+          <input class="field-input" id="username" type="text" placeholder="Username" autocomplete="username" spellcheck="false">
+          <div class="field-line"></div>
+        </div>
+
+        <div class="field" id="fieldPass">
+          <label class="field-label" for="password">Password</label>
+          <input class="field-input" id="password" type="password" placeholder="Password" autocomplete="current-password">
+          <div class="field-line"></div>
+          <button class="field-toggle" id="passToggle" type="button">Show</button>
+        </div>
+      </div>
+
+      <div class="form-message" id="formMessage"></div>
+
+      <div class="login-row">
+        <button class="login-btn mag-btn" id="loginBtn" type="button">
+          <span class="login-btn-text">Sign In</span>
+          <div class="login-btn-arrow"></div>
+          <div class="spinner"></div>
+        </button>
+        <span class="forgot-link" style="cursor:default">Forgot credentials? Contact IT x4357</span>
+      </div>
+
+      <div class="form-footer">
+        <div class="form-footer-row">
+          <span class="form-footer-item">IT Help Desk: x4357</span>
+          <span class="form-footer-item">System Status: Operational</span>
+          <a href="index.html" class="form-footer-item">Return to Homepage</a>
+        </div>
+        <div class="form-footer-legal">
+          &copy; 2026 The MJR Hospital &middot; Authorized use only &middot; All activity is logged and monitored &middot; HIPAA Notice of Privacy Practices
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════════════════════════════════
+     1. CUSTOM CURSOR (matches homepage)
+     ═══════════════════════════════════════ */
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+  (function animateRing(){
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  const interactives = 'a, button, .field-input, .mag-btn, .field-toggle';
+  document.addEventListener('mouseover', e => {
+    if(e.target.closest(interactives)){
+      dot.classList.add('hovering');
+      ring.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if(e.target.closest(interactives)){
+      dot.classList.remove('hovering');
+      ring.classList.remove('hovering');
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     2. MAGNETIC BUTTON (matches homepage)
+     ═══════════════════════════════════════ */
+  if(window.matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.mag-btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width/2;
+        const y = e.clientY - rect.top - rect.height/2;
+        btn.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+        btn.style.transition = 'transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.3s';
+        setTimeout(() => { btn.style.transition = 'background 0.3s, transform 0.2s'; }, 400);
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════
+     3. LIVE CLOCK (matches homepage ER section)
+     ═══════════════════════════════════════ */
+  const timeEl = document.getElementById('brandTime');
+  function updateTime(){
+    const now = new Date();
+    const opts = {weekday:'long',year:'numeric',month:'long',day:'numeric'};
+    const date = now.toLocaleDateString('en-US',opts);
+    const h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    timeEl.textContent = `${date}  ·  ${h12}:${m}:${s} ${ampm}`;
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  /* ═══════════════════════════════════════
+     4. BRAND PANEL ENTRANCE
+     ═══════════════════════════════════════ */
+  const brandCenter = document.getElementById('brandCenter');
+  brandCenter.style.opacity = '0';
+  brandCenter.style.transform = 'translateY(20px)';
+  setTimeout(() => {
+    brandCenter.style.transition = 'opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)';
+    brandCenter.style.opacity = '1';
+    brandCenter.style.transform = 'translateY(0)';
+  }, 200);
+
+  /* ═══════════════════════════════════════
+     5. FLOATING LABEL FIELDS
+     ═══════════════════════════════════════ */
+  document.querySelectorAll('.field').forEach(field => {
+    const input = field.querySelector('.field-input');
+
+    function checkFilled(){
+      if(input.value.length > 0) field.classList.add('filled');
+      else field.classList.remove('filled');
+    }
+
+    input.addEventListener('focus', () => field.classList.add('focused'));
+    input.addEventListener('blur', () => {
+      field.classList.remove('focused');
+      checkFilled();
+    });
+    input.addEventListener('input', checkFilled);
+    checkFilled();
+  });
+
+  /* ═══════════════════════════════════════
+     6. PASSWORD VISIBILITY TOGGLE
+     ═══════════════════════════════════════ */
+  const passInput = document.getElementById('password');
+  const passToggle = document.getElementById('passToggle');
+  passToggle.addEventListener('click', () => {
+    const showing = passInput.type === 'text';
+    passInput.type = showing ? 'password' : 'text';
+    passToggle.textContent = showing ? 'Show' : 'Hide';
+    passInput.focus();
+  });
+
+  /* ═══════════════════════════════════════
+     7. LOGIN LOGIC
+     ═══════════════════════════════════════ */
+  const loginBtn = document.getElementById('loginBtn');
+  const usernameInput = document.getElementById('username');
+  const formMsg = document.getElementById('formMessage');
+  const successOverlay = document.getElementById('successOverlay');
+  const successGreeting = document.getElementById('successGreeting');
+  let attempts = 0;
+
+  function showMessage(text, type){
+    formMsg.className = 'form-message ' + type;
+    formMsg.textContent = text;
+    // Force reflow for animation
+    void formMsg.offsetWidth;
+    formMsg.classList.add('visible');
+  }
+  function hideMessage(){
+    formMsg.classList.remove('visible');
+  }
+
+  function shake(el){
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'shake 0.5s ease';
+  }
+
+  // Add shake keyframes dynamically
+  const shakeStyle = document.createElement('style');
+  shakeStyle.textContent = `@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(5px)}45%{transform:translateX(-4px)}60%{transform:translateX(3px)}75%{transform:translateX(-2px)}}`;
+  document.head.appendChild(shakeStyle);
+
+  function attemptLogin(){
+    const user = usernameInput.value.trim();
+    const pass = passInput.value;
+
+    hideMessage();
+
+    // Validation
+    if(!user || !pass){
+      showMessage('Please enter both username and password.', 'error');
+      shake(document.getElementById('loginForm'));
+      return;
+    }
+
+    // Show loading
+    loginBtn.classList.add('loading');
+    loginBtn.disabled = true;
+
+    // Simulate network delay for realism
+    const delay = 800 + Math.random() * 600;
+
+    setTimeout(() => {
+      loginBtn.classList.remove('loading');
+
+      if(user.toLowerCase() === 'student' && pass === 'lab'){
+        // SUCCESS — keep button disabled
+        loginBtn.disabled = true;
+        showMessage('Authentication successful. Preparing your workspace…', 'success');
+
+        // Determine greeting based on time
+        const hour = new Date().getHours();
+        let greeting = 'Good evening';
+        if(hour < 12) greeting = 'Good morning';
+        else if(hour < 17) greeting = 'Good afternoon';
+        successGreeting.textContent = greeting + '.';
+
+        setTimeout(() => {
+          successOverlay.classList.add('active');
+        }, 600);
+
+        // Redirect after animation completes
+        setTimeout(() => {
+          window.location.href = 'summary.html';
+        }, 4000);
+
+      } else {
+        // FAILURE — re-enable button for retry
+        loginBtn.disabled = false;
+        attempts++;
+        shake(document.getElementById('loginForm'));
+
+        if(attempts === 1){
+          showMessage('Invalid credentials. Please check your username and password.', 'error');
+        } else if(attempts === 2){
+          showMessage('Authentication failed. If you\'ve forgotten your credentials, contact the IT Help Desk at extension 4357.', 'error');
+        } else if(attempts >= 3){
+          showMessage(`Authentication failed (${attempts} attempts). Your account may be locked after 5 failed attempts. Contact IT Help Desk: x4357.`, 'error');
+          if(attempts >= 5){
+            loginBtn.disabled = true;
+            loginBtn.style.opacity = '0.4';
+            showMessage('Too many failed attempts. Your session has been locked for security. Please contact the IT Help Desk at extension 4357 or (555) 800-4357.', 'error');
+          }
+        }
+
+        // Flash field borders red briefly
+        document.querySelectorAll('.field-line').forEach(line => {
+          line.style.background = 'var(--error)';
+          line.style.width = '100%';
+          setTimeout(() => {
+            line.style.background = '';
+            line.style.width = '';
+          }, 1200);
+        });
+      }
+    }, delay);
+  }
+
+  loginBtn.addEventListener('click', attemptLogin);
+
+  // Enter key submits
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !loginBtn.disabled){
+      const active = document.activeElement;
+      if(active === usernameInput || active === passInput || active === loginBtn){
+        attemptLogin();
+      }
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     8. FOCUS MANAGEMENT — TAB TO PASSWORD
+     ═══════════════════════════════════════ */
+  usernameInput.addEventListener('keydown', e => {
+    if(e.key === 'Tab' && !e.shiftKey){
+      // Natural tab order
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     9. SESSION AWARENESS
+     ═══════════════════════════════════════ */
+  // Show session expired message if referrer is from the same domain
+  // (simulating a timeout redirect)
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('expired') === '1'){
+    const si = document.getElementById('sessionInfo');
+    si.classList.add('visible');
+  }
+
+  /* ═══════════════════════════════════════
+     10. AMBIENT ORB MOUSE TRACKING
+     ═══════════════════════════════════════ */
+  const orbs = document.querySelectorAll('.ambient-orb');
+  if(window.matchMedia('(pointer:fine)').matches){
+    document.addEventListener('mousemove', e => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+      orbs.forEach((orb, i) => {
+        const factor = (i + 1) * 8;
+        orb.style.transform = `translate(${nx * factor}px, ${ny * factor}px)`;
+        orb.style.transition = 'transform 1.2s cubic-bezier(0.16,1,0.3,1)';
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════
+     11. AUTO-FOCUS USERNAME ON LOAD
+     ═══════════════════════════════════════ */
+  setTimeout(() => {
+    usernameInput.focus();
+  }, 1200);
+
+  /* ═══════════════════════════════════════
+     12. CAPSLOCK WARNING
+     ═══════════════════════════════════════ */
+  let capsWarned = false;
+  passInput.addEventListener('keyup', e => {
+    if(e.getModifierState && e.getModifierState('CapsLock') && !capsWarned){
+      capsWarned = true;
+      // Only show caps warning if no existing error (don't overwrite login failures)
+      if(!formMsg.classList.contains('visible') || formMsg.textContent === 'Caps Lock is on.'){
+        showMessage('Caps Lock is on.', 'error');
+      }
+    } else if(capsWarned && e.getModifierState && !e.getModifierState('CapsLock')){
+      capsWarned = false;
+      // Only hide if it's the caps lock message, not a login error
+      if(formMsg.textContent === 'Caps Lock is on.'){
+        hideMessage();
+      }
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     13. FORGOT CREDENTIALS HANDLER
+     ═══════════════════════════════════════ */
+  document.querySelector('.forgot-link').addEventListener('click', e => {
+    e.preventDefault();
+    showMessage('Contact the IT Help Desk at extension 4357 or email ithelpdesk@mjrhospital.org for a password reset.', 'error');
+  });
+
+})();
+</script>
+
+</body>
+</html>
