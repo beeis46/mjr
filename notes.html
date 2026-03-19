@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The MJR Hospital — Notes — Harmon, Eleanor D.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Barlow+Condensed:wght@200;300;400;600&family=Space+Mono&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,200&display=swap" rel="stylesheet">
+<style>
+:root{
+  --warm:    #EEEADC;
+  --white:   #F6F3E8;
+  --rule:    #CCCABC;
+  --text:    #161412;
+  --muted:   #8A8880;
+  --tile:    #E4E0D4;
+  --forest:  #3A3C4A;
+  --accent-bg:   #141210;
+  --accent-mid:  #201E1C;
+  --accent-text: #EEEADC;
+  --accent-rule: rgba(238,234,220,0.14);
+  --accent-muted:rgba(238,234,220,0.45);
+  --sage:  #7A9288;
+  --wheat: #C8B870;
+  --blush: #C89096;
+  --sky:   #7A8CA4;
+  --plum:  #A8A098;
+  --crit:  #7D3030;
+  --warn:  #5A5030;
+  --ok:    var(--forest);
+  --corm:  "Cormorant Garamond",Georgia,serif;
+  --mono:  "Space Mono",monospace;
+  --cond:  "Barlow Condensed",sans-serif;
+  --sans:  "DM Sans",sans-serif;
+}
+
+/* BASE */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--warm);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:40px;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+
+/* DARK MODE */
+body.dark{--warm:#0E0D0C;--white:#1A1918;--rule:#2C2B28;--text:#EEEADC;--muted:#8A8880;--tile:#211F1C;}
+body.dark .pt-block{background:#181510!important;border-bottom-color:var(--rule)!important;}
+body.dark .pull-quote{filter:brightness(0.9);}
+body.dark .dm-pip{background:var(--forest);border-color:var(--forest);}
+body.dark .dm-pip::after{transform:translateX(10px);background:var(--warm);}
+body.dark .hf-red{background:rgba(125,48,48,.18)!important;}
+body.dark .hf-amber{background:rgba(90,80,.18,1)!important;}
+body.dark .hf-sky{background:rgba(58,60,74,.22)!important;}
+
+/* CURSOR */
+.cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;background:var(--sage);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .15s;mix-blend-mode:difference;opacity:0;}
+.cursor-ring{position:fixed;top:0;left:0;width:30px;height:30px;border:1px solid rgba(122,146,136,0.25);border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;opacity:0;}
+body:hover .cursor-dot,body:hover .cursor-ring{opacity:1;}
+.cursor-dot.hovering{width:12px;height:12px;background:var(--blush);}
+.cursor-ring.hovering{width:44px;height:44px;border-color:rgba(200,184,112,0.3);}
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none!important;}}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;z-index:9999;background:linear-gradient(90deg,var(--sage),var(--wheat),var(--blush));width:0;pointer-events:none;opacity:0;transition:opacity .3s;}
+.scroll-progress.visible{opacity:1;}
+
+/* NAV — uses --white */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:58px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:rgba(246,243,232,0.97);border-bottom:1px solid var(--rule);backdrop-filter:blur(14px);transition:background .4s,border-color .4s;}
+.nav-left{display:flex;align-items:center;gap:28px;padding:0 36px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.nav-left a{transition:opacity .15s;}
+.nav-left a:hover{opacity:.45;}
+.nav-stat{display:flex;align-items:center;gap:6px;}
+.nav-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.nav-center{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 40px;border-left:1px solid var(--rule);border-right:1px solid var(--rule);height:100%;justify-content:center;}
+.nav-wordmark{font-family:var(--corm);font-size:22px;font-weight:300;letter-spacing:.32em;text-transform:uppercase;white-space:nowrap;line-height:1;color:var(--text);}
+.nav-wordmark em{font-style:italic;font-weight:400;letter-spacing:.2em;}
+.nav-sub{font-family:var(--mono);font-size:6.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.nav-right{display:flex;align-items:center;justify-content:flex-end;gap:24px;padding:0 36px;}
+.nav-act{display:flex;align-items:center;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:opacity .15s;white-space:nowrap;cursor:pointer;border:none;background:none;}
+.nav-act:hover{opacity:.45;}
+.nav-act.primary{color:var(--text);}
+.nav-act-btn{padding:6px 14px;border:1px solid rgba(22,20,18,.25);border-radius:2px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,20,18,.65);transition:all .2s;white-space:nowrap;cursor:pointer;background:none;}
+.nav-act-btn:hover{border-color:var(--text);color:var(--text);}
+.dm-label{display:flex;align-items:center;gap:7px;cursor:pointer;}
+.dm-pip{width:22px;height:12px;border:1px solid var(--rule);border-radius:6px;position:relative;transition:background .2s;}
+.dm-pip::after{content:'';position:absolute;left:2px;top:2px;width:6px;height:6px;border-radius:50%;background:var(--muted);transition:transform .2s,background .2s;}
+
+/* TABS */
+.stabs{position:sticky;top:58px;z-index:499;display:flex;align-items:stretch;background:var(--white);border-bottom:1px solid var(--rule);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.stab{padding:0 20px;height:36px;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none;color:var(--muted);border-right:1px solid var(--rule);border-bottom:2px solid transparent;transition:color .15s,background .15s,border-bottom-color .2s;flex-shrink:0;}
+.stab:hover{color:var(--text);background:var(--tile);}
+.stab.active{color:var(--text);background:var(--warm);border-bottom-color:var(--text);}
+.stab-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;}
+.stab-pt-group{margin-left:auto;display:flex;align-items:stretch;border-left:1px solid var(--rule);}
+.stab-pt{padding:0 16px;height:36px;display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;flex-shrink:0;}
+.stab-pt:hover{opacity:.6;}
+.stab-pt.active{color:var(--text);background:var(--warm);border-bottom-color:var(--text);}
+
+/* PATIENT BANNER — uses --warm, full black ink */
+.pt-block{background:var(--warm);width:100%;position:relative;overflow:hidden;border-bottom:2px solid var(--rule);}
+.pt-block::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-size:200px;}
+.pt-block-ident{padding:84px 72px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;}
+.pt-issue{font-family:var(--mono);font-size:7px;letter-spacing:.28em;text-transform:uppercase;color:rgba(22,20,18,0.40);margin-bottom:13px;}
+.pt-name{font-family:var(--corm);font-size:clamp(44px,5.5vw,72px);font-weight:300;font-style:italic;line-height:.92;color:var(--text);}
+.pt-demogrid{display:grid;grid-template-columns:repeat(4,1fr);margin:20px 40px 0;position:relative;z-index:1;}
+.pt-demo{padding:12px 22px;}
+.pt-demo-lbl{font-family:var(--mono);font-size:6.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(22,20,18,0.38);margin-bottom:4px;}
+.pt-demo-val{font-family:var(--cond);font-size:14px;font-weight:300;letter-spacing:.04em;color:var(--text);}
+.pt-demo-val.crit{color:var(--crit);font-weight:400;}
+.pt-demo-val.warn{color:var(--warn);font-weight:400;}
+.pt-flags{display:flex;gap:6px;flex-wrap:wrap;padding:14px 72px;justify-content:center;border-top:1px solid var(--rule);position:relative;z-index:1;}
+.hflag{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;white-space:nowrap;cursor:default;position:relative;transition:transform .15s;}
+.hflag:hover{transform:translateY(-1px);}
+.hf-red{background:rgba(125,48,48,.09);color:var(--crit);}
+.hf-amber{background:rgba(90,80,48,.09);color:var(--warn);}
+.hf-sky{background:rgba(58,60,74,.09);color:var(--forest);}
+.hflag-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:var(--accent-bg);color:var(--accent-text);font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;padding:6px 10px;white-space:nowrap;z-index:200;border:1px solid var(--accent-rule);box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.hflag:hover .hflag-tip{display:block;}
+
+/* VITALS ROW (summary only, but defined in chrome so it matches banner) */
+.pt-vitals{display:grid;grid-template-columns:repeat(5,1fr);margin:0 40px 28px;position:relative;z-index:1;}
+.pt-vit{padding:16px 20px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:background .2s;}
+
+.pt-vit:hover{background:rgba(22,20,18,.03);}
+.pv-lbl{font-family:var(--mono);font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(22,20,18,0.38);white-space:nowrap;}
+.pv-val{font-family:var(--corm);font-size:30px;font-style:italic;font-weight:300;line-height:1;color:var(--text);transition:transform .2s;}
+.pt-vit:hover .pv-val{transform:scale(1.04);}
+.pv-val.crit{color:var(--crit);}
+.pv-val.warn{color:var(--warn);}
+.pv-val.ok{color:var(--ok);}
+
+/* TOAST */
+.toast{position:fixed;bottom:48px;left:50%;transform:translateX(-50%) translateY(20px);z-index:8000;background:var(--accent-bg);color:var(--accent-text);font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;padding:8px 20px;border-radius:2px;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* STATUS BAR */
+.status-bar{position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--white);border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:center;height:28px;gap:32px;}
+.sbar-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.sbar-dot{width:4px;height:4px;border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE CHROME */
+@media(max-width:900px){
+  .top-nav{grid-template-columns:1fr;justify-items:center;height:auto;padding:10px 16px;}
+  .nav-left,.nav-right{display:none;}
+  .nav-center{border:none;padding:0;}
+  .pt-block-ident{padding:56px 20px 14px;}
+  .pt-demogrid{grid-template-columns:repeat(2,1fr);margin:14px 16px 0;}
+  .pt-flags{padding:10px 16px;}
+  .pt-vitals{grid-template-columns:repeat(3,1fr);margin:0 16px 20px;}
+  .stab-pt-group{display:none;}
+  .cursor-dot,.cursor-ring{display:none!important;}
+  .status-bar{display:none;}
+}
+@media(max-width:560px){
+  .pt-demogrid{grid-template-columns:1fr 1fr;margin:12px 8px 0;}
+  .pt-vitals{grid-template-columns:repeat(2,1fr);margin:0 8px 16px;}
+  .pt-name{font-size:clamp(34px,8vw,52px);}
+}
+
+
+/* PULL QUOTE */
+.pull-quote{background:var(--accent-bg);padding:22px 72px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;border-bottom:3px solid var(--forest);position:relative;}
+.pull-quote::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-size:200px;}
+.pq-body{font-family:var(--corm);font-size:15px;font-style:italic;font-weight:300;line-height:1.7;color:rgba(238,234,220,.88);max-width:860px;position:relative;z-index:1;}
+.pq-body strong{font-style:normal;font-weight:400;color:var(--wheat);}
+.pq-meta{text-align:center;position:relative;z-index:1;}
+.pq-who{font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:rgba(238,234,220,.5);}
+.pq-when{font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;color:rgba(238,234,220,.28);margin-top:3px;}
+
+/* NOTES FILTER */
+.n-filters{display:flex;align-items:center;gap:16px;padding:12px 48px;background:var(--white);border-bottom:1px solid var(--rule);}
+.n-filters-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.nf-btns{display:flex;gap:3px;margin-left:auto;}
+.nf-btn{padding:4px 12px;border:1px solid var(--rule);border-radius:2px;cursor:pointer;font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;background:var(--white);color:var(--muted);transition:all .15s;}
+.nf-btn.active{background:var(--forest);color:var(--accent-text);border-color:var(--forest);}
+.nf-btn:hover:not(.active){background:var(--tile);color:var(--text);}
+
+/* NOTE LIST */
+.note-list{padding:0 48px 48px;}
+.note-date{padding:16px 0 6px;font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule);}
+.note-date span{font-family:var(--mono);font-size:7px;color:var(--plum);margin-left:auto;}
+.note-card{background:var(--white);border:1px solid var(--rule);margin-bottom:6px;transition:box-shadow .2s;}
+.note-card:hover{box-shadow:0 2px 16px rgba(0,0,0,.04);}
+.nc-hdr{padding:16px 28px;cursor:pointer;display:flex;align-items:flex-start;gap:16px;transition:background .12s;user-select:none;}
+.nc-hdr:hover{background:var(--tile);}
+.nc-arrow{font-family:var(--mono);font-size:10px;color:var(--muted);transition:transform .3s;flex-shrink:0;margin-top:2px;}
+.note-card.open .nc-arrow{transform:rotate(90deg);color:var(--wheat);}
+.nc-info{flex:1;min-width:0;}
+.nc-type{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--text);line-height:1.3;}
+.nc-author{font-family:var(--mono);font-size:8px;letter-spacing:.06em;color:var(--sage);margin-top:3px;}
+.nc-preview{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.4;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.note-card.open .nc-preview{display:none;}
+.nc-tags{display:flex;gap:4px;margin-top:6px;}
+.nc-tag{font-family:var(--mono);font-size:6px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:1px;}
+.nct-final{background:rgba(200,184,112,.12);color:var(--warn);}
+.nct-pend{background:rgba(122,140,164,.12);color:var(--sky);}
+.nct-type{background:var(--tile);color:var(--muted);}
+.nc-time{font-family:var(--mono);font-size:8px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.nc-accent{height:4px;background:var(--wheat);}
+.nc-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1);}
+.note-card.open .nc-body{max-height:5000px;}
+.nc-body-inner{padding:0 28px 28px;}
+.ns{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:20px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:6px;}
+.ns::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.ns:first-child{margin-top:0;}
+.np{font-family:var(--sans);font-size:13px;color:var(--text);line-height:1.75;margin-bottom:8px;}
+.np b{font-weight:500;}
+.np .hi{color:var(--crit);font-weight:500;}
+.np .hi-g{color:var(--warn);font-weight:500;}
+.np .hi-b{color:var(--sage);font-weight:500;}
+.nb{font-family:var(--sans);font-size:12px;color:var(--text);line-height:1.65;padding-left:14px;margin-bottom:4px;display:flex;align-items:baseline;gap:6px;}
+.nb::before{content:"·";color:var(--sage);font-size:14px;flex-shrink:0;}
+.nb b{font-weight:500;}
+.nb .hi{color:var(--crit);font-weight:500;}
+.nb .hi-b{color:var(--sage);font-weight:500;}
+.ap{margin-bottom:12px;padding:12px 16px;background:rgba(58,60,74,.02);border:1px solid var(--rule);border-left:3px solid var(--sage);border-radius:0 4px 4px 0;}
+.ap-dx{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--forest);margin-bottom:6px;}
+.ap-dx span{font-size:11px;font-weight:300;color:var(--muted);margin-left:6px;font-family:var(--mono);}
+.apl{display:flex;align-items:baseline;gap:7px;margin-bottom:3px;font-size:12px;color:var(--text);line-height:1.6;}
+.apl::before{content:"→";color:var(--sage);font-size:12px;flex-shrink:0;}
+.vt{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:12px;}
+.vt th{background:var(--tile);padding:5px 10px;text-align:left;font-family:var(--mono);font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--rule);}
+.vt td{padding:5px 10px;border:1px solid var(--rule);color:var(--text);background:var(--white);}
+.vt td.crit{color:var(--crit);font-weight:500;}
+.vt td.warn{color:var(--warn);font-weight:500;}
+.nc-meta{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.nc-meta-item{display:flex;flex-direction:column;gap:2px;}
+.nc-meta-lbl{font-family:var(--mono);font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.nc-meta-val{font-family:var(--cond);font-size:14px;font-weight:300;color:var(--text);}
+.nc-meta-val.hi{color:var(--wheat);}
+
+@media(max-width:900px){
+  .n-filters{padding:10px 16px;flex-wrap:wrap;gap:8px;}
+  .nf-btns{margin-left:0;flex-wrap:wrap;}
+  .note-list{padding:0 16px 40px;}
+  .nc-hdr{padding:12px 16px;}
+  .nc-body-inner{padding:0 16px 20px;}
+  .pull-quote{padding:16px 24px;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="toast" id="toast"></div>
+
+<div class="top-nav">
+  <div class="nav-left">
+    <div class="nav-stat"><div class="nav-dot" style="background:var(--sage)"></div>Systems Operational</div>
+    <div class="nav-stat"><div class="nav-dot" style="background:var(--sky)"></div>HIPAA</div>
+    <div class="nav-stat"><div class="nav-dot" style="background:var(--wheat)"></div>Sync <span id="syncTime"></span></div>
+  </div>
+  <div class="nav-center"><a href="index.html" class="nav-wordmark">The <em>MJR</em> Hospital</a><div class="nav-sub">EMR &nbsp;&middot;&nbsp; v4.1</div></div>
+  <div class="nav-right">
+    <button class="nav-act dm-label" id="dmToggle"><div class="dm-pip"></div>Dark</button>
+    <a href="summary.html" class="nav-act">&larr; Chart</a>
+    <a href="index.html" class="nav-act">&larr; Home</a>
+    <span class="nav-act primary">Student Lab</span>
+    <a href="login.html" class="nav-act" style="opacity:.5">&times; Sign Out</a>
+  </div>
+</div>
+
+<div class="stabs">
+  <a href="summary.html" class="stab"><span class="stab-dot" style="background:var(--muted);opacity:.5"></span>Summary</a>
+  <a href="summary.html" class="stab"><span class="stab-dot" style="background:var(--blush)"></span>Vitals</a>
+  <a href="summary.html" class="stab"><span class="stab-dot" style="background:var(--sage)"></span>Labs</a>
+  <a href="mar.html" class="stab"><span class="stab-dot" style="background:var(--sky)"></span>MAR</a>
+  <div class="stab active"><span class="stab-dot" style="background:var(--wheat)"></span>Notes</div>
+  <a href="summary.html" class="stab"><span class="stab-dot" style="background:var(--plum)"></span>Orders</a>
+  <a href="summary.html" class="stab"><span class="stab-dot" style="background:var(--sky)"></span>Imaging</a>
+  <div class="stab-pt-group">
+    <div class="stab-pt active"><span class="stab-dot" style="background:var(--sage)"></span>Harmon, E.</div>
+    <div class="stab-pt"><span class="stab-dot" style="background:var(--muted);opacity:.4"></span>Patel, R.</div>
+    <div class="stab-pt"><span class="stab-dot" style="background:var(--muted);opacity:.4"></span>Osei, D.</div>
+  </div>
+</div>
+
+<!-- Patient hero -->
+<div class="pt-block">
+  <div class="pt-block-ident">
+    <div class="pt-issue">Chart Review &middot; Notes &amp; Documentation &middot; 03/06/2026</div>
+    <div class="pt-name" id="ptName">Harmon, <em>Eleanor D.</em></div>
+  </div>
+  <div class="pt-demogrid">
+    <div class="pt-demo"><div class="pt-demo-lbl">MRN</div><div class="pt-demo-val">847-293-1</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">DOB &middot; Age &middot; Sex</div><div class="pt-demo-val">04/12/1968 &middot; 57y &middot; F</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Room &middot; Bed</div><div class="pt-demo-val">5 West &middot; Rm 514</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Attending</div><div class="pt-demo-val">Dr. Marcus Chen &middot; Cardiology</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Code Status</div><div class="pt-demo-val crit">Full Code</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Primary Dx</div><div class="pt-demo-val warn">ADHF &middot; EF 30%</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Allergies</div><div class="pt-demo-val crit">PCN &middot; Sulfa &middot; Iodine</div></div>
+    <div class="pt-demo"><div class="pt-demo-lbl">Admit Weight</div><div class="pt-demo-val">84 kg</div></div>
+  </div>
+  <div class="pt-flags">
+    <div class="hflag hf-red">&#9679; MRSA Contact Precautions<div class="hflag-tip">Gown + gloves required &middot; Private room &middot; Dedicated equipment</div></div>
+    <div class="hflag hf-amber">&#9651; Fall Risk &mdash; Moderate<div class="hflag-tip">Bed alarm active &middot; Non-slip socks &middot; Call light in reach</div></div>
+    <div class="hflag hf-sky">LVAD Candidacy Evaluation<div class="hflag-tip">MCS consult active &middot; Dr. Okonkwo &middot; Rounding 11:00</div></div>
+    <div class="hflag hf-amber">Dobutamine Drip Active</div>
+  </div>
+  <div class="pt-vitals">
+    <div class="pt-vit"><div class="pv-lbl">BP mmHg</div><div class="pv-val crit">94/62</div></div>
+    <div class="pt-vit"><div class="pv-lbl">HR bpm</div><div class="pv-val warn">108</div></div>
+    <div class="pt-vit"><div class="pv-lbl">SpO&#8322;</div><div class="pv-val warn">94%</div></div>
+    <div class="pt-vit"><div class="pv-lbl">Temp &deg;C</div><div class="pv-val ok">37.4</div></div>
+    <div class="pt-vit"><div class="pv-lbl">RR /min</div><div class="pv-val ok">18</div></div>
+  </div>
+</div>
+
+<div class="pull-quote">
+  <div class="pq-body">11 notes across 5 hospital days &mdash; <strong>5 physician</strong> &middot; 2 nursing &middot; 4 consult/ancillary. Last attending note 03/06 07:42. Medication reconciliation complete.</div>
+  <div class="pq-meta"><div class="pq-who">Chart Review &mdash; Notes &amp; Documentation</div><div class="pq-when">03/06/2026 &middot; Harmon, Eleanor D. &middot; HD#5</div></div>
+  <div class="pq-meta">Admission 03/01/2026 through HD#5 &nbsp;&middot;&nbsp; Most recent: Today 08:55</div>
+</div>
+
+<!-- Filter bar -->
+<div class="n-filters reveal">
+  <div class="n-filters-label">Notes &amp; Documentation</div>
+  <div class="nf-btns">
+    <button class="nf-btn active" data-f="all">All</button>
+    <button class="nf-btn" data-f="phys">Physician</button>
+    <button class="nf-btn" data-f="nurs">Nursing</button>
+    <button class="nf-btn" data-f="cons">Consult</button>
+  </div>
+</div>
+
+<!-- Note cards -->
+<div class="note-list reveal" id="noteList"></div>
+
+<!-- Status bar -->
+<div class="status-bar">
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--sage)"></div>Systems Operational</div>
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--sky)"></div>HIPAA &middot; 256-bit</div>
+  <div class="sbar-item"><div class="sbar-dot" style="background:var(--wheat)"></div>Sync <span id="sbarSync"></span></div>
+  <div class="sbar-item" id="sbarClock"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* Cursor */
+const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+let mx=-100,my=-100,rx=-100,ry=-100;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(aR)})();
+const ints='a,button,.stab,.stab-pt,.nc-hdr,.nf-btn,.hflag';
+document.addEventListener('mouseover',e=>{if(e.target.closest(ints)){dot.classList.add('hovering');ring.classList.add('hovering')}});
+document.addEventListener('mouseout',e=>{if(e.target.closest(ints)){dot.classList.remove('hovering');ring.classList.remove('hovering')}});
+
+/* Scroll progress */
+const prog=document.getElementById('scrollProgress');
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{const s=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=Math.min(s/Math.max(h,1),1)*100+'%';if(s>100)prog.classList.add('visible');else prog.classList.remove('visible');ticking=false});ticking=true}},{passive:true});
+
+/* Reveals */
+document.querySelectorAll('.reveal').forEach(el=>{new IntersectionObserver(([e])=>{if(e.isIntersecting)e.target.classList.add('visible');},{threshold:.1}).observe(el);});
+
+/* Name entrance */
+const ptName=document.getElementById('ptName');
+ptName.style.opacity='0';ptName.style.transform='translateY(14px)';
+setTimeout(()=>{ptName.style.transition='opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)';ptName.style.opacity='1';ptName.style.transform='translateY(0)';},200);
+
+/* Clock */
+const sbarClock=document.getElementById('sbarClock');
+function tick(){const n=new Date(),h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');sbarClock.textContent=(h%12||12)+':'+m+':'+s+' '+(h>=12?'PM':'AM');}
+tick();setInterval(tick,1000);
+function updateSync(){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById('syncTime').textContent=t;document.getElementById('sbarSync').textContent=t;}
+updateSync();setInterval(updateSync,60000);
+
+/* Dark mode + keyboard */
+document.getElementById('dmToggle').addEventListener('click',()=>{document.body.classList.toggle('dark');showToast(document.body.classList.contains('dark')?'Dark mode':'Light mode');});
+document.addEventListener('keydown',e=>{if(document.activeElement.tagName==='INPUT')return;if(e.key==='d'){document.body.classList.toggle('dark');showToast(document.body.classList.contains('dark')?'Dark mode':'Light mode');}});
+
+/* Toast */
+const toast=document.getElementById('toast');let toastTimer;
+function showToast(msg){toast.textContent=msg;toast.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('visible'),1800);}
+
+/* ═══ NOTE DATA ═══ */
+const N=[
+{id:1,date:'03/06/2026',dl:'03/06/2026 — Today',time:'07:42',cat:'phys',type:'Attending Progress Note',author:'Chen, Marcus MD · Cardiology',tags:[['✓ Final','nct-final'],['Physician','nct-type']],preview:'HD#5. BP 94/62 on dobutamine. New fever 38.4°C, possible RLL opacity. K⁺ 2.9 critical.',
+meta:[['Author','Chen, Marcus MD'],['Service','Cardiology'],['Date','03/06/2026 · 07:42'],['Hospital Day','HD #5']],
+body:`<div class="ns">Subjective / Interval History</div><p class="np">57-year-old female with known <b>HFrEF (EF 30%)</b>, T2DM, HTN, CKD 3a admitted <b>03/01/2026</b> for ADHF. Hospital day <b>#5</b>. Improved but persistent dyspnea at rest. Orthopnea improved from 4-pillow to 2-pillow overnight. Denies chest pain or palpitations.</p><p class="np"><span class="hi-g">Temperature spike to 38.4°C overnight.</span> Blood cultures ×2 and sputum ordered. CXR: <span class="hi">possible RLL opacity</span>. Pulm consult (Dr. Tran) placed.</p><div class="ns">Objective — Vitals (06:14)</div><table class="vt"><thead><tr><th>Parameter</th><th>Value</th><th>Ref</th></tr></thead><tbody><tr><td>BP</td><td class="crit">94/62</td><td>90–140/60–90</td></tr><tr><td>HR</td><td class="warn">108 bpm</td><td>60–100</td></tr><tr><td>Temp</td><td class="crit">38.4°C</td><td>36.5–37.5</td></tr><tr><td>SpO₂</td><td class="warn">94% 2L NC</td><td>≥95%</td></tr><tr><td>I/O (24h)</td><td class="warn">+1,180 mL</td><td>Negative goal</td></tr></tbody></table><div class="ns">Assessment &amp; Plan</div><div class="ap"><div class="ap-dx">1. Acute Decompensated HFrEF <span>I50.22</span></div><div class="apl">Continue dobutamine 5 mcg/kg/min</div><div class="apl">Furosemide drip → increase to 10 mL/hr; goal UO 100+ mL/hr</div><div class="apl">Strict I&amp;Os. 1.5L fluid restriction. Daily weights.</div></div><div class="ap"><div class="ap-dx">2. Hypokalemia — K⁺ 2.9 (Critical) <span>E87.6</span></div><div class="apl">KCl 40 mEq PO × 2 doses; recheck BMP at 10:00</div><div class="apl">MgSO₄ 2 g IV × 1</div><div class="apl">Continuous telemetry — watch QTc and ectopy</div></div><div class="ap"><div class="ap-dx">3. Fever — r/o Pneumonia <span>R50.9</span></div><div class="apl">Blood cultures × 2 drawn 06:50</div><div class="apl">Pulm/CC consult guiding antibiotics; <span class="hi">cannot use PCN or Sulfa</span></div></div><div class="ap"><div class="ap-dx">4. AKI on CKD 3a <span>N17.9</span></div><div class="apl">BMP q12h; hourly UO monitoring</div><div class="apl">Hold metformin, ACEi while Cr > 1.4</div></div><div class="ap"><div class="ap-dx">5. Goals of Care <span>Full Code</span></div><div class="apl">Family meeting 03/07 with Palliative Care</div><div class="apl">LVAD discussion ongoing</div></div><div class="ns">Attestation</div><p class="np"><b>Dr. Marcus Chen, MD</b> — personally performed H&amp;P and MDM. <b>Signed 07:42 · 03/06/2026.</b></p>`},
+
+{id:2,date:'03/06/2026',time:'07:10',cat:'nurs',type:'Nursing Shift Assessment',author:'Student Lab · 5 West',tags:[['⏳ Pending Co-sign','nct-pend'],['Nursing','nct-type']],preview:'A&O ×3. BP 94/62 — MD notified. Sinus tach 108. Bilateral basilar crackles. Temp 38.4°C.',
+meta:[['Author','Student Lab'],['Unit','5 West — Telemetry'],['Date','03/06/2026 · 07:10']],
+body:`<div class="ns">Neurological</div><p class="np">Alert, oriented ×3. Speech clear. <span class="hi-g">Fall risk: Morse 65 — High.</span> Bed alarm active.</p><div class="ns">Cardiovascular</div><p class="np">HR 108 sinus tach. <span class="hi">BP 94/62</span> — Dr. Chen notified 06:18. <span class="hi-g">JVD present.</span> 2+ pitting edema bilat LE. UO 72 mL/hr.</p><div class="ns">Respiratory</div><p class="np">SpO₂ 94% 2L NC. <span class="hi">Bilateral basilar crackles.</span> IS encouraged q1h. HOB 45°.</p><div class="ns">Temperature</div><p class="np"><span class="hi">Temp 38.4°C at 06:30</span> — new spike. Cultures drawn. Acetaminophen 650 mg PO given 07:00.</p><div class="ns">Medications Administered (07:00)</div><div class="nb">Furosemide drip 10 mL/hr — running</div><div class="nb">Dobutamine 5 mcg/kg/min — verified</div><div class="nb">KCl 40 mEq PO — administered</div><div class="nb">Acetaminophen 650 mg PO — for fever</div><div class="ns">Priorities</div><div class="nb">Hourly UO; report < 30 mL/hr to MD</div><div class="nb">Recheck BMP 10:00; call critical values</div><div class="nb">Repeat BP 08:00; report SBP < 90 to MD</div>`},
+
+{id:3,date:'03/06/2026',time:'08:55',cat:'cons',type:'Pulm / Critical Care Consult',author:'Tran, James MD · Pulmonology',tags:[['✓ Final','nct-final'],['Consult','nct-type']],preview:'R/o CAP vs. HAP. CXR RLL opacity. Cultures pending. Azithromycin recommended.',
+meta:[['Author','Tran, James MD'],['Service','Pulmonology / Critical Care'],['Date','03/06/2026 · 08:55'],['Reason','New fever + CXR opacity']],
+body:`<div class="ns">Reason for Consult</div><p class="np">57F ADHF, HD#5. New fever 38.4°C, WBC 11.4, CXR RLL opacity. <span class="hi">Severe PCN and Sulfa allergies.</span></p><div class="ns">Examination</div><p class="np"><span class="hi">Dullness and decreased breath sounds right base.</span> Bilateral crackles (volume overload). SpO₂ 94% 2L NC.</p><div class="ns">Assessment</div><p class="np">RLL opacity with fever and leukocytosis. DDx: (1) <b>HAP</b>, (2) <b>aspiration</b>, (3) <b>atelectasis</b>.</p><div class="ns">Recommendations</div><div class="nb">Await cultures — <b>do not start antibiotics empirically</b> unless deterioration</div><div class="nb">If cultures positive: <span class="hi-b">azithromycin 500 mg IV daily</span> — avoids PCN/sulfa</div><div class="nb">Bronchoscopy deferred — hemodynamically tenuous</div><div class="nb">Continue O₂ ≥ 94%; repeat CXR 24–48h</div>`},
+
+{id:4,date:'03/06/2026',time:'06:30',cat:'cons',type:'Respiratory Therapy Note',author:'Pham, Kevin RRT',tags:[['✓ Final','nct-final']],preview:'SpO₂ 94% 2L NC. Neb treatment given. IS encouraged. No acute distress.',
+meta:[['Author','Pham, Kevin RRT'],['Date','03/06/2026 · 06:30']],
+body:`<div class="ns">Assessment</div><p class="np">SpO₂ 94% on 2L NC. RR 22. No acute distress. Bilateral basilar crackles.</p><div class="ns">Therapy</div><div class="nb">Albuterol 2.5 mg + Ipratropium 0.5 mg neb — tolerated well</div><div class="nb">IS technique reviewed — goal 10/hr; compliance ~6–8/hr</div><div class="nb">HOB maintained 45°</div><div class="ns">Plan</div><div class="nb">Continue 2L NC; titrate SpO₂ ≥ 94%</div><div class="nb">Neb q4h per order</div><div class="nb">Reassess 10:30; notify MD if SpO₂ < 90%</div>`},
+
+{id:5,date:'03/05/2026',dl:'03/05/2026',time:'14:20',cat:'cons',type:'Advanced HF / MCS Consult',author:'Okonkwo, Sarah MD · Adv HF',tags:[['✓ Final','nct-final'],['Consult','nct-type']],preview:'INTERMACS Profile 3. Inotrope-dependent. EF 30%. LVAD evaluation initiated.',
+meta:[['Author','Okonkwo, Sarah MD'],['Service','Advanced HF / MCS'],['Date','03/05/2026 · 14:20'],['Reason','Inotrope-dependent HFrEF — LVAD eval']],
+body:`<div class="ns">Reason for Consult</div><p class="np">57F ADHF (EF 30%), inotrope-dependent 4 days. Referred for LVAD candidacy.</p><div class="ns">Assessment</div><p class="np"><span class="hi-b">INTERMACS Profile 3</span> — stable but inotrope-dependent. Echo 03/04: LVEF 30%, dilated CMP, mod MR/TR. PASP 42. RV moderately preserved — favorable for LVAD.</p><p class="np"><span class="hi-g">Patient has expressed ambivalence regarding surgical intervention.</span></p><div class="ns">Recommendations</div><div class="nb">Optimize medical therapy — continue dobutamine, diuresis</div><div class="nb">Right heart cath needed — defer until hemodynamic optimization</div><div class="nb">Multidisciplinary HF team meeting 03/08</div><div class="nb">Patient/family education on LVAD vs. medical management vs. comfort care</div>`},
+
+{id:6,date:'03/05/2026',time:'08:15',cat:'phys',type:'Attending Progress Note — HD#4',author:'Chen, Marcus MD · Cardiology',tags:[['✓ Final','nct-final'],['Physician','nct-type']],preview:'HD#4. Furosemide ↑ 10 mg/hr. UO 88 mL/hr. K 3.1 repleted. Adv HF consult placed.',
+meta:[['Author','Chen, Marcus MD'],['Date','03/05/2026 · 08:15'],['Hospital Day','HD #4']],
+body:`<div class="ns">HD#4 Update</div><p class="np">BP 96/64 on dobutamine. HR 104. No fever. Weight 83.1 kg. Furosemide drip increased to 10 mg/hr — UO improved to 88 mL/hr. K 3.1 repleted. Advanced HF consult placed (Dr. Okonkwo). Echo: EF 30%, PASP 42.</p><div class="ns">Plan</div><div class="nb">Continue dobutamine 5 mcg/kg/min</div><div class="nb">Furosemide 10 mg/hr; goal UO 100+</div><div class="nb">K 3.1 — repleted; recheck BMP PM</div><div class="nb">Advanced HF consult today</div><div class="nb">Aspirin 81 mg daily for elevated troponin (Type II MI)</div>`},
+
+{id:7,date:'03/05/2026',time:'19:00',cat:'nurs',type:'Nursing Shift Assessment — Night',author:'Student Lab · 5 West',tags:[['✓ Final','nct-final'],['Nursing','nct-type']],preview:'BP 96/66, HR 102. UO 90 mL/hr. Afebrile. Son at bedside. Mild improvement.',
+meta:[['Author','Student Lab'],['Date','03/05/2026 · 19:00']],
+body:`<div class="ns">Assessment</div><p class="np">BP 96/66. HR 102 sinus tach. Afebrile 37.1°C. SpO₂ 95% 2L NC. UO 90 mL/hr. Son Carlos at bedside. Patient reports mild improvement. Edema 2+ bilat LE (down from 3+).</p><div class="ns">Medications</div><div class="nb">Dobutamine 5 mcg/kg/min — verified</div><div class="nb">Furosemide 10 mL/hr — running</div><div class="nb">Carvedilol 6.25 mg PO given 21:03</div><div class="nb">Atorvastatin 40 mg PO given 21:02</div>`},
+
+{id:8,date:'03/04/2026',dl:'03/04/2026',time:'13:20',cat:'cons',type:'Echocardiogram Report',author:'Morris, D. MD · Echo Lab',tags:[['✓ Final','nct-final'],['Result','nct-type']],preview:'LVEF 30%, severely reduced. Dilated CMP. Mod MR, mod TR. PASP 42.',
+meta:[['Author','Morris, D. MD'],['Service','Cardiology / Echo'],['Date','03/04/2026 · 13:20']],
+body:`<div class="ns">Findings</div><p class="np"><b>LV:</b> Severely dilated. LVEF <span class="hi">30%</span> (severely reduced). Global hypokinesis. No LV thrombus.</p><p class="np"><b>RV:</b> Mildly dilated. Moderately preserved function. TAPSE 16 mm.</p><p class="np"><b>Valves:</b> Moderate MR (functional). Moderate TR. PASP <span class="hi-g">42 mmHg</span>.</p><p class="np"><b>Other:</b> Dilated LA (4.8 cm). No pericardial effusion. IVC dilated, diminished respiratory variation.</p><div class="ns">Impression</div><div class="nb">Severely reduced LVEF (30%) — dilated cardiomyopathy</div><div class="nb">Moderate MR and TR — functional</div><div class="nb">Mild pulmonary hypertension (PASP 42)</div><div class="nb">Elevated filling pressures — consistent with ADHF</div>`},
+
+{id:9,date:'03/01/2026',dl:'03/01/2026 — Admission',time:'11:20',cat:'phys',type:'H&P — Admission',author:'Chen, Marcus MD · Cardiology',tags:[['✓ Final','nct-final'],['Physician','nct-type']],preview:'57F HFrEF (EF 30%). 5-day worsening dyspnea, orthopnea, LE edema. Dobutamine initiated.',
+meta:[['Author','Chen, Marcus MD'],['Service','Cardiology'],['Date','03/01/2026 · 11:20']],
+body:`<div class="ns">Chief Complaint</div><p class="np">Worsening SOB × 5 days, orthopnea, bilateral LE swelling.</p><div class="ns">HPI</div><p class="np">57F with HFrEF (EF 30%), T2DM, HTN, CKD 3a presenting with progressive dyspnea → dyspnea at rest. 3-pillow orthopnea. 10-lb weight gain over 2 weeks. Reports non-compliance with lisinopril × 3 months.</p><div class="ns">Allergies</div><p class="np"><span class="hi">Penicillin — Severe (anaphylaxis). Sulfa — Severe (anaphylaxis). Iodine — Mild (rash).</span></p><div class="ns">Exam</div><p class="np">BP 118/74, HR 118, SpO₂ 90% RA → 94% 2L NC. S3 gallop, JVD. Bilateral crackles. 3+ pitting edema to knees.</p><div class="ns">Assessment &amp; Plan</div><p class="np">ADHF — volume overloaded. Furosemide 80 mg IV bolus → drip. Dobutamine 3 mcg/kg/min. Echo ordered. Full code confirmed.</p>`},
+
+{id:10,date:'03/01/2026',time:'09:38',cat:'phys',type:'ED Triage & Assessment',author:'Nguyen, L. MD · Emergency Medicine',tags:[['✓ Final','nct-final'],['Physician','nct-type']],preview:'SpO₂ 90% RA. BNP 4,200. CXR pulmonary edema. Lasix 80 mg IV. Cards consulted.',
+meta:[['Author','Nguyen, L. MD'],['Service','Emergency Medicine'],['Date','03/01/2026 · 09:38']],
+body:`<div class="ns">Presentation</div><p class="np">57F HFrEF with acute dyspnea. Triage: BP 118/74, HR 118, SpO₂ 90% RA.</p><div class="ns">ED Course</div><div class="nb">BNP <span class="hi">4,200</span> — markedly elevated</div><div class="nb">CXR: bilateral pulmonary edema, cardiomegaly</div><div class="nb">EKG: sinus tach, no acute ST changes</div><div class="nb">Furosemide 80 mg IV — UO 600 mL / 90 min</div><div class="nb">O₂ titrated 4L NC → SpO₂ 94%</div><div class="nb">Cardiology (Dr. Chen) accepting admission</div>`},
+
+{id:11,date:'03/01/2026',time:'12:45',cat:'phys',type:'Medication Reconciliation',author:'Reyes, Alicia PA-C · Hospital Medicine',tags:[['✓ Final','nct-final'],['Amended ×1','nct-pend']],preview:'2 discrepancies. Metformin dose corrected. Lisinopril non-compliance documented.',
+meta:[['Author','Reyes, Alicia PA-C'],['Date','03/01/2026 · 12:45'],['Source','Patient + Son + Pharmacy']],
+body:`<div class="ns">Home Medications</div><div class="nb">Furosemide 40 mg PO daily — <b>HELD</b> (→ IV drip)</div><div class="nb">Carvedilol 12.5 mg PO BID — <b>HELD</b></div><div class="nb">Lisinopril 5 mg PO daily — <b>HELD</b> (BP low, AKI)</div><div class="nb">Spironolactone 25 mg PO daily — <b>HELD</b></div><div class="nb">Metformin 1,000 mg PO BID — <b>HELD</b> (AKI)</div><div class="nb">Levothyroxine 75 mcg PO daily — <b>CONTINUED</b></div><div class="nb">Aspirin 81 mg PO daily — <b>CONTINUED</b></div><div class="nb">Atorvastatin 40 mg PO nightly — <b>CONTINUED</b></div><div class="nb">Insulin lispro per SS — <b>NEW</b></div><div class="ns">Discrepancies</div><p class="np"><span class="hi-g">1. Metformin:</span> Patient reported 1,000 mg BID — Rx showed 500 mg BID. Corrected.</p><p class="np"><span class="hi-g">2. Lisinopril:</span> Not filled × 3 months. Non-compliance confirmed. Cardiology aware.</p>`},
+];
+
+/* ═══ RENDER ═══ */
+const list=document.getElementById('noteList');
+function render(filter){
+  list.innerHTML='';
+  let lastDate='';
+  N.forEach((n,i)=>{
+    if(filter!=='all'&&n.cat!==filter)return;
+    if(n.date!==lastDate){
+      lastDate=n.date;
+      list.insertAdjacentHTML('beforeend',`<div class="note-date">${n.dl||n.date}</div>`);
+    }
+    const card=document.createElement('div');
+    card.className='note-card';
+    card.innerHTML=`<div class="nc-hdr"><div class="nc-arrow">&#9656;</div><div class="nc-info"><div class="nc-type">${n.type}</div><div class="nc-author">${n.author} · ${n.time}</div><div class="nc-preview">${n.preview}</div><div class="nc-tags">${n.tags.map(t=>`<span class="nc-tag ${t[1]}">${t[0]}</span>`).join('')}</div></div><div class="nc-time">${n.time}</div></div><div class="nc-accent"></div><div class="nc-body"><div class="nc-body-inner"><div class="nc-meta">${(n.meta||[]).map(m=>`<div class="nc-meta-item"><div class="nc-meta-lbl">${m[0]}</div><div class="nc-meta-val${m[0]==='Author'?' hi':''}">${m[1]}</div></div>`).join('')}</div>${n.body}</div></div>`;
+    card.querySelector('.nc-hdr').addEventListener('click',()=>{
+      const wasOpen=card.classList.contains('open');
+      card.classList.toggle('open');
+      if(!wasOpen)showToast(n.type+' — '+n.time);
+    });
+    list.appendChild(card);
+  });
+}
+
+/* Filters */
+document.querySelectorAll('.nf-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nf-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.f);
+  });
+});
+
+render('all');
+})();
+</script>
+</body>
+</html>
