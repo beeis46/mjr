@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARC</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#eee8e0;
+  --surface:rgba(255,252,248,0.55);
+  --surface-solid:#f8f5f1;
+  --text:#3e3b36;
+  --text2:#5e5a52;
+  --text3:#8a857c;
+  --text4:#b8b2a8;
+  --accent:#b89a4a;
+  --accent-soft:rgba(184,154,74,0.08);
+  --accent-border:rgba(184,154,74,0.18);
+  --rose:#b87a6a;
+  --rose-soft:rgba(184,122,106,0.07);
+  --sage:#7a9a88;
+  --divider:rgba(180,174,164,0.18);
+  --radius:12px;
+}
+
+html,body{min-height:100vh;scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  color:var(--text);
+  font-size:15.5px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* === HEADER === */
+header{
+  background:rgba(238,232,224,0.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--divider);
+}
+
+.header-main{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:14px 40px 6px;
+}
+
+.h-left{display:flex;align-items:baseline;gap:0.8rem}
+
+.h-name{
+  font-family:'Cormorant',serif;
+  font-weight:600;font-size:1.9rem;
+  color:var(--text);letter-spacing:0.01em;
+}
+
+.h-demo{font-size:0.95rem;font-weight:300;color:var(--text2)}
+
+.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.1rem}
+
+.h-meta{
+  display:flex;gap:1rem;align-items:baseline;
+  font-size:0.88rem;font-weight:300;color:var(--text3);
+}
+
+.h-arc{
+  font-family:'Cormorant',serif;font-weight:500;
+  font-size:1.15rem;letter-spacing:0.3em;
+  color:var(--text4);
+}
+
+.header-tags{
+  display:flex;gap:0.5rem;align-items:center;
+  padding:0 40px 10px;flex-wrap:wrap;
+}
+
+.tag{
+  font-size:0.82rem;font-weight:400;
+  padding:0.2rem 0.75rem;border-radius:20px;
+  border:1px solid var(--divider);color:var(--text3);
+}
+.tag.warn{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+.tag.danger{border-color:rgba(184,122,106,0.2);color:var(--rose);background:var(--rose-soft)}
+
+/* nav */
+nav{
+  display:flex;justify-content:center;align-items:center;
+  border-bottom:1px solid var(--divider);
+  background:rgba(238,232,224,0.95);
+  backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:45;
+  height:42px;
+}
+nav a{
+  font-size:0.95rem;font-weight:300;color:var(--text4);
+  padding:11px 26px 12px;cursor:pointer;
+  text-decoration:none;position:relative;
+  transition:color 0.4s ease;
+}
+nav a:hover{color:var(--text3)}
+nav a.on{color:var(--text);font-weight:400}
+nav a.on::after{
+  content:'';position:absolute;bottom:0;left:25%;right:25%;
+  height:2px;background:var(--accent);opacity:0.5;border-radius:1px;
+}
+
+/* === PAGE === */
+main{
+  max-width:1440px;margin:0 auto;
+  padding:28px 40px 60px;
+}
+
+/* === GLASS CARDS === */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.glass{
+  background:var(--surface);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,252,248,0.6);
+  border-radius:var(--radius);
+  padding:1.5rem 1.7rem 1.3rem;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+  transition:box-shadow 0.5s ease,transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.glass:hover{
+  box-shadow:0 8px 30px rgba(0,0,0,0.03);
+  transform:translateY(-1px);
+}
+
+.glass-label{
+  font-size:0.72rem;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text4);margin-bottom:1rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.glass-add{
+  font-weight:300;letter-spacing:0;text-transform:none;
+  font-size:0.82rem;color:var(--text4);cursor:pointer;
+  transition:color 0.3s ease;
+}
+.glass-add:hover{color:var(--accent)}
+
+/* rows */
+.r{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:0.42rem 0;
+  border-bottom:1px solid var(--divider);
+  gap:1rem;
+}
+.r:last-child{border-bottom:none}
+
+.r-l{font-size:0.92rem;font-weight:300;color:var(--text3);white-space:nowrap}
+.r-v{font-size:0.95rem;font-weight:400;color:var(--text);text-align:right}
+.r-v.lg{font-size:1.08rem;font-weight:500}
+.r-v.accent{color:var(--accent)}
+.r-v.rose{color:var(--rose)}
+.r-v.dim{color:var(--text3)}
+
+/* conditions */
+.cx{padding:0.5rem 0;border-bottom:1px solid var(--divider)}
+.cx:last-child{border-bottom:none}
+.cx-top{display:flex;align-items:center;gap:0.5rem}
+.cx-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cx-dot.a{background:var(--sage)}.cx-dot.w{background:var(--accent)}.cx-dot.r{background:var(--text4)}
+.cx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
+.cx-name.accent{color:var(--accent)}
+.cx-name.dim{color:var(--text3)}
+.cx-sub{font-size:0.82rem;font-weight:200;color:var(--text3);margin-top:0.1rem;margin-left:1.1rem}
+
+/* allergy cards */
+.ax{
+  background:var(--accent-soft);border:1px solid var(--accent-border);
+  border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.ax:last-child{margin-bottom:0}
+.ax-name{font-size:0.95rem;font-weight:500;color:var(--accent)}
+.ax-rx{font-size:0.85rem;font-weight:300;color:var(--text2)}
+
+/* meds */
+.mx{padding:0.4rem 0;border-bottom:1px solid var(--divider)}
+.mx:last-child{border-bottom:none}
+.mx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
+.mx-info{font-size:0.82rem;font-weight:200;color:var(--text3)}
+
+/* inline add */
+.iadd{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,padding 0.4s ease;
+}
+.iadd.open{max-height:250px;opacity:1;padding-top:0.6rem}
+
+.iadd input{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid var(--divider);
+  padding:0.4rem 0;font-family:'DM Sans',sans-serif;
+  font-size:0.92rem;font-weight:300;color:var(--text);
+  outline:none;margin-bottom:0.4rem;
+  transition:border-color 0.4s ease;
+}
+.iadd input:focus{border-color:var(--accent)}
+.iadd input::placeholder{color:var(--text4)}
+
+.ibtn{
+  background:none;border:none;font-size:0.88rem;font-weight:400;
+  cursor:pointer;transition:color 0.3s ease;padding:0;margin-right:1rem;
+}
+.ibtn.s{color:var(--accent)}.ibtn.s:hover{color:var(--text)}
+.ibtn.c{color:var(--text4)}.ibtn.c:hover{color:var(--text3)}
+
+/* toast */
+.toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--surface-solid);border:1px solid var(--divider);
+  padding:0.55rem 1.5rem;font-size:0.92rem;font-weight:400;
+  color:var(--text);border-radius:8px;z-index:70;
+  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 30px rgba(0,0,0,0.05);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* footer */
+.dark-bar{background:var(--text);height:36px;width:100%;position:sticky;top:42px;z-index:44}
+footer{
+  padding:1rem 0;
+  border-top:1px solid var(--divider);
+  display:flex;justify-content:space-between;align-items:baseline;
+  position:sticky;bottom:0;background:var(--bg);z-index:30;
+}
+footer .f-l{font-family:'Cormorant',serif;font-weight:500;font-size:0.92rem;color:var(--text4);letter-spacing:0.3em;text-transform:uppercase}
+footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
+
+@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){
+  .grid{grid-template-columns:1fr}
+  main{padding:20px 18px 40px}
+  .header-main{padding:12px 18px 6px}
+  .header-tags{padding:0 18px 8px}
+  .h-left{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-main">
+    <div class="h-left">
+      <span class="h-name">Reeves, Margaret A.</span>
+      <span class="h-demo">68 F · MRN 4819203 · Tele 712-A · HOD #1</span>
+    </div>
+    <span class="h-arc">ARC</span>
+  </div>
+  <div class="header-tags">
+    <span class="tag warn">Afib w/ RVR</span>
+    <span class="tag warn">Anticoagulated</span>
+    <span class="tag danger">ALLERGY: PCN</span>
+    <span class="tag">Full Code</span>
+    <span class="tag">Dr. Chen, Cardiology</span>
+    <span style="flex:1"></span>
+    <span class="b-clock" id="clock"></span>
+  </div>
+</header>
+
+<nav>
+  <a class="on">portrait</a>
+  <a href="arc-medication.html">medication</a>
+  <a>notes</a>
+  <a>nursing</a>
+  <a>results</a>
+  <a>orders</a>
+</nav>
+
+<div class="dark-bar"></div>
+
+<div class="toast" id="toast"></div>
+
+<main>
+  <div class="grid">
+
+    <!-- ACTIVE PROBLEMS -->
+    <div class="glass">
+      <div class="glass-label">Active Problems <span class="glass-add" onclick="tog('ap')">+ add</span></div>
+      <div id="plist">
+        <div class="cx"><div class="cx-top"><div class="cx-dot w"></div><div class="cx-name accent">Atrial fibrillation with RVR</div></div><div class="cx-sub">New onset 20 Mar · HR 148 on arrival · rate control initiated · diltiazem drip → PO metoprolol</div></div>
+        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Hypertension, essential</div></div><div class="cx-sub">Diagnosed 2008 · home meds: lisinopril 20mg, amlodipine 5mg · BP controlled on admit</div></div>
+        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Type 2 diabetes mellitus</div></div><div class="cx-sub">Diagnosed 2012 · A1c 7.2% Jan '26 · home metformin 1000mg BID · held on admission</div></div>
+        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Heart failure, HFpEF</div></div><div class="cx-sub">EF 55% echo Nov '25 · NYHA class II · mild LAE, grade I diastolic dysfunction</div></div>
+        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Hyperlipidemia</div></div><div class="cx-sub">On atorvastatin 40mg · LDL 88 Jan '26</div></div>
+        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">CHA₂DS₂-VASc: 4</div></div><div class="cx-sub">Age ≥65 (1) · female (1) · HTN (1) · DM (1) → anticoagulation indicated · heparin gtt initiated, transition to DOAC</div></div>
+      </div>
+      <div class="iadd" id="ap">
+        <input placeholder="Problem" id="pi1">
+        <input placeholder="Details / onset / management" id="pi2">
+        <div><button class="ibtn s" onclick="addP()">save</button><button class="ibtn c" onclick="tog('ap')">cancel</button></div>
+      </div>
+    </div>
+
+    <!-- MEDICAL HISTORY -->
+    <div class="glass">
+      <div class="glass-label">Medical History <span class="glass-add" onclick="tog('mh')">+ add</span></div>
+      <div id="mhlist">
+        <div class="r"><span class="r-l">Hypertension</span><span class="r-v">Since 2008</span></div>
+        <div class="r"><span class="r-l">Type 2 DM</span><span class="r-v">Since 2012</span></div>
+        <div class="r"><span class="r-l">HFpEF</span><span class="r-v">Diagnosed 2023 · NYHA II</span></div>
+        <div class="r"><span class="r-l">Hyperlipidemia</span><span class="r-v">Since 2010</span></div>
+        <div class="r"><span class="r-l">Osteoarthritis</span><span class="r-v">Bilateral knees · R TKA 2022</span></div>
+        <div class="r"><span class="r-l">GERD</span><span class="r-v">Intermittent · no current meds</span></div>
+        <div class="r"><span class="r-l">Cholelithiasis</span><span class="r-v dim">Resolved — cholecystectomy 2019</span></div>
+        <div class="r"><span class="r-l">HF exacerbation</span><span class="r-v dim">Aug 2025 · 3-day admission</span></div>
+        <div class="r"><span class="r-l">Family Hx</span><span class="r-v">Mother: afib, CVA age 74</span></div>
+        <div class="r"><span class="r-l"></span><span class="r-v">Father: MI age 62, deceased</span></div>
+        <div class="r"><span class="r-l"></span><span class="r-v">Brother: T2DM, HTN</span></div>
+      </div>
+      <div class="iadd" id="mh">
+        <input placeholder="Condition" id="mhi1">
+        <input placeholder="Year / details" id="mhi2">
+        <div><button class="ibtn s" onclick="addMH()">save</button><button class="ibtn c" onclick="tog('mh')">cancel</button></div>
+      </div>
+    </div>
+
+    <!-- SURGICAL HISTORY -->
+    <div class="glass">
+      <div class="glass-label">Surgical History <span class="glass-add" onclick="tog('sh')">+ add</span></div>
+      <div id="shlist">
+        <div class="r"><span class="r-l">2022</span><span class="r-v">Right total knee arthroplasty</span></div>
+        <div class="r"><span class="r-l">2019</span><span class="r-v">Laparoscopic cholecystectomy</span></div>
+        <div class="r"><span class="r-l">2004</span><span class="r-v">Hysterectomy (fibroids)</span></div>
+        <div class="r"><span class="r-l">1998</span><span class="r-v">Tonsillectomy</span></div>
+      </div>
+      <div style="margin-top:0.8rem;padding-top:0.6rem;border-top:1px solid var(--divider)">
+        <div class="r"><span class="r-l" style="font-weight:400">Anesthesia Hx</span><span class="r-v">No prior complications</span></div>
+        <div class="r"><span class="r-l" style="font-weight:400">Blood type</span><span class="r-v">O positive</span></div>
+      </div>
+      <div class="iadd" id="sh">
+        <input placeholder="Year" id="shi1">
+        <input placeholder="Procedure" id="shi2">
+        <div><button class="ibtn s" onclick="addSH()">save</button><button class="ibtn c" onclick="tog('sh')">cancel</button></div>
+      </div>
+    </div>
+
+    <!-- ALLERGIES -->
+    <div class="glass">
+      <div class="glass-label">Allergies <span class="glass-add" onclick="tog('aa')">+ add</span></div>
+      <div id="alist">
+        <div class="ax"><span class="ax-name">Penicillin</span><span class="ax-rx">Anaphylaxis — documented 2003</span></div>
+        <div class="ax"><span class="ax-name">Codeine</span><span class="ax-rx">Nausea, vomiting</span></div>
+      </div>
+      <div style="margin-top:0.8rem;padding-top:0.5rem;border-top:1px solid var(--divider)">
+        <div class="r"><span class="r-l">Cross-reactivity</span><span class="r-v accent">Amoxicillin, ampicillin — avoid all PCN class</span></div>
+        <div class="r"><span class="r-l">Cephalosporins</span><span class="r-v">Tolerates — cefazolin given 2022 (TKA) without reaction</span></div>
+        <div class="r"><span class="r-l">Contrast</span><span class="r-v">No known reaction</span></div>
+        <div class="r"><span class="r-l">Latex</span><span class="r-v">No known reaction</span></div>
+        <div class="r"><span class="r-l">Food</span><span class="r-v dim">NKFA</span></div>
+      </div>
+      <div class="iadd" id="aa">
+        <input placeholder="Allergen" id="ai1">
+        <input placeholder="Reaction · severity · date" id="ai2">
+        <div><button class="ibtn s" onclick="addA()">save</button><button class="ibtn c" onclick="tog('aa')">cancel</button></div>
+      </div>
+    </div>
+
+    <!-- SOCIAL HISTORY -->
+    <div class="glass">
+      <div class="glass-label">Social History</div>
+      <div class="r"><span class="r-l">Lives</span><span class="r-v">Alone · single-story home · son 10 min away</span></div>
+      <div class="r"><span class="r-l">Occupation</span><span class="r-v">Retired teacher (2020)</span></div>
+      <div class="r"><span class="r-l">ADLs</span><span class="r-v">Independent baseline · uses cane occasionally</span></div>
+      <div class="r"><span class="r-l">Tobacco</span><span class="r-v">Former · 1 PPD × 20 yrs · quit 2005</span></div>
+      <div class="r"><span class="r-l">Alcohol</span><span class="r-v">Occasional glass of wine</span></div>
+      <div class="r"><span class="r-l">Substances</span><span class="r-v dim">Denies</span></div>
+      <div class="r"><span class="r-l">Exercise</span><span class="r-v">Walks 20 min daily when feeling well</span></div>
+      <div class="r"><span class="r-l">Diet</span><span class="r-v">Low-sodium at home, inconsistent</span></div>
+      <div class="r"><span class="r-l">Support</span><span class="r-v">Son Thomas (DPOA), daughter Catherine · church community</span></div>
+      <div class="r"><span class="r-l">Advance directive</span><span class="r-v">On file · Full Code · DPOA: Thomas</span></div>
+    </div>
+
+    <!-- TREATMENT TEAM -->
+    <div class="glass">
+      <div class="glass-label">Treatment Team</div>
+      <div class="r"><span class="r-l">Attending</span><span class="r-v lg">Dr. Sarah Chen, Cardiology</span></div>
+      <div class="r"><span class="r-l">PCP</span><span class="r-v">Dr. James Holloway, Internal Medicine</span></div>
+      <div class="r"><span class="r-l">Resident</span><span class="r-v">Dr. Marcus Rivera, PGY-2</span></div>
+      <div class="r"><span class="r-l">RN (day)</span><span class="r-v">Jessica Tran, RN</span></div>
+      <div class="r"><span class="r-l">RN (night)</span><span class="r-v">David Park, RN</span></div>
+      <div class="r"><span class="r-l">Pharmacist</span><span class="r-v">Linda Okafor, PharmD</span></div>
+      <div class="r"><span class="r-l">SW</span><span class="r-v">Maria Santos, LCSW</span></div>
+      <div class="r"><span class="r-l">PT</span><span class="r-v">Consult placed — pending eval</span></div>
+      <div class="r"><span class="r-l">Dietary</span><span class="r-v">Cardiac / diabetic diet ordered</span></div>
+      <div class="r"><span class="r-l">Son / DPOA</span><span class="r-v">Thomas Reeves · 614-555-0187</span></div>
+      <div class="r"><span class="r-l">Daughter</span><span class="r-v">Catherine Reeves-Park · 614-555-0234</span></div>
+      <div class="r"><span class="r-l">Pharmacy</span><span class="r-v">Walgreens Maple Ridge · 614-555-0300</span></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="f-l">ARC</span>
+    <span class="f-r">Reeves, Margaret A. · MRN 4819203 · Tele 712-A · Dr. Chen</span>
+  </footer>
+</main>
+
+<script>
+function uc(){const n=new Date();document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+n.getMinutes().toString().padStart(2,'0')}
+setInterval(uc,1000);uc();
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+
+function tog(id){const el=document.getElementById(id);el.classList.toggle('open');if(el.classList.contains('open')){const i=el.querySelector('input');if(i)setTimeout(()=>i.focus(),150)}}
+
+function addP(){
+  const n=document.getElementById('pi1').value.trim();if(!n)return;
+  const d=document.getElementById('pi2').value.trim();
+  const el=document.createElement('div');el.className='cx';
+  el.innerHTML='<div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">'+n+'</div></div>'+(d?'<div class="cx-sub">'+d+'</div>':'');
+  document.getElementById('plist').appendChild(el);
+  document.getElementById('pi1').value='';document.getElementById('pi2').value='';
+  tog('ap');toast('problem added');
+}
+
+function addMH(){
+  const n=document.getElementById('mhi1').value.trim();if(!n)return;
+  const d=document.getElementById('mhi2').value.trim();
+  const el=document.createElement('div');el.className='r';
+  el.innerHTML='<span class="r-l">'+n+'</span><span class="r-v">'+(d||'')+'</span>';
+  document.getElementById('mhlist').appendChild(el);
+  document.getElementById('mhi1').value='';document.getElementById('mhi2').value='';
+  tog('mh');toast('history added');
+}
+
+function addSH(){
+  const y=document.getElementById('shi1').value.trim();if(!y)return;
+  const p=document.getElementById('shi2').value.trim();
+  const el=document.createElement('div');el.className='r';
+  el.innerHTML='<span class="r-l">'+y+'</span><span class="r-v">'+(p||'')+'</span>';
+  document.getElementById('shlist').appendChild(el);
+  document.getElementById('shi1').value='';document.getElementById('shi2').value='';
+  tog('sh');toast('surgical history added');
+}
+
+function addA(){
+  const n=document.getElementById('ai1').value.trim();if(!n)return;
+  const r=document.getElementById('ai2').value.trim();
+  const el=document.createElement('div');el.className='ax';
+  el.innerHTML='<span class="ax-name">'+n+'</span><span class="ax-rx">'+(r||'—')+'</span>';
+  document.getElementById('alist').appendChild(el);
+  document.getElementById('ai1').value='';document.getElementById('ai2').value='';
+  tog('aa');toast('allergy added');
+}
+</script>
+</body>
+</html>

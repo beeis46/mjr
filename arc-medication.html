@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARC — Medication</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#eee8e0;
+  --surface:rgba(255,252,248,0.55);
+  --surface-solid:#f8f5f1;
+  --text:#3e3b36;
+  --text2:#5e5a52;
+  --text3:#8a857c;
+  --text4:#b8b2a8;
+  --accent:#b89a4a;
+  --accent-soft:rgba(184,154,74,0.08);
+  --accent-border:rgba(184,154,74,0.18);
+  --rose:#b87a6a;
+  --rose-soft:rgba(184,122,106,0.07);
+  --sage:#7a9a88;
+  --divider:rgba(180,174,164,0.18);
+  --radius:12px;
+}
+
+html,body{min-height:100vh;scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  color:var(--text);
+  font-size:15.5px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* === HEADER === */
+header{
+  background:rgba(238,232,224,0.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--divider);
+}
+
+.header-main{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:14px 40px 6px;
+}
+
+.h-left{display:flex;align-items:baseline;gap:0.8rem}
+
+.h-name{
+  font-family:'Cormorant',serif;
+  font-weight:600;font-size:1.9rem;
+  color:var(--text);letter-spacing:0.01em;
+}
+
+.h-demo{font-size:0.95rem;font-weight:300;color:var(--text2)}
+
+.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.1rem}
+
+.h-meta{
+  display:flex;gap:1rem;align-items:baseline;
+  font-size:0.88rem;font-weight:300;color:var(--text3);
+}
+
+.h-arc{
+  font-family:'Cormorant',serif;font-weight:500;
+  font-size:1.15rem;letter-spacing:0.3em;
+  color:var(--text4);
+}
+
+.header-tags{
+  display:flex;gap:0.5rem;align-items:center;
+  padding:0 40px 10px;flex-wrap:wrap;
+}
+
+.tag{
+  font-size:0.82rem;font-weight:400;
+  padding:0.2rem 0.75rem;border-radius:20px;
+  border:1px solid var(--divider);color:var(--text3);
+}
+.tag.warn{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
+.tag.danger{border-color:rgba(184,122,106,0.2);color:var(--rose);background:var(--rose-soft)}
+
+/* allergy */
+/* nav */
+nav{
+  display:flex;justify-content:center;align-items:center;
+  border-bottom:1px solid var(--divider);
+  background:rgba(238,232,224,0.95);
+  backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:45;
+  height:42px;
+}
+nav a{
+  font-size:0.95rem;font-weight:300;color:var(--text4);
+  padding:11px 26px 12px;cursor:pointer;
+  text-decoration:none;position:relative;
+  transition:color 0.4s ease;
+}
+nav a:hover{color:var(--text3)}
+nav a.on{color:var(--text);font-weight:400}
+nav a.on::after{
+  content:'';position:absolute;bottom:0;left:25%;right:25%;
+  height:2px;background:var(--accent);opacity:0.5;border-radius:1px;
+}
+
+/* === PAGE === */
+main{
+  max-width:1440px;margin:0 auto;
+  padding:28px 40px 60px;
+}
+
+/* === GLASS CARDS === */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.glass{
+  background:var(--surface);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,252,248,0.6);
+  border-radius:var(--radius);
+  padding:1.5rem 1.7rem 1.3rem;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+  transition:box-shadow 0.5s ease,transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.glass:hover{
+  box-shadow:0 8px 30px rgba(0,0,0,0.03);
+  transform:translateY(-1px);
+}
+
+.glass-label{
+  font-size:0.72rem;font-weight:500;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text4);margin-bottom:1rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.glass-add{
+  font-weight:300;letter-spacing:0;text-transform:none;
+  font-size:0.82rem;color:var(--text4);cursor:pointer;
+  transition:color 0.3s ease;
+}
+.glass-add:hover{color:var(--accent)}
+
+/* rows */
+.r{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:0.42rem 0;
+  border-bottom:1px solid var(--divider);
+  gap:1rem;
+}
+.r:last-child{border-bottom:none}
+
+.r-l{font-size:0.92rem;font-weight:300;color:var(--text3);white-space:nowrap}
+.r-v{font-size:0.95rem;font-weight:400;color:var(--text);text-align:right}
+.r-v.lg{font-size:1.08rem;font-weight:500}
+.r-v.accent{color:var(--accent)}
+.r-v.rose{color:var(--rose)}
+.r-v.dim{color:var(--text3)}
+
+/* conditions */
+.cx{padding:0.5rem 0;border-bottom:1px solid var(--divider)}
+.cx:last-child{border-bottom:none}
+.cx-top{display:flex;align-items:center;gap:0.5rem}
+.cx-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cx-dot.a{background:var(--sage)}.cx-dot.w{background:var(--accent)}.cx-dot.r{background:var(--text4)}
+.cx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
+.cx-name.accent{color:var(--accent)}
+.cx-name.dim{color:var(--text3)}
+.cx-sub{font-size:0.82rem;font-weight:200;color:var(--text3);margin-top:0.1rem;margin-left:1.1rem}
+
+/* allergy cards */
+.ax{
+  background:var(--accent-soft);border:1px solid var(--accent-border);
+  border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.ax:last-child{margin-bottom:0}
+.ax-name{font-size:0.95rem;font-weight:500;color:var(--accent)}
+.ax-rx{font-size:0.85rem;font-weight:300;color:var(--text2)}
+
+/* meds */
+.mx{padding:0.4rem 0;border-bottom:1px solid var(--divider)}
+.mx:last-child{border-bottom:none}
+.mx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
+.mx-info{font-size:0.82rem;font-weight:200;color:var(--text3)}
+
+/* inline add */
+.iadd{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,padding 0.4s ease;
+}
+.iadd.open{max-height:250px;opacity:1;padding-top:0.6rem}
+
+.iadd input{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid var(--divider);
+  padding:0.4rem 0;font-family:'DM Sans',sans-serif;
+  font-size:0.92rem;font-weight:300;color:var(--text);
+  outline:none;margin-bottom:0.4rem;
+  transition:border-color 0.4s ease;
+}
+.iadd input:focus{border-color:var(--accent)}
+.iadd input::placeholder{color:var(--text4)}
+
+.ibtn{
+  background:none;border:none;font-size:0.88rem;font-weight:400;
+  cursor:pointer;transition:color 0.3s ease;padding:0;margin-right:1rem;
+}
+.ibtn.s{color:var(--accent)}.ibtn.s:hover{color:var(--text)}
+.ibtn.c{color:var(--text4)}.ibtn.c:hover{color:var(--text3)}
+
+/* toast */
+.toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--surface-solid);border:1px solid var(--divider);
+  padding:0.55rem 1.5rem;font-size:0.92rem;font-weight:400;
+  color:var(--text);border-radius:8px;z-index:70;
+  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 30px rgba(0,0,0,0.05);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* footer */
+footer{
+  padding:1rem 0;
+  border-top:1px solid var(--divider);
+  display:flex;justify-content:space-between;align-items:baseline;
+  position:sticky;bottom:0;background:var(--bg);z-index:30;
+}
+footer .f-l{font-family:'Cormorant',serif;font-weight:500;font-size:0.92rem;color:var(--text4);letter-spacing:0.3em;text-transform:uppercase}
+footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
+
+@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){
+  .grid{grid-template-columns:1fr}
+  main{padding:20px 18px 40px}
+  .header-main{padding:12px 18px 6px}
+  .header-tags{padding:0 18px 8px}
+    .h-left{flex-wrap:wrap}
+}
+
+/* === MAR ADDITIONS — same design language as portrait === */
+
+/* Time header — styled like our tag row */
+.t-row{
+  position:sticky;top:42px;z-index:44;
+  display:grid;grid-template-columns:repeat(8,1fr);
+  background:var(--text);padding:0 40px;
+  height:36px;align-items:center;
+}
+.t-cell{
+  text-align:center;
+  font-size:0.82rem;font-weight:300;
+  color:rgba(238,232,224,0.35);
+  border-right:1px solid rgba(238,232,224,0.06);
+  line-height:36px;
+}
+.t-cell:last-child{border-right:none}
+.t-cell.now{color:var(--accent);font-weight:500}
+
+/* Med cards — glass, horizontal, same as portrait cards */
+.m-list{padding:8px 40px 40px}
+
+.m-sec{
+  padding:16px 0 6px;font-size:0.72rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--divider);
+}
+.m-sec-dot{width:6px;height:6px;border-radius:50%}
+
+.m-card{
+  background:var(--surface);
+  border:1px solid rgba(255,252,248,0.6);
+  border-radius:var(--radius);
+  margin-bottom:8px;overflow:hidden;
+  transition:box-shadow 0.4s ease,transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.m-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.025);transform:translateY(-0.5px)}
+
+.m-head{padding:12px 20px 8px;border-bottom:1px solid var(--divider)}
+.m-order{font-size:0.92rem;font-weight:300;color:var(--text2);line-height:1.55}
+.m-order strong{font-weight:500;color:var(--text)}
+
+/* Reuse portrait tag style for badges */
+.m-tags{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
+
+.m-params{padding:4px 20px 6px;font-size:0.85rem;font-weight:300;display:flex;gap:16px;flex-wrap:wrap}
+.m-param{color:var(--rose)}
+.m-ind{color:var(--sage)}
+
+.m-scale{
+  padding:6px 20px 8px;font-size:0.85rem;font-weight:200;color:var(--text3);
+  line-height:1.7;border-top:1px solid var(--divider);
+}
+.m-scale b{color:var(--accent);font-weight:500;margin-right:4px}
+
+/* Timeline cells */
+.m-grid{
+  display:grid;grid-template-columns:repeat(8,1fr);
+  min-height:44px;border-top:1px solid var(--divider);
+  border-bottom:1px solid var(--divider);
+}
+.m-cell{
+  display:flex;align-items:center;justify-content:center;
+  padding:6px 3px;
+  border-right:1px solid rgba(180,174,164,0.12);
+  cursor:pointer;transition:background 0.2s ease;
+}
+.m-cell:last-child{border-right:none}
+.m-cell:hover{background:var(--accent-soft)}
+.m-cell.now-col{background:rgba(184,154,74,0.025)}
+.m-dot{color:var(--text4);opacity:0.2;font-size:0.8rem}
+
+/* Chips — using our palette */
+.chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:4px 10px;border-radius:4px;
+  font-size:0.8rem;font-weight:400;white-space:nowrap;
+}
+.c-given{background:var(--sage-soft);color:var(--sage)}
+.c-due{background:var(--text);color:var(--bg);animation:softPulse 3s ease-in-out infinite}
+.c-held{background:var(--accent-soft);color:var(--accent)}
+.c-run{color:var(--sage);font-style:italic;font-size:0.75rem;font-weight:200;opacity:0.6}
+@keyframes softPulse{0%,100%{opacity:1}50%{opacity:0.65}}
+
+/* Admin footer row — same row style as portrait */
+.m-foot{
+  padding:6px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+  font-size:0.82rem;font-weight:200;color:var(--text3);
+}
+.m-foot b{font-weight:400;color:var(--text2);margin-left:3px}
+.m-foot div:nth-child(2){text-align:center}
+.m-foot div:nth-child(3){text-align:right}
+
+/* Doc modal — same glass surface as portrait add forms but as modal */
+.doc-bg{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(238,232,224,0.85);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:none;align-items:center;justify-content:center;
+}
+.doc-bg.open{display:flex}
+.doc-box{
+  background:var(--surface-solid);border:1px solid rgba(255,252,248,0.6);
+  border-radius:var(--radius);padding:2rem 2.5rem;
+  max-width:460px;width:92%;
+  box-shadow:0 16px 60px rgba(0,0,0,0.05);
+  animation:docIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes docIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.doc-title{font-family:'Cormorant',serif;font-weight:600;font-size:1.4rem;color:var(--text);margin-bottom:0.3rem}
+.doc-sub{font-size:0.88rem;font-weight:200;color:var(--text3);line-height:1.5;margin-bottom:0.2rem}
+.doc-meta{font-size:0.82rem;font-weight:300;color:var(--text4);margin-bottom:1.2rem}
+.doc-field{margin-bottom:0.9rem}
+.doc-field label{display:block;font-size:0.82rem;font-weight:400;color:var(--text3);margin-bottom:0.15rem}
+.doc-field input{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid var(--divider);padding:0.4rem 0;
+  font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:400;
+  color:var(--text);outline:none;transition:border-color 0.4s ease;
+}
+.doc-field input:focus{border-color:var(--accent)}
+.doc-field input::placeholder{color:var(--text4)}
+.doc-err{font-size:0.78rem;font-weight:400;color:var(--rose);margin-top:0.3rem;min-height:1em}
+.doc-btns{display:flex;gap:0.6rem;margin-top:0.8rem}
+.doc-btn{
+  padding:0.55rem 1.4rem;border-radius:20px;
+  font-size:0.88rem;font-weight:400;cursor:pointer;
+  transition:all 0.25s ease;border:1px solid var(--divider);background:transparent;
+}
+.doc-btn.go{background:var(--text);color:var(--bg);border-color:var(--text)}
+.doc-btn.go:hover{background:#2a2722}
+.doc-btn.hold{color:var(--accent);border-color:var(--accent-border);background:var(--accent-soft)}
+.doc-btn.hold:hover{background:rgba(184,154,74,0.12)}
+.doc-btn.x{color:var(--text4)}
+.doc-btn.x:hover{color:var(--text3);border-color:var(--text4)}
+
+@media(max-width:900px){
+    .t-row{padding:0 18px}
+  .m-list{padding:8px 18px 40px}
+  .m-foot{grid-template-columns:1fr;gap:2px}
+  .m-foot div:nth-child(2),.m-foot div:nth-child(3){text-align:left}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-main">
+    <div class="h-left">
+      <span class="h-name">Reeves, Margaret A.</span>
+      <span class="h-demo">68 F · MRN 4819203 · Tele 712-A · HOD #1</span>
+    </div>
+    <span class="h-arc">ARC</span>
+  </div>
+  <div class="header-tags">
+    <span class="tag warn">Afib w/ RVR</span>
+    <span class="tag warn">Anticoagulated</span>
+    <span class="tag danger">ALLERGY: PCN</span>
+    <span class="tag">Full Code</span>
+    <span class="tag">Dr. Chen, Cardiology</span>
+    <span style="flex:1"></span>
+    <span style="font-size:0.88rem;font-weight:300;color:var(--text3)" id="clock"></span>
+  </div>
+</header>
+<nav>
+  <a href="arc-portrait.html">portrait</a>
+  <a class="on">medication</a>
+  <a>notes</a>
+  <a>nursing</a>
+  <a>results</a>
+  <a>orders</a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<div class="t-row">
+  <div class="t-cell">0700</div><div class="t-cell">0800</div><div class="t-cell">0900</div>
+  <div class="t-cell now">1000</div>
+  <div class="t-cell">1100</div><div class="t-cell">1200</div><div class="t-cell">1300</div><div class="t-cell">1400</div>
+</div>
+
+<div class="m-list" id="medList"></div>
+
+<div style="padding:0 40px">
+<footer>
+  <span class="f-l">ARC</span>
+  <span class="f-r">Reeves, Margaret A. · MRN 4819203 · Tele 712-A · Dr. Chen</span>
+</footer>
+</div>
+
+<div class="doc-bg" id="docBg">
+  <div class="doc-box">
+    <div class="doc-title">Document Administration</div>
+    <div class="doc-sub" id="docDrug"></div>
+    <div class="doc-meta" id="docMeta"></div>
+    <div class="doc-field"><label>Time administered (24h)</label><input id="docTime" placeholder="HH:MM" maxlength="5" autocomplete="off"><div class="doc-err" id="docErr"></div></div>
+    <div class="doc-field"><label>Administered by</label><input id="docBy" value="Student RN"></div>
+    <div class="doc-field"><label>Notes (optional)</label><input id="docNotes" placeholder="Assessment, site, response..."></div>
+    <div class="doc-btns">
+      <button class="doc-btn go" id="docGo">Confirm Given</button>
+      <button class="doc-btn hold" id="docHold">Hold</button>
+      <button class="doc-btn x" id="docX">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const hours=['0700','0800','0900','1000','1100','1200','1300','1400'];
+const M=[
+  {cat:'sched',sec:'Scheduled',sc:'var(--accent)',n:'Amlodipine',hdr:'<strong>Amlodipine</strong> 5 mg tablet · PO · Daily',admin:'5 mg (1 tablet)',last:'20 Mar 0900 — given',disp:'Pyxis',c:['','','due|0900','','','','','']},
+  {cat:'sched',n:'Apixaban',hdr:'<strong>Apixaban</strong> (Eliquis) 5 mg tablet · PO · BID — Anticoagulation for Afib',p:'D/C heparin 2h after first PO dose · CrCl >25',ha:1,admin:'5 mg (1 tablet)',last:'New order — first dose',disp:'Pyxis',c:['','','due|0900','','','','','']},
+  {cat:'sched',n:'Atorvastatin',hdr:'<strong>Atorvastatin</strong> 40 mg tablet · PO · qHS',admin:'40 mg (1 tablet)',last:'20 Mar 2100 — given',disp:'Pyxis',c:['','','','','','','','']},
+  {cat:'sched',n:'Diltiazem',hdr:'<strong>Diltiazem</strong> (Cardizem) 30 mg tablet · PO · Q6H',p:'Hold HR <60 · Hold SBP <90',admin:'30 mg (1 tablet)',last:'20 Mar 2200 — given',disp:'Pyxis',c:['given|0700','','','due|1000','','','due|1300','']},
+  {cat:'sched',n:'Furosemide',hdr:'<strong>Furosemide</strong> (Lasix) 40 mg · IV · Daily',p:'Check K+ before admin · I&O strict',admin:'40 mg (4 mL)',last:'New order',disp:'Pharmacy',c:['','','','due|1000','','','','']},
+  {cat:'sched',n:'Insulin Glargine',hdr:'<strong>Insulin Glargine</strong> (Lantus) 18 units · SC · qHS',p:'Verify with 2nd RN',ha:1,admin:'18 units',last:'20 Mar 2100 — given',disp:'Pyxis',c:['','','','','','','','']},
+  {cat:'sched',n:'Insulin Lispro',hdr:'<strong>Insulin Lispro</strong> (Humalog) per sliding scale · SC · AC + HS',p:'Hold BG <70 · Give D50W for hypoglycemia',ha:1,ss:'<b>Scale:</b> BG <70: Hold+D50W+notify · 70–150: 0u · 151–200: 2u · 201–250: 4u · 251–300: 6u · 301–350: 8u · >350: 10u+notify',admin:'Per scale · Check BG 15 min prior',last:'21 Mar 0645 — 2u given, BG 178',disp:'Pyxis',c:['','','','','','due|1200','','']},
+  {cat:'sched',n:'Lisinopril',hdr:'<strong>Lisinopril</strong> 20 mg tablet · PO · Daily',p:'Hold SBP <90',admin:'20 mg (1 tablet)',last:'20 Mar 0900 — given',disp:'Pyxis',c:['','','due|0900','','','','','']},
+  {cat:'sched',n:'Metformin',hdr:'<strong>Metformin</strong> 1000 mg tablet · PO · BID — <em>HELD</em>',p:'Held per admitting — acute illness, monitor renal function',held:1,admin:'1000 mg (1 tablet)',last:'Held since admission',disp:'Pyxis',c:['','','held|0900','','','','','']},
+  {cat:'sched',n:'Metoprolol Succinate',hdr:'<strong>Metoprolol Succinate</strong> (Toprol XL) 50 mg tablet · PO · Daily',p:'Hold HR <60 · Hold SBP <90',admin:'50 mg (1 tablet)',last:'20 Mar 0900 — given, HR 96',disp:'Pyxis',c:['','','due|0900','','','','','']},
+  {cat:'sched',n:'Pantoprazole',hdr:'<strong>Pantoprazole</strong> 40 mg tablet · PO · Daily',admin:'40 mg (1 tablet)',last:'20 Mar 0900 — given',disp:'Pyxis',c:['','','given|0900','','','','','']},
+  {cat:'sched',n:'Potassium Chloride',hdr:'<strong>Potassium Chloride</strong> 20 mEq tablet · PO · BID',admin:'20 mEq (1 tablet)',last:'20 Mar 0900 — given',disp:'Pyxis',c:['','','given|0900','','','','due|1300','']},
+  {cat:'cont',sec:'Continuous Infusions',sc:'var(--sage)',n:'Heparin',hdr:'<strong>Heparin</strong> 25,000 units/500 mL D5W · Rate per protocol · IV Continuous',p:'PTT q6h · Target 60–80 sec · Last PTT 0600: 68 (therapeutic)',ha:1,admin:'25,000 units/500 mL',last:'Running since 20 Mar 2042',disp:'Pharmacy',c:['run','run','run','run','run','run','run','run']},
+  {cat:'cont',n:'NS',hdr:'<strong>0.9% NaCl</strong> 1000 mL · Rate 75 mL/hr · IV Continuous',admin:'1000 mL bag',last:'Bag 2 hung 0800',disp:'Floor stock',c:['run','run','run','run','run','run','run','run']},
+  {cat:'prn',sec:'PRN — As Needed',sc:'var(--text3)',n:'Acetaminophen',hdr:'<strong>Acetaminophen</strong> 650 mg · PO · Q6H PRN',ind:'Pain or Temp >38°C · Max 4g/24h',admin:'650 mg (2 × 325 mg tablets)',last:'21 Mar 0712 — given for HA',disp:'Pyxis',c:['given|0712','','','','','','','']},
+  {cat:'prn',n:'Lorazepam',hdr:'<strong>Lorazepam</strong> (Ativan) 0.5 mg · IV · Q6H PRN',ind:'Anxiety · Assess sedation + RR prior',admin:'0.5 mg (0.5 mL)',last:'Not given this admission',disp:'Pyxis (C-IV)',c:['','','','','','','','']},
+  {cat:'prn',n:'Metoprolol IV',hdr:'<strong>Metoprolol Tartrate</strong> (Lopressor) 5 mg · IV Push · PRN × 3',ind:'HR >120 bpm',p:'Hold SBP <100 · Hold 2nd/3rd° AVB',ha:1,admin:'5 mg (5 mL)',last:'20 Mar 1855 — given, HR 148',disp:'Pyxis',c:['','','','','','','','']},
+  {cat:'prn',n:'Ondansetron',hdr:'<strong>Ondansetron</strong> (Zofran) 4 mg · IV · Q6H PRN',ind:'Nausea/vomiting · Monitor QTc',admin:'4 mg (2 mL)',last:'Not given this shift',disp:'Pyxis',c:['','','','','','','','']},
+];
+
+const list=document.getElementById('medList');
+let curSec='';
+function render(filter){
+  list.innerHTML='';curSec='';
+  M.forEach((m,mi)=>{
+    if(filter!=='all'){if(filter==='ha'&&!m.ha)return;if(filter!=='ha'&&m.cat!==filter)return;}
+    if(m.sec&&m.sec!==curSec){curSec=m.sec;list.insertAdjacentHTML('beforeend','<div class="m-sec"><div class="m-sec-dot" style="background:'+m.sc+'"></div>'+m.sec+'</div>');}
+    let h='<div class="m-card" data-cat="'+m.cat+'"><div class="m-head"><span class="m-order">'+m.hdr+'</span><span class="m-tags">';
+    if(m.ha)h+='<span class="tag danger" style="font-size:0.68rem;padding:0.1rem 0.5rem">HIGH ALERT</span>';
+    if(m.held)h+='<span class="tag warn" style="font-size:0.68rem;padding:0.1rem 0.5rem">HELD</span>';
+    h+='</span></div>';
+    if(m.p||m.ind){h+='<div class="m-params">';if(m.p)h+='<span class="m-param">'+m.p+'</span>';if(m.ind)h+='<span class="m-ind">'+m.ind+'</span>';h+='</div>';}
+    if(m.ss)h+='<div class="m-scale">'+m.ss+'</div>';
+    h+='<div class="m-grid">';
+    m.c.forEach((cell,ci)=>{
+      const nc=ci===3?' now-col':'';
+      if(cell==='run'){h+='<div class="m-cell'+nc+'"><span class="m-dot">→</span></div>';}
+      else if(!cell){h+='<div class="m-cell'+nc+'" data-mi="'+mi+'" data-ci="'+ci+'"><span class="m-dot">·</span></div>';}
+      else{const[type,time]=cell.split('|');const cls={given:'c-given',due:'c-due',held:'c-held'}[type]||'';const lbl={given:'✓',due:'Due',held:'Held'}[type]||'';const click=type==='due'||type==='held'?' data-mi="'+mi+'" data-ci="'+ci+'"':'';h+='<div class="m-cell'+nc+'"'+click+'><span class="chip '+cls+'">'+time+' '+lbl+'</span></div>';}
+    });
+    h+='</div><div class="m-foot"><div>'+m.admin+'</div><div>Last: <b>'+(m.last||'—')+'</b></div><div>Dispense: <b>'+(m.disp||'—')+'</b></div></div></div>';
+    list.insertAdjacentHTML('beforeend',h);
+  });
+  list.querySelectorAll('[data-mi]').forEach(c=>c.addEventListener('click',()=>openDoc(+c.dataset.mi,+c.dataset.ci,c)));
+}
+
+document.querySelectorAll('.f-pill').forEach(b=>b.addEventListener('click',function(){document.querySelectorAll('.f-pill').forEach(x=>x.classList.remove('on'));this.classList.add('on');render(this.dataset.f);}));
+
+const docBg=document.getElementById('docBg'),docTimeIn=document.getElementById('docTime'),docErr=document.getElementById('docErr');
+let dMi,dCi;
+
+function parseTime(s){s=s.trim().replace(/[^0-9:]/g,'');let h,m;if(s.includes(':')){const p=s.split(':');h=parseInt(p[0]);m=parseInt(p[1]);}else if(s.length>=3){h=parseInt(s.slice(0,-2));m=parseInt(s.slice(-2));}else return null;if(isNaN(h)||isNaN(m)||h>23||m>59)return null;return h*60+m;}
+function fmtTime(mins){return String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0')}
+function minsToCol(mins){for(let i=0;i<hours.length;i++){const h=parseInt(hours[i].slice(0,2));const s=h*60;if(mins>=s&&mins<=s+59)return i;}return -1;}
+
+function openDoc(mi,ci){
+  dMi=mi;dCi=ci;const m=M[mi];
+  document.getElementById('docDrug').innerHTML=m.hdr;
+  const now=new Date();
+  document.getElementById('docMeta').textContent='Window: '+hours[ci]+' · Now: '+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+  docTimeIn.value=hours[ci].slice(0,2)+':'+hours[ci].slice(2);
+  docErr.textContent='';document.getElementById('docNotes').value='';
+  docBg.classList.add('open');setTimeout(()=>docTimeIn.focus(),100);
+}
+
+docTimeIn.addEventListener('input',function(){let v=this.value.replace(/[^0-9]/g,'');if(v.length>2)v=v.slice(0,2)+':'+v.slice(2,4);this.value=v;docErr.textContent='';});
+document.getElementById('docX').addEventListener('click',()=>docBg.classList.remove('open'));
+docBg.addEventListener('click',e=>{if(e.target===docBg)docBg.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')docBg.classList.remove('open')});
+
+document.getElementById('docGo').addEventListener('click',()=>{
+  const mins=parseTime(docTimeIn.value);
+  if(mins===null){docErr.textContent='Enter valid time (HH:MM)';docTimeIn.focus();return;}
+  const col=minsToCol(mins);
+  if(col===-1){docErr.textContent='Time outside shift window';docTimeIn.focus();return;}
+  const m=M[dMi];
+  if(m.c[col]&&m.c[col].startsWith('given')){docErr.textContent='Already documented for '+hours[col];docTimeIn.focus();return;}
+  const t=fmtTime(mins);m.c[col]='given|'+t;
+  render('all');
+  docBg.classList.remove('open');toast(m.n+' documented at '+t);
+});
+
+document.getElementById('docHold').addEventListener('click',()=>{
+  const m=M[dMi];m.c[dCi]='held|'+hours[dCi].slice(0,2)+':'+hours[dCi].slice(2);
+  render('all');
+  docBg.classList.remove('open');toast(m.n+' held');
+});
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function uc(){const n=new Date();document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+n.getMinutes().toString().padStart(2,'0')}
+setInterval(uc,1000);uc();
+render('all');
+</script>
+</body>
+</html>
