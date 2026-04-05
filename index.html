@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Essayer — The MJR Hospital</title>
+<title>esSAYER — The MJR Hospital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="rebel-angels-card.webp" type="image/webp">
@@ -158,23 +158,32 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 
 .p0-foot{
   position:absolute;bottom:0;left:0;right:0;z-index:50;
-  text-align:center;padding-bottom:32px;
+  text-align:center;padding-bottom:28px;
   opacity:0;animation:fadeIn .9s ease .85s forwards;
+  display:flex;flex-direction:column;align-items:center;
+}
+.p0-disclaimer{
+  font-family:'DM Sans',sans-serif;font-weight:300;font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-lt);opacity:.35;margin-bottom:16px;
 }
 .p0-enter{
-  display:inline-flex;align-items:center;gap:8px;
   background:none;border:none;cursor:pointer;
   font-family:'DM Sans',sans-serif;font-weight:400;font-size:12px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-  opacity:.45;transition:opacity .3s,gap .3s;padding:8px 0;
+  opacity:.45;transition:opacity .3s;padding:4px 0;
 }
-.p0-enter:hover{opacity:1;gap:12px}
-.p0-enter .arr{
-  display:inline-block;width:6px;height:6px;
-  border-right:1px solid currentColor;border-bottom:1px solid currentColor;
-  transform:rotate(45deg);transition:transform .3s;
+.p0-enter:hover{opacity:1}
+.p0-chev{
+  display:block;width:7px;height:7px;margin-top:8px;
+  border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  transform:rotate(45deg);opacity:.3;
+  animation:chevBob 2.2s ease-in-out infinite;
 }
-.p0-enter:hover .arr{transform:rotate(45deg) translate(1px,1px)}
+@keyframes chevBob{
+  0%,100%{transform:rotate(45deg) translate(0,0);opacity:.25}
+  50%{transform:rotate(45deg) translate(1.5px,1.5px);opacity:.5}
+}
 
 /* ══════════════════════════════════════
    PAGE 1 — VIDEO (VHS)
@@ -188,7 +197,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 .p1-video{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block;
-  filter:brightness(1.02) contrast(1.12) saturate(0.85) sepia(0.06) blur(0.18px);
+  filter:brightness(1.02) contrast(1.08) saturate(0.88) sepia(0.04);
   transform:scale(1.45);
 }
 .p1.alive .p1-video{animation:jitter .15s steps(3) infinite}
@@ -205,7 +214,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 .scanlines{
   position:absolute;inset:0;z-index:5;pointer-events:none;
   background:repeating-linear-gradient(to bottom,transparent 0px,transparent 1px,rgba(0,0,0,.18) 1px,rgba(0,0,0,.18) 2px);
-  opacity:.55;
+  opacity:.35;
 }
 .chroma{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
 .chroma::before,.chroma::after{content:'';position:absolute;inset:0}
@@ -213,9 +222,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 .chroma::after{background:inherit;mix-blend-mode:screen;opacity:.03;transform:translate(-1.5px,0);filter:hue-rotate(-60deg) saturate(2)}
 .p1-grain{
   position:absolute;inset:-10%;width:120%;height:120%;
-  z-index:6;pointer-events:none;opacity:.09;
+  z-index:6;pointer-events:none;opacity:.04;
   background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0/200px;
-  animation:grainBoil .3s steps(4) infinite;
+  animation:grainBoil .5s steps(3) infinite;
 }
 @keyframes grainBoil{
   0%{transform:translate(0,0)}25%{transform:translate(-3%,-5%)}
@@ -230,11 +239,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
   background:repeating-linear-gradient(90deg,transparent 0px,rgba(255,255,255,.08) 2px,rgba(180,140,200,.06) 4px,transparent 6px,rgba(100,200,180,.05) 8px,transparent 10px);
   opacity:0;animation:trackDrift 12s linear infinite;filter:blur(0.5px);
 }
-@keyframes trackDrift{0%{top:-10px;opacity:0}3%{opacity:.7}8%{opacity:.7}11%{opacity:0}100%{top:105%;opacity:0}}
+@keyframes trackDrift{0%{top:-10px;opacity:0}3%{opacity:.35}8%{opacity:.35}11%{opacity:0}100%{top:105%;opacity:0}}
 .headswitch{
   position:absolute;bottom:0;left:0;right:0;height:8px;z-index:9;pointer-events:none;
   background:linear-gradient(90deg,rgba(180,60,200,.15),rgba(60,200,180,.12) 25%,rgba(200,180,60,.1) 50%,rgba(60,100,200,.12) 75%,rgba(200,60,100,.15));
-  opacity:.5;animation:hsFlicker .06s steps(2) infinite;filter:blur(0.3px);
+  opacity:.25;animation:hsFlicker .06s steps(2) infinite;filter:blur(0.3px);
 }
 @keyframes hsFlicker{0%{opacity:.3;transform:translateX(0)}50%{opacity:.6;transform:translateX(-2px)}}
 .p1-flicker{
@@ -248,7 +257,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
   opacity:0;animation:dropoutFlash 8s ease infinite;
 }
 .dropout:nth-child(2){left:5%;right:55%;top:35%;animation-delay:3.2s;animation-duration:11s}
-@keyframes dropoutFlash{0%,96%,100%{opacity:0;top:22%}97%{opacity:.7;top:22%}98%{opacity:.5;top:22.15%}99%{opacity:0;top:22.3%}}
+@keyframes dropoutFlash{0%,97%,100%{opacity:0;top:22%}97.5%{opacity:.35;top:22%}98.5%{opacity:.2;top:22.15%}99%{opacity:0;top:22.3%}}
 
 .p1-text{
   position:absolute;z-index:20;bottom:70px;left:50%;
@@ -265,10 +274,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 }
 .p1-title{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(26px,3.6vw,44px);font-weight:300;
+  font-size:clamp(26px,3.6vw,44px);font-weight:300;font-style:italic;
   letter-spacing:.1em;line-height:1.35;margin-bottom:10px;
-  color:rgba(245,240,232,1);
-  text-shadow:0 2px 24px rgba(0,0,0,.9),0 1px 6px rgba(0,0,0,.7);
+  color:rgba(245,240,232,.92);
+  text-shadow:0 1px 16px rgba(0,0,0,.6);
 }
 .p1-sub{
   font-family:'DM Sans',sans-serif;font-weight:300;
@@ -587,7 +596,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 <section class="page p0" id="pg0">
   <div class="ambient" aria-hidden="true"></div>
   <header class="p0-head">
-    <div class="p0-logo">Essayer</div>
+    <div class="p0-logo">esSAYER</div>
   </header>
   <div class="scene" id="scene">
     <div class="print pr-l" id="prL">
@@ -608,9 +617,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
     </div>
   </div>
   <div class="p0-foot">
-    <button class="p0-enter" data-go="1" aria-label="Contract">
-      Contract <span class="arr"></span>
+    <div class="p0-disclaimer">A simulated clinical environment for educational use only</div>
+    <button class="p0-enter" data-go="1" aria-label="Enter">
+      Enter
     </button>
+    <span class="p0-chev" aria-hidden="true"></span>
   </div>
 </section>
 
@@ -713,7 +724,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
     </picture>
     <div class="p3-panel-brand">
       <div class="brand-eye">Electronic Health Record</div>
-      <div class="brand-logo">Essayer</div>
+      <div class="brand-logo">esSAYER</div>
       <div class="brand-sub">by the MJR Hospital</div>
     </div>
     <div class="p3-panel-caption">
@@ -728,7 +739,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
       Back
     </button>
     <div class="p3-inner">
-      <div class="p3-sub">Essayer</div>
+      <div class="p3-sub">esSAYER</div>
       <div class="p3-hospital">The MJR Hospital · Electronic Health Record</div>
       <div class="p3-rule"></div>
       <div class="p3-login">
@@ -736,7 +747,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
         <input class="lg-in" type="password" placeholder="Password" autocomplete="off" aria-label="Password">
         <button class="lg-btn" aria-label="Sign in">Sign In →</button>
       </div>
-      <div class="p3-note">star / student</div>
+      <div class="p3-note">Electronic Health Record</div>
     </div>
   </div>
 </section>
@@ -745,25 +756,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 <section class="page p4" id="pg4">
   <div class="ft-inner">
     <div class="ft-title">The record that holds the light</div>
-    <div class="ft-logo">Essayer</div>
+    <div class="ft-logo">esSAYER</div>
     <div class="ft-rule"></div>
     <div class="ft-cols">
       <div>
         <div class="ft-col-t">Navigate</div>
         <a data-go="0">Home</a>
         <a data-go="2">Fiction Contract</a>
+        <a data-go="3">Sign In</a>
       </div>
       <div>
-        <div class="ft-col-t">Resources</div>
-        <a>INACSL Standards</a>
-        <a>Simulation Lab Guide</a>
-        <a>Technical Support</a>
-      </div>
-      <div>
-        <div class="ft-col-t">Contact</div>
-        <a>Simulation Lab Coordinator</a>
-        <a>Faculty Support</a>
-        <a>IT Help Desk</a>
+        <div class="ft-col-t">Standards</div>
+        <a href="https://www.inacsl.org/healthcare-simulation-standards" target="_blank" rel="noopener">INACSL Standards</a>
+        <a href="https://www.nln.org/education/teaching-resources/professional-development-programsteaching-resources/simulation" target="_blank" rel="noopener">NLN Simulation</a>
+        <a href="https://sites.google.com/view/gatherevidencescale" target="_blank" rel="noopener">GAS Scale</a>
       </div>
     </div>
     <div class="ft-bot">
@@ -779,6 +785,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--cream);-webkit
 var DUR = 720, EASE = 'cubic-bezier(0.77,0,0.175,1)';
 var pages = [].slice.call(document.querySelectorAll('.page'));
 var N = pages.length, cur = 0, busy = false, zTop = N + 10;
+var contractAccepted = false;
 
 pages.forEach(function(p, i){
   p.style.zIndex = i === 0 ? zTop++ : i;
@@ -801,12 +808,31 @@ function syncUI(){
   handleVideo();
 }
 
+/* ── VIDEO — Firefox autoplay fix ── */
 var vid = document.getElementById('vid');
 var sndBtn = document.getElementById('sndBtn');
 function handleVideo(){
-  if(cur === 1){ vid.play().catch(function(){}); }
-  else { vid.pause(); }
+  if(cur === 1){
+    var p = vid.play();
+    if(p && p.catch) p.catch(function(){
+      function retryPlay(){
+        vid.play().catch(function(){});
+        document.removeEventListener('click', retryPlay);
+        document.removeEventListener('touchstart', retryPlay);
+        document.removeEventListener('keydown', retryPlay);
+      }
+      document.addEventListener('click', retryPlay, {once:true});
+      document.addEventListener('touchstart', retryPlay, {once:true});
+      document.addEventListener('keydown', retryPlay, {once:true});
+    });
+  } else {
+    vid.pause();
+  }
 }
+vid.addEventListener('canplay', function(){
+  if(cur === 1) vid.play().catch(function(){});
+}, {once:true});
+
 if(sndBtn){
   sndBtn.addEventListener('click', function(e){
     e.stopPropagation();
@@ -815,8 +841,21 @@ if(sndBtn){
   });
 }
 
+/* ── CONTRACT GATE ──
+   From page 2 (fiction contract), scrolling/swiping/arrowing DOWN
+   is blocked unless contractAccepted is true.
+   Only the "I enter in good faith" button sets it. */
+function canAdvance(from, to){
+  // Block forward past contract page unless accepted
+  if(from === 2 && to > 2 && !contractAccepted) return false;
+  // Also block dot-clicking to pages past contract
+  if(to > 2 && !contractAccepted) return false;
+  return true;
+}
+
 function go(to){
   if(busy || to === cur || to < 0 || to >= N) return;
+  if(!canAdvance(cur, to)) return;
   busy = true;
   var target = pages[to], dir = to > cur ? 1 : -1;
   if(dir > 0){
@@ -838,15 +877,22 @@ function go(to){
   }, DUR + 80);
 }
 
+/* data-go buttons */
 [].slice.call(document.querySelectorAll('[data-go]')).forEach(function(el){
   el.addEventListener('click', function(e){
     e.stopPropagation();
-    go(parseInt(el.getAttribute('data-go'), 10));
+    var target = parseInt(el.getAttribute('data-go'), 10);
+    // The contract acceptance button
+    if(el.classList.contains('p2-cta')){
+      contractAccepted = true;
+    }
+    go(target);
   });
 });
 
 pages[0].classList.add('alive');
 
+/* ── WHEEL ── */
 var wa = 0, wt = null;
 window.addEventListener('wheel', function(e){
   e.preventDefault();
@@ -858,6 +904,7 @@ window.addEventListener('wheel', function(e){
   if(wa < -40){ wa = 0; go(cur - 1); }
 }, {passive: false});
 
+/* ── TOUCH ── */
 var ty0 = 0;
 window.addEventListener('touchstart', function(e){ ty0 = e.touches[0].clientY; }, {passive: true});
 window.addEventListener('touchend', function(e){
@@ -867,6 +914,7 @@ window.addEventListener('touchend', function(e){
   if(dy < -50) go(cur - 1);
 }, {passive: true});
 
+/* ── KEYBOARD ── */
 window.addEventListener('keydown', function(e){
   if(isInput()) return;
   if(e.key === 'ArrowDown' || e.key === 'PageDown'){ e.preventDefault(); go(cur + 1); }
@@ -875,6 +923,7 @@ window.addEventListener('keydown', function(e){
 
 function isInput(){ return document.activeElement && document.activeElement.tagName === 'INPUT'; }
 
+/* ── LOGIN ── */
 var lgBtn = document.querySelector('.lg-btn');
 var lgIns = document.querySelectorAll('.lg-in');
 if(lgBtn){
@@ -886,7 +935,7 @@ if(lgBtn){
       lgBtn.style.background = 'rgba(245,240,232,.92)';
       lgBtn.style.color = '#080808';
       lgBtn.style.borderColor = 'rgba(245,240,232,.92)';
-      setTimeout(function(){ window.location.href = 'arc-portrait.html'; }, 800);
+      setTimeout(function(){ window.location.href = 'essayer-portrait.html'; }, 800);
     } else {
       lgBtn.textContent = 'Not recognized';
       lgBtn.style.borderColor = 'rgba(160,40,20,.35)';
@@ -905,6 +954,7 @@ if(lgBtn){
   });
 }
 
+/* ── 3D TILT ── */
 var sceneEl = document.getElementById('scene');
 var prL = document.getElementById('prL');
 var prR = document.getElementById('prR');
@@ -917,6 +967,7 @@ sceneEl.addEventListener('mousemove', function(e){
 });
 sceneEl.addEventListener('mouseleave', function(){ tx = 0; ty = 0; });
 
+/* ── CURSOR ── */
 var hasCursor = window.matchMedia('(pointer:fine)').matches;
 var dot, ring, mx = 0, my = 0, rx = 0, ry = 0;
 if(hasCursor){
@@ -937,6 +988,7 @@ if(hasCursor){
   });
 }
 
+/* ── SINGLE LOOP ── */
 function lerp(a, b, t){ return a + (b - a) * t; }
 (function frame(){
   if(cur === 0){
