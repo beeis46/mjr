@@ -3,46 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARC</title>
+<title>ESSAYER — Portrait</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap');
 
 *{margin:0;padding:0;box-sizing:border-box}
 
-:root{
-  --bg:#eee8e0;
-  --surface:rgba(255,252,248,0.55);
-  --surface-solid:#f8f5f1;
-  --text:#3e3b36;
-  --text2:#5e5a52;
-  --text3:#8a857c;
-  --text4:#b8b2a8;
-  --accent:#b89a4a;
-  --accent-soft:rgba(184,154,74,0.08);
-  --accent-border:rgba(184,154,74,0.18);
-  --rose:#b87a6a;
-  --rose-soft:rgba(184,122,106,0.07);
-  --sage:#7a9a88;
-  --divider:rgba(180,174,164,0.18);
-  --radius:12px;
-}
-
 html,body{min-height:100vh;scroll-behavior:smooth}
 body{
-  background:var(--bg);
+  background:#fefdfb;
   font-family:'DM Sans',sans-serif;
   font-weight:300;
-  color:var(--text);
-  font-size:15.5px;
+  color:#0a0a0a;
+  font-size:15px;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
 
-/* === HEADER === */
 header{
-  background:rgba(238,232,224,0.92);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--divider);
+  background:rgba(254,253,251,0.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:.5px solid rgba(10,10,10,.09);
 }
 
 .header-main{
@@ -53,68 +36,69 @@ header{
 .h-left{display:flex;align-items:baseline;gap:0.8rem}
 
 .h-name{
-  font-family:'Cormorant',serif;
-  font-weight:600;font-size:1.9rem;
-  color:var(--text);letter-spacing:0.01em;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;font-size:22px;
+  color:#0a0a0a;letter-spacing:.02em;
 }
 
-.h-demo{font-size:0.95rem;font-weight:300;color:var(--text2)}
+.h-demo{font-size:13px;font-weight:300;color:#5a5a5a}
 
 .h-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.1rem}
 
 .h-meta{
   display:flex;gap:1rem;align-items:baseline;
-  font-size:0.88rem;font-weight:300;color:var(--text3);
+  font-size:13px;font-weight:300;color:#ababab;
 }
 
 .h-arc{
-  font-family:'Cormorant',serif;font-weight:500;
-  font-size:1.15rem;letter-spacing:0.3em;
-  color:var(--text4);
+  font-family:'Cormorant Garamond',serif;font-weight:500;
+  font-size:15px;letter-spacing:.38em;padding-right:.38em;
+  color:#ababab;
 }
 
 .header-tags{
   display:flex;gap:0.5rem;align-items:center;
-  padding:0 40px 10px;flex-wrap:wrap;
+  padding:0 40px 11px;flex-wrap:wrap;
 }
 
 .tag{
-  font-size:0.82rem;font-weight:400;
-  padding:0.2rem 0.75rem;border-radius:20px;
-  border:1px solid var(--divider);color:var(--text3);
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;font-weight:400;
+  letter-spacing:.04em;
+  padding:3px 12px;border-radius:1px;
+  border:.5px solid rgba(10,10,10,.09);color:#5a5a5a;
 }
-.tag.warn{border-color:var(--accent-border);color:var(--accent);background:var(--accent-soft)}
-.tag.danger{border-color:rgba(184,122,106,0.2);color:var(--rose);background:var(--rose-soft)}
+.tag.warn{border-color:rgba(10,10,10,.14);color:#0a0a0a}
+.tag.danger{border-color:rgba(10,10,10,.14);color:#0a0a0a;font-weight:500}
 
-/* nav */
 nav{
   display:flex;justify-content:center;align-items:center;
-  border-bottom:1px solid var(--divider);
-  background:rgba(238,232,224,0.95);
-  backdrop-filter:blur(20px);
+  border-bottom:.5px solid rgba(10,10,10,.09);
+  background:rgba(254,253,251,0.95);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   position:sticky;top:0;z-index:45;
   height:42px;
 }
 nav a{
-  font-size:0.95rem;font-weight:300;color:var(--text4);
-  padding:11px 26px 12px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:300;color:#ababab;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:12px 22px;cursor:pointer;
   text-decoration:none;position:relative;
-  transition:color 0.4s ease;
+  transition:color .4s ease;
 }
-nav a:hover{color:var(--text3)}
-nav a.on{color:var(--text);font-weight:400}
+nav a:hover{color:#5a5a5a}
+nav a.on{color:#0a0a0a;font-weight:400}
 nav a.on::after{
   content:'';position:absolute;bottom:0;left:25%;right:25%;
-  height:2px;background:var(--accent);opacity:0.5;border-radius:1px;
+  height:.5px;background:#0a0a0a;opacity:.2;
 }
 
-/* === PAGE === */
 main{
   max-width:1440px;margin:0 auto;
   padding:28px 40px 60px;
 }
 
-/* === GLASS CARDS === */
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -122,123 +106,125 @@ main{
 }
 
 .glass{
-  background:var(--surface);
-  backdrop-filter:blur(8px);
-  border:1px solid rgba(255,252,248,0.6);
-  border-radius:var(--radius);
+  background:rgba(255,255,255,0.5);
+  border:.5px solid rgba(10,10,10,.09);
+  border-radius:1px;
   padding:1.5rem 1.7rem 1.3rem;
-  box-shadow:0 1px 3px rgba(0,0,0,0.02);
-  transition:box-shadow 0.5s ease,transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  transition:box-shadow .5s ease;
 }
 .glass:hover{
-  box-shadow:0 8px 30px rgba(0,0,0,0.03);
-  transform:translateY(-1px);
+  box-shadow:0 4px 20px rgba(10,10,10,.04);
 }
 
 .glass-label{
-  font-size:0.72rem;font-weight:500;
-  letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--text4);margin-bottom:1rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;font-weight:400;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:#ababab;margin-bottom:1rem;
   display:flex;justify-content:space-between;align-items:center;
 }
 
 .glass-add{
-  font-weight:300;letter-spacing:0;text-transform:none;
-  font-size:0.82rem;color:var(--text4);cursor:pointer;
-  transition:color 0.3s ease;
+  font-weight:300;letter-spacing:.04em;text-transform:none;
+  font-size:12px;color:#ababab;cursor:pointer;
+  transition:color .3s ease;
 }
-.glass-add:hover{color:var(--accent)}
+.glass-add:hover{color:#0a0a0a}
 
-/* rows */
 .r{
   display:flex;justify-content:space-between;align-items:baseline;
   padding:0.42rem 0;
-  border-bottom:1px solid var(--divider);
+  border-bottom:.5px solid rgba(10,10,10,.09);
   gap:1rem;
 }
 .r:last-child{border-bottom:none}
 
-.r-l{font-size:0.92rem;font-weight:300;color:var(--text3);white-space:nowrap}
-.r-v{font-size:0.95rem;font-weight:400;color:var(--text);text-align:right}
-.r-v.lg{font-size:1.08rem;font-weight:500}
-.r-v.accent{color:var(--accent)}
-.r-v.rose{color:var(--rose)}
-.r-v.dim{color:var(--text3)}
+.r-l{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#ababab;white-space:nowrap}
+.r-v{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a;text-align:right}
+.r-v.lg{font-size:15px;font-weight:500}
+.r-v.accent{color:#0a0a0a;font-weight:500}
+.r-v.rose{color:#0a0a0a}
+.r-v.dim{color:#ababab}
 
-/* conditions */
-.cx{padding:0.5rem 0;border-bottom:1px solid var(--divider)}
+.cx{padding:0.5rem 0;border-bottom:.5px solid rgba(10,10,10,.09)}
 .cx:last-child{border-bottom:none}
 .cx-top{display:flex;align-items:center;gap:0.5rem}
-.cx-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.cx-dot.a{background:var(--sage)}.cx-dot.w{background:var(--accent)}.cx-dot.r{background:var(--text4)}
-.cx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
-.cx-name.accent{color:var(--accent)}
-.cx-name.dim{color:var(--text3)}
-.cx-sub{font-size:0.82rem;font-weight:200;color:var(--text3);margin-top:0.1rem;margin-left:1.1rem}
+.cx-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.cx-dot.a{background:#ababab}.cx-dot.w{background:#0a0a0a}.cx-dot.r{background:#ababab}
+.cx-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a}
+.cx-name.accent{color:#0a0a0a;font-weight:500}
+.cx-name.dim{color:#ababab}
+.cx-sub{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#5a5a5a;margin-top:2px;margin-left:1.1rem}
 
-/* allergy cards */
 .ax{
-  background:var(--accent-soft);border:1px solid var(--accent-border);
-  border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;
+  background:rgba(10,10,10,.03);border:.5px solid rgba(10,10,10,.09);
+  border-radius:1px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;
   display:flex;justify-content:space-between;align-items:baseline;
 }
 .ax:last-child{margin-bottom:0}
-.ax-name{font-size:0.95rem;font-weight:500;color:var(--accent)}
-.ax-rx{font-size:0.85rem;font-weight:300;color:var(--text2)}
+.ax-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:#0a0a0a}
+.ax-rx{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#5a5a5a}
 
-/* meds */
-.mx{padding:0.4rem 0;border-bottom:1px solid var(--divider)}
+.mx{padding:0.4rem 0;border-bottom:.5px solid rgba(10,10,10,.09)}
 .mx:last-child{border-bottom:none}
-.mx-name{font-size:0.95rem;font-weight:400;color:var(--text)}
-.mx-info{font-size:0.82rem;font-weight:200;color:var(--text3)}
+.mx-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a}
+.mx-info{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#ababab}
 
-/* inline add */
 .iadd{
   max-height:0;overflow:hidden;opacity:0;
-  transition:max-height 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,padding 0.4s ease;
+  transition:max-height .5s cubic-bezier(.23,1,.32,1),opacity .4s ease,padding .4s ease;
 }
 .iadd.open{max-height:250px;opacity:1;padding-top:0.6rem}
 
 .iadd input{
   width:100%;background:transparent;border:none;
-  border-bottom:1px solid var(--divider);
+  border-bottom:.5px solid rgba(10,10,10,.09);
   padding:0.4rem 0;font-family:'DM Sans',sans-serif;
-  font-size:0.92rem;font-weight:300;color:var(--text);
+  font-size:13px;font-weight:300;color:#0a0a0a;
   outline:none;margin-bottom:0.4rem;
-  transition:border-color 0.4s ease;
+  transition:border-color .4s ease;
 }
-.iadd input:focus{border-color:var(--accent)}
-.iadd input::placeholder{color:var(--text4)}
+.iadd input:focus{border-color:rgba(10,10,10,.35)}
+.iadd input::placeholder{color:#ababab}
 
 .ibtn{
-  background:none;border:none;font-size:0.88rem;font-weight:400;
-  cursor:pointer;transition:color 0.3s ease;padding:0;margin-right:1rem;
+  background:none;border:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:400;
+  letter-spacing:.04em;
+  cursor:pointer;transition:color .3s ease;padding:0;margin-right:1rem;
 }
-.ibtn.s{color:var(--accent)}.ibtn.s:hover{color:var(--text)}
-.ibtn.c{color:var(--text4)}.ibtn.c:hover{color:var(--text3)}
+.ibtn.s{color:#0a0a0a}.ibtn.s:hover{color:#5a5a5a}
+.ibtn.c{color:#ababab}.ibtn.c:hover{color:#5a5a5a}
 
-/* toast */
 .toast{
   position:fixed;bottom:28px;left:50%;
   transform:translateX(-50%) translateY(80px);
-  background:var(--surface-solid);border:1px solid var(--divider);
-  padding:0.55rem 1.5rem;font-size:0.92rem;font-weight:400;
-  color:var(--text);border-radius:8px;z-index:70;
-  transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow:0 8px 30px rgba(0,0,0,0.05);
+  background:#fefdfb;border:.5px solid rgba(10,10,10,.09);
+  padding:0.55rem 1.5rem;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;
+  color:#0a0a0a;border-radius:1px;z-index:70;
+  transition:transform .5s cubic-bezier(.23,1,.32,1);
+  box-shadow:0 4px 20px rgba(10,10,10,.06);
 }
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* footer */
-.dark-bar{background:var(--text);height:36px;width:100%;position:sticky;top:42px;z-index:44}
+.dark-bar{background:#0a0a0a;height:36px;width:100%;position:sticky;top:42px;z-index:44}
+
 footer{
   padding:1rem 0;
-  border-top:1px solid var(--divider);
+  border-top:.5px solid rgba(10,10,10,.09);
   display:flex;justify-content:space-between;align-items:baseline;
-  position:sticky;bottom:0;background:var(--bg);z-index:30;
+  position:sticky;bottom:0;background:#fefdfb;z-index:30;
 }
-footer .f-l{font-family:'Cormorant',serif;font-weight:500;font-size:0.92rem;color:var(--text4);letter-spacing:0.3em;text-transform:uppercase}
-footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
+footer .f-l{
+  font-family:'Cormorant Garamond',serif;font-weight:500;
+  font-size:11px;color:#ababab;letter-spacing:.38em;
+}
+footer .f-r{
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;font-weight:300;color:#ababab;
+}
 
 @media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){
@@ -258,7 +244,7 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       <span class="h-name">Reeves, Margaret A.</span>
       <span class="h-demo">68 F · MRN 4819203 · Tele 712-A · HOD #1</span>
     </div>
-    <span class="h-arc">ARC</span>
+    <span class="h-arc">ESSAYER</span>
   </div>
   <div class="header-tags">
     <span class="tag warn">Afib w/ RVR</span>
@@ -287,7 +273,6 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
 <main>
   <div class="grid">
 
-    <!-- ACTIVE PROBLEMS -->
     <div class="glass">
       <div class="glass-label">Active Problems <span class="glass-add" onclick="tog('ap')">+ add</span></div>
       <div id="plist">
@@ -305,7 +290,6 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       </div>
     </div>
 
-    <!-- MEDICAL HISTORY -->
     <div class="glass">
       <div class="glass-label">Medical History <span class="glass-add" onclick="tog('mh')">+ add</span></div>
       <div id="mhlist">
@@ -328,7 +312,6 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       </div>
     </div>
 
-    <!-- SURGICAL HISTORY -->
     <div class="glass">
       <div class="glass-label">Surgical History <span class="glass-add" onclick="tog('sh')">+ add</span></div>
       <div id="shlist">
@@ -337,7 +320,7 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
         <div class="r"><span class="r-l">2004</span><span class="r-v">Hysterectomy (fibroids)</span></div>
         <div class="r"><span class="r-l">1998</span><span class="r-v">Tonsillectomy</span></div>
       </div>
-      <div style="margin-top:0.8rem;padding-top:0.6rem;border-top:1px solid var(--divider)">
+      <div style="margin-top:0.8rem;padding-top:0.6rem;border-top:.5px solid rgba(10,10,10,.09)">
         <div class="r"><span class="r-l" style="font-weight:400">Anesthesia Hx</span><span class="r-v">No prior complications</span></div>
         <div class="r"><span class="r-l" style="font-weight:400">Blood type</span><span class="r-v">O positive</span></div>
       </div>
@@ -348,14 +331,13 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       </div>
     </div>
 
-    <!-- ALLERGIES -->
     <div class="glass">
       <div class="glass-label">Allergies <span class="glass-add" onclick="tog('aa')">+ add</span></div>
       <div id="alist">
         <div class="ax"><span class="ax-name">Penicillin</span><span class="ax-rx">Anaphylaxis — documented 2003</span></div>
         <div class="ax"><span class="ax-name">Codeine</span><span class="ax-rx">Nausea, vomiting</span></div>
       </div>
-      <div style="margin-top:0.8rem;padding-top:0.5rem;border-top:1px solid var(--divider)">
+      <div style="margin-top:0.8rem;padding-top:0.5rem;border-top:.5px solid rgba(10,10,10,.09)">
         <div class="r"><span class="r-l">Cross-reactivity</span><span class="r-v accent">Amoxicillin, ampicillin — avoid all PCN class</span></div>
         <div class="r"><span class="r-l">Cephalosporins</span><span class="r-v">Tolerates — cefazolin given 2022 (TKA) without reaction</span></div>
         <div class="r"><span class="r-l">Contrast</span><span class="r-v">No known reaction</span></div>
@@ -369,7 +351,6 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       </div>
     </div>
 
-    <!-- SOCIAL HISTORY -->
     <div class="glass">
       <div class="glass-label">Social History</div>
       <div class="r"><span class="r-l">Lives</span><span class="r-v">Alone · single-story home · son 10 min away</span></div>
@@ -384,7 +365,6 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
       <div class="r"><span class="r-l">Advance directive</span><span class="r-v">On file · Full Code · DPOA: Thomas</span></div>
     </div>
 
-    <!-- TREATMENT TEAM -->
     <div class="glass">
       <div class="glass-label">Treatment Team</div>
       <div class="r"><span class="r-l">Attending</span><span class="r-v lg">Dr. Sarah Chen, Cardiology</span></div>
@@ -404,23 +384,23 @@ footer .f-r{font-size:0.82rem;font-weight:200;color:var(--text4)}
   </div>
 
   <footer>
-    <span class="f-l">ARC</span>
+    <span class="f-l">ESSAYER</span>
     <span class="f-r">Reeves, Margaret A. · MRN 4819203 · Tele 712-A · Dr. Chen</span>
   </footer>
 </main>
 
 <script>
-function uc(){const n=new Date();document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+n.getMinutes().toString().padStart(2,'0')}
+function uc(){var n=new Date();document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+n.getMinutes().toString().padStart(2,'0')}
 setInterval(uc,1000);uc();
 
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000)}
 
-function tog(id){const el=document.getElementById(id);el.classList.toggle('open');if(el.classList.contains('open')){const i=el.querySelector('input');if(i)setTimeout(()=>i.focus(),150)}}
+function tog(id){var el=document.getElementById(id);el.classList.toggle('open');if(el.classList.contains('open')){var i=el.querySelector('input');if(i)setTimeout(function(){i.focus()},150)}}
 
 function addP(){
-  const n=document.getElementById('pi1').value.trim();if(!n)return;
-  const d=document.getElementById('pi2').value.trim();
-  const el=document.createElement('div');el.className='cx';
+  var n=document.getElementById('pi1').value.trim();if(!n)return;
+  var d=document.getElementById('pi2').value.trim();
+  var el=document.createElement('div');el.className='cx';
   el.innerHTML='<div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">'+n+'</div></div>'+(d?'<div class="cx-sub">'+d+'</div>':'');
   document.getElementById('plist').appendChild(el);
   document.getElementById('pi1').value='';document.getElementById('pi2').value='';
@@ -428,9 +408,9 @@ function addP(){
 }
 
 function addMH(){
-  const n=document.getElementById('mhi1').value.trim();if(!n)return;
-  const d=document.getElementById('mhi2').value.trim();
-  const el=document.createElement('div');el.className='r';
+  var n=document.getElementById('mhi1').value.trim();if(!n)return;
+  var d=document.getElementById('mhi2').value.trim();
+  var el=document.createElement('div');el.className='r';
   el.innerHTML='<span class="r-l">'+n+'</span><span class="r-v">'+(d||'')+'</span>';
   document.getElementById('mhlist').appendChild(el);
   document.getElementById('mhi1').value='';document.getElementById('mhi2').value='';
@@ -438,9 +418,9 @@ function addMH(){
 }
 
 function addSH(){
-  const y=document.getElementById('shi1').value.trim();if(!y)return;
-  const p=document.getElementById('shi2').value.trim();
-  const el=document.createElement('div');el.className='r';
+  var y=document.getElementById('shi1').value.trim();if(!y)return;
+  var p=document.getElementById('shi2').value.trim();
+  var el=document.createElement('div');el.className='r';
   el.innerHTML='<span class="r-l">'+y+'</span><span class="r-v">'+(p||'')+'</span>';
   document.getElementById('shlist').appendChild(el);
   document.getElementById('shi1').value='';document.getElementById('shi2').value='';
@@ -448,10 +428,10 @@ function addSH(){
 }
 
 function addA(){
-  const n=document.getElementById('ai1').value.trim();if(!n)return;
-  const r=document.getElementById('ai2').value.trim();
-  const el=document.createElement('div');el.className='ax';
-  el.innerHTML='<span class="ax-name">'+n+'</span><span class="ax-rx">'+(r||'—')+'</span>';
+  var n=document.getElementById('ai1').value.trim();if(!n)return;
+  var r=document.getElementById('ai2').value.trim();
+  var el=document.createElement('div');el.className='ax';
+  el.innerHTML='<span class="ax-name">'+n+'</span><span class="ax-rx">'+(r||'\u2014')+'</span>';
   document.getElementById('alist').appendChild(el);
   document.getElementById('ai1').value='';document.getElementById('ai2').value='';
   tog('aa');toast('allergy added');
