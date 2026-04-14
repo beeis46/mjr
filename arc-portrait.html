@@ -1,441 +1,1659 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESSAYER — Portrait</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ARC · Reeves, Margaret A. — fluid EHR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════════════════════════════════════
+       BRUTALIST LUXE · PORSCHE ENGINE · SPRING PHYSICS · COLD WHITE / PURE BLACK
+       VERMILLION / ULTRAMARINE / OCHRE — ZERO GRADIENTS — APPLE‑INSPIRED
+       FULL AUDIT IMPLEMENTATION: ACCESSIBILITY · FOCUS · PRINT · REDUCED MOTION
+    ════════════════════════════════════════════════════════════════════════ */
+    :root {
+      --color-vermilion: #b8321a;
+      --color-ultramarine: #1e3560;
+      --color-ochre: #b87c1a;
+      --color-viridian: #3d7249;
+      --color-pure-black: #000000;
+      --color-cold-white: #f4f6f9;
+      --color-ink: #000000;
+      --color-ink-mid: #2c2c2c;
+      --color-ink-lt: #6e6e6e;
+      --color-border: rgba(0,0,0,0.08);
+      
+      --state-critical: var(--color-vermilion);
+      --state-warning: var(--color-ochre);
+      --state-normal: var(--color-ultramarine);
+      --state-verified: var(--color-viridian);
+      --state-inactive: var(--color-ink-lt);
+      
+      --surface-primary: var(--color-cold-white);
+      --surface-elevated: #ffffff;
+      --text-primary: var(--color-ink);
+      --text-secondary: var(--color-ink-mid);
+      --text-tertiary: var(--color-ink-lt);
+      --border-light: var(--color-border);
+      
+      --pure-black: var(--color-pure-black);
+      --cold-white: var(--color-cold-white);
+      --ink: var(--text-primary);
+      --ink-mid: var(--text-secondary);
+      --ink-lt: var(--text-tertiary);
+      --border: var(--border-light);
+      
+      --vermillion: var(--state-critical);
+      --vermillion-lt: rgba(184,50,26,0.06);
+      --vermillion-border: rgba(184,50,26,0.25);
+      --ultramarine: var(--state-normal);
+      --ultramarine-lt: rgba(30,53,96,0.06);
+      --ultramarine-border: rgba(30,53,96,0.25);
+      --ochre: var(--state-warning);
+      --ochre-lt: rgba(184,124,26,0.06);
+      --ochre-border: rgba(184,124,26,0.25);
+      --viridian: var(--state-verified);
+      --viridian-lt: rgba(61,114,73,0.08);
+      --viridian-border: rgba(61,114,73,0.3);
+      
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease: cubic-bezier(0.77,0,0.175,1);
+    }
 
-*{margin:0;padding:0;box-sizing:border-box}
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold-white); -webkit-font-smoothing: antialiased; color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; text-rendering: optimizeLegibility; }
 
-html,body{min-height:100vh;scroll-behavior:smooth}
-body{
-  background:#fefdfb;
-  font-family:'DM Sans',sans-serif;
-  font-weight:300;
-  color:#0a0a0a;
-  font-size:15px;
-  line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-}
+    @media (pointer: fine) {
+      body.has-cursor, body.has-cursor * { cursor: none !important; }
+      .cur-dot {
+        position: fixed; z-index: 9999; pointer-events: none;
+        width: 5px; height: 5px; border-radius: 50%; background: var(--pure-black);
+        transform: translate(-50%,-50%); mix-blend-mode: multiply;
+        transition: transform 0.18s ease, opacity 0.25s;
+      }
+      .cur-ring {
+        position: fixed; z-index: 9998; pointer-events: none;
+        width: 26px; height: 26px; border-radius: 50%;
+        border: 0.5px solid rgba(0,0,0,0.15);
+        transform: translate(-50%,-50%); mix-blend-mode: multiply;
+        transition: width 0.3s ease, height 0.3s ease, border-color 0.3s;
+      }
+      .cur-dot.hover { transform: translate(-50%,-50%) scale(2.2); opacity: 0.5; }
+      .cur-ring.hover { width: 44px; height: 44px; border-color: rgba(0,0,0,0.08); }
 
-header{
-  background:rgba(254,253,251,0.92);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:.5px solid rgba(10,10,10,.09);
-}
+    }
 
-.header-main{
-  display:flex;align-items:baseline;justify-content:space-between;
-  padding:14px 40px 6px;
-}
+    *:focus-visible {
+      outline: 2px solid var(--ultramarine);
+      outline-offset: 2px;
+      border-radius: 1px;
+    }
+    button:focus-visible,
+    .card-base:focus-visible,
+    .m-cell[data-mi]:focus-visible,
+    .chevron-nav:focus-visible,
+    .footer-btn:focus-visible,
+    .page-select:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+    }
 
-.h-left{display:flex;align-items:baseline;gap:0.8rem}
+    .site-logo {
+      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 3000; cursor: pointer;
+      font-family: 'Cormorant Garamond', serif; font-weight: 500;
+      font-size: clamp(22px,2.4vw,28px); letter-spacing: .38em; padding-right: .38em;
+      color: var(--ink); opacity: 0; transition: opacity .7s ease;
+      background: rgba(244,246,249,0.75); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 0.5px solid var(--border);
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .logo-visible .site-logo { opacity: 1; }
+    .site-logo em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; }
 
-.h-name{
-  font-family:'Cormorant Garamond',serif;
-  font-weight:500;font-size:22px;
-  color:#0a0a0a;letter-spacing:.02em;
-}
+    .grain {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      opacity: .018; mix-blend-mode: multiply;
+      transform: translateZ(0);
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0/180px;
+    }
 
-.h-demo{font-size:13px;font-weight:300;color:#5a5a5a}
+    .page {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
+      overflow: hidden; isolation: isolate; background: var(--cold-white);
+      content-visibility: auto;
+      contain-intrinsic-size: 100vw 100vh;
+    }
+    .page.alive, .page.entering {
+      content-visibility: visible;
+    }
+    .page-scroll {
+      width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch; padding-bottom: 100px;
+      display: flex; flex-direction: column;
+    }
 
-.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.1rem}
+    .patient-header {
+      position: sticky; top: 60px; left: 0; right: 0; z-index: 2500;
+      padding: 14px 40px 16px; text-align: center;
+      background: rgba(244,246,249,0.75); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .patient-meta {
+      font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 14px;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mid);
+      margin-bottom: 10px;
+    }
+    .patient-tags { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
 
-.h-meta{
-  display:flex;gap:1rem;align-items:baseline;
-  font-size:13px;font-weight:300;color:#ababab;
-}
+    /* Sim-time chrome — persistent top-right clock */
+    .sim-clock {
+      position: fixed; top: 14px; right: 24px; z-index: 3100;
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 13px;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mid);
+      opacity: 0; transition: opacity .7s ease;
+      user-select: none;
+    }
+    body.logo-visible .sim-clock { opacity: 1; }
+    .sim-clock-label {
+      color: var(--ink-lt); font-size: 11px; letter-spacing: .18em;
+    }
+    .sim-clock-value {
+      cursor: pointer; padding: 4px 8px; border-radius: 1px;
+      transition: background var(--dur-hover, .25s);
+      color: var(--ink);
+    }
+    .sim-clock-value:hover { background: rgba(0,0,0,0.04); }
+    .sim-clock-edit {
+      font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 13px;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+      padding: 4px 8px; width: 84px;
+      background: var(--cold-white); border: none;
+      border-bottom: 1px solid var(--ink); border-radius: 0;
+      outline: none;
+    }
+    .sim-clock-btn {
+      border: none; background: none; cursor: pointer;
+      width: 22px; height: 22px; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--ink-lt); opacity: 0.5;
+      transition: opacity var(--dur-hover, .25s);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1;
+    }
+    .sim-clock-btn:hover { opacity: 1; color: var(--ink); }
+    .sim-clock-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    .bracelet {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--ultramarine); color: var(--cold-white);
+      font-size: 11px; font-weight: 500; margin-right: 4px;
+      vertical-align: middle; line-height: 1;
+    }
+    .tag {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400;
+      letter-spacing: .05em; padding: 5px 14px; border-radius: 1px;
+      border: 1px solid var(--border); color: var(--ink-mid);
+      background: rgba(255,255,255,0.3);
+    }
+    .tag.warn { border-color: var(--ochre-border); color: var(--ochre); }
+    .tag.danger { border-color: var(--vermillion-border); color: var(--vermillion); font-weight: 500; }
 
-.h-arc{
-  font-family:'Cormorant Garamond',serif;font-weight:500;
-  font-size:15px;letter-spacing:.38em;padding-right:.38em;
-  color:#ababab;
-}
+    .card-base {
+      background: var(--cold-white);
+      padding: 9px 9px 38px; border-radius: 1px; position: relative;
+      opacity: 1; transform: translateX(0);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), box-shadow 0.4s ease;
+      border: 0.5px solid var(--border);
+      contain: layout style;
+      cursor: pointer;
+    }
+    .page.entering .card-base {
+      opacity: 0; transform: translateX(18px);
+      will-change: opacity, transform;
+    }
+    .page.entering.alive .card-base { opacity: 1; transform: translateX(0); }
+    .card-base:hover { box-shadow: 0 24px 48px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.04); }
+    .card-base:active {
+      transform: scale(0.985);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+      transition: transform 0.1s ease;
+    }
+    .card-base::before {
+      content: ''; position: absolute; inset: 0; border: 0.5px solid var(--border);
+      border-radius: 1px; pointer-events: none; z-index: 5;
+    }
+    .photo-overlay {
+      background: #ffffff; position: relative; overflow: hidden;
+      contain: paint;
+    }
+    .photo-overlay::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0/100px,
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g2)'/%3E%3C/svg%3E") 0/180px;
+      mix-blend-mode: overlay; opacity: .05;
+    }
+    .card-caption {
+      position: absolute; left: 9px; right: 9px; bottom: 12px;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+      font-size: 14px; letter-spacing: .04em; color: var(--ochre); text-align: center; opacity: 0.9;
+    }
 
-.header-tags{
-  display:flex;gap:0.5rem;align-items:center;
-  padding:0 40px 11px;flex-wrap:wrap;
-}
+    .portrait-inner, .results-inner, .med-inner, .orders-inner, .notes-inner {
+      max-width: 1440px; margin: 0 auto; padding: 28px 40px; flex: 1;
+      display: flex; flex-direction: column; justify-content: safe center; width: 100%;
+    }
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 32px 28px; padding-bottom: 20px;
+    }
+    .polaroid-photo { display: flex; flex-direction: column; padding: 20px 22px; min-height: 260px; }
+    .r { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 0.5px solid var(--border); gap: 12px; }
+    .r:last-child { border-bottom: none; }
+    .r-l { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); white-space: nowrap; }
+    .r-v { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink); text-align: right; line-height: 1.4; }
+    .r-v.lg { font-size: 16px; font-weight: 500; }
+    .cx { padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+    .cx:last-child { border-bottom: none; }
+    .cx-top { display: flex; align-items: center; gap: 8px; }
+    .cx-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--ochre); }
+    .cx-dot.w { background: var(--vermillion); }
+    .cx-name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink); }
+    .cx-name.accent { font-weight: 500; }
+    .cx-sub { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); margin-top: 4px; margin-left: 16px; line-height: 1.5; }
+    .ax {
+      background: var(--vermillion-lt); border: 0.5px solid var(--vermillion-border); border-radius: 1px;
+      padding: 8px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .ax:last-child { margin-bottom: 0; }
+    .ax-name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--vermillion); }
+    .ax-rx { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--vermillion); opacity: 0.8; }
 
-.tag{
-  font-family:'DM Sans',sans-serif;
-  font-size:11px;font-weight:400;
-  letter-spacing:.04em;
-  padding:3px 12px;border-radius:1px;
-  border:.5px solid rgba(10,10,10,.09);color:#5a5a5a;
-}
-.tag.warn{border-color:rgba(10,10,10,.14);color:#0a0a0a}
-.tag.danger{border-color:rgba(10,10,10,.14);color:#0a0a0a;font-weight:500}
+    /* RESULTS PANEL */
+    .results-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      width: 100%;
+      align-items: stretch;
+    }
+    .results-panel .card-base {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .results-panel .photo-overlay {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 65vh;
+      padding: 20px 22px;
+    }
+    .results-panel .card-caption {
+      position: static;
+      margin-top: auto;
+      padding: 12px 9px 0;
+    }
 
-nav{
-  display:flex;justify-content:center;align-items:center;
-  border-bottom:.5px solid rgba(10,10,10,.09);
-  background:rgba(254,253,251,0.95);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  position:sticky;top:0;z-index:45;
-  height:42px;
-}
-nav a{
-  font-family:'DM Sans',sans-serif;
-  font-size:12px;font-weight:300;color:#ababab;
-  letter-spacing:.12em;text-transform:uppercase;
-  padding:12px 22px;cursor:pointer;
-  text-decoration:none;position:relative;
-  transition:color .4s ease;
-}
-nav a:hover{color:#5a5a5a}
-nav a.on{color:#0a0a0a;font-weight:400}
-nav a.on::after{
-  content:'';position:absolute;bottom:0;left:25%;right:25%;
-  height:.5px;background:#0a0a0a;opacity:.2;
-}
+    .rl-group {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 0 8px;
+      font-family: 'Cormorant SC', serif; font-weight: 400; font-size: 14px;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--ink-mid);
+      border-bottom: 0.5px solid var(--border); margin-bottom: 2px;
+    }
+    .rl-group:first-child { padding-top: 0; }
+    .rl-group-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ochre); flex-shrink: 0; }
 
-main{
-  max-width:1440px;margin:0 auto;
-  padding:28px 40px 60px;
-}
+    .rl-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 2px; border-bottom: 0.5px solid var(--border);
+      cursor: pointer; user-select: none; transition: background .15s;
+    }
+    .rl-row:hover { background: rgba(0,0,0,0.018); border-radius: 1px; }
+    .rl-name {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300;
+      color: var(--ink-mid); flex: 1; white-space: nowrap;
+    }
+    .rl-val {
+      font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300;
+      line-height: 1; min-width: 44px; text-align: right;
+    }
+    .rl-val.v-ok   { color: var(--ultramarine); }
+    .rl-val.v-flag { color: var(--vermillion); }
+    .rl-unit {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      color: var(--ink-lt); min-width: 50px;
+    }
+    .rl-flag {
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+      color: var(--vermillion); width: 14px; text-align: center; flex-shrink: 0;
+    }
+    .rl-chev {
+      font-size: 12px; color: var(--ink-lt); opacity: 0.45; flex-shrink: 0;
+      transition: transform .3s var(--spring);
+    }
+    .rl-row.open .rl-chev { transform: rotate(180deg); }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-}
+    .rl-detail { overflow: hidden; height: 0; transition: height 0.35s var(--ease); }
+    .rl-detail-inner { padding: 10px 2px 13px; border-bottom: 0.5px solid var(--border); }
+    .rl-cap {
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+      font-size: 13px; line-height: 1.4; margin-bottom: 8px;
+    }
+    .rl-cap.v-ok   { color: var(--ultramarine); opacity: 0.85; }
+    .rl-cap.v-flag { color: var(--vermillion); }
 
-.glass{
-  background:rgba(255,255,255,0.5);
-  border:.5px solid rgba(10,10,10,.09);
-  border-radius:1px;
-  padding:1.5rem 1.7rem 1.3rem;
-  transition:box-shadow .5s ease;
-}
-.glass:hover{
-  box-shadow:0 4px 20px rgba(10,10,10,.04);
-}
+    .rd-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 2px; border-bottom: 0.5px solid var(--border);
+      cursor: pointer; user-select: none; transition: background .15s;
+    }
+    .rd-row:hover { background: rgba(0,0,0,0.018); border-radius: 1px; }
+    .rd-name {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      color: var(--ink); flex: 1;
+    }
+    .rd-date {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      color: var(--ink-lt); white-space: nowrap;
+    }
+    .rd-chev {
+      font-size: 12px; color: var(--ink-lt); opacity: 0.45; flex-shrink: 0;
+      transition: transform .3s var(--spring);
+    }
+    .rd-row.open .rd-chev { transform: rotate(180deg); }
 
-.glass-label{
-  font-family:'DM Sans',sans-serif;
-  font-size:11px;font-weight:400;
-  letter-spacing:.14em;text-transform:uppercase;
-  color:#ababab;margin-bottom:1rem;
-  display:flex;justify-content:space-between;align-items:center;
-}
+    .rd-detail { overflow: hidden; height: 0; transition: height 0.35s var(--ease); }
+    .rd-detail-inner { padding: 12px 2px 14px; border-bottom: 0.5px solid var(--border); }
+    .rd-imp {
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+      font-size: 14px; line-height: 1.55; color: var(--ink);
+      padding-bottom: 8px; margin-bottom: 8px; border-bottom: 0.5px solid var(--border);
+    }
+    .rd-find {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      line-height: 1.6; color: var(--ink-mid); padding: 3px 0;
+    }
+    .rd-find b { font-weight: 500; color: var(--ink); }
 
-.glass-add{
-  font-weight:300;letter-spacing:.04em;text-transform:none;
-  font-size:12px;color:#ababab;cursor:pointer;
-  transition:color .3s ease;
-}
-.glass-add:hover{color:#0a0a0a}
+    .lab-range { width: 100%; margin-top: 8px; }
+    .range-bar { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 4px; }
+    .range-fill { position: absolute; height: 4px; background: var(--ultramarine); border-radius: 2px; left: 0; width: 0%; transition: width 0.8s var(--spring) 0.15s; }
+    .range-fill.abnormal { background: var(--ochre); }
+    .range-marker { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); top: -1px; left: 0%; transform: translateX(-50%); transition: left 0.8s var(--spring) 0.15s; }
+    .range-labels { display: flex; justify-content: space-between; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink-lt); }
 
-.r{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding:0.42rem 0;
-  border-bottom:.5px solid rgba(10,10,10,.09);
-  gap:1rem;
-}
-.r:last-child{border-bottom:none}
+    /* MAR styles (unchanged) */
+    .t-row {
+      position: sticky; top: 148px; z-index: 40;
+      display: grid; grid-template-columns: repeat(8,1fr);
+      background: var(--pure-black); padding: 0 14px; height: 40px; align-items: center;
+      border-radius: 1px; margin-bottom: 24px; opacity: 0;
+      transition: opacity 1s ease .25s;
+    }
+    .page.alive .t-row { opacity: 1; }
+    .t-cell {
+      text-align: center; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      color: rgba(244,246,249,0.5); border-right: 1px solid rgba(244,246,249,0.15);
+      letter-spacing: .08em;
+    }
+    .t-cell:last-child { border-right: none; }
+    .t-cell.now { color: var(--cold-white); font-weight: 500; }
+    .m-sec {
+      padding: 22px 0 10px; font-family: 'Cormorant SC', serif; font-weight: 400; font-size: 14px;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--ink-mid);
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 0.5px solid var(--border); margin-bottom: 12px;
+    }
+    .m-sec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ochre); }
+    .m-card {
+      background: var(--cold-white); border: 0.5px solid var(--border);
+      border-radius: 1px; margin-bottom: 10px; overflow: hidden;
+      transition: transform 0.2s var(--ease), box-shadow 0.3s ease, border-color 0.2s;
+    }
+    .m-card.held-card { border-color: var(--ochre-border); background: #faf8f5; }
+    .m-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+      border-color: var(--ultramarine-border);
+    }
+    .m-head { padding: 13px 22px 10px; border-bottom: 0.5px solid var(--border); }
+    .m-order { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: var(--ink-mid); line-height: 1.5; }
+    .m-order strong { font-weight: 500; color: var(--ink); }
+    .m-tags { display: inline-flex; gap: 5px; margin-left: 8px; }
+    .m-tag-mini {
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .05em;
+      padding: 2px 8px; border-radius: 1px; border: 0.5px solid var(--border); color: var(--ink);
+    }
+    .m-tag-mini.danger { color: var(--vermillion); border-color: var(--vermillion-border); background: var(--vermillion-lt); }
+    .m-tag-mini.warn { color: var(--ochre); border-color: var(--ochre-border); background: var(--ochre-lt); }
+    .m-params { padding: 6px 22px 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); display: flex; gap: 18px; flex-wrap: wrap; }
+    .m-scale { padding: 6px 22px 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); border-top: 0.5px solid var(--border); }
+    .m-scale b { color: var(--ochre); font-weight: 500; }
+    .m-grid { display: grid; grid-template-columns: repeat(8,1fr); min-height: 50px; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+    .m-cell { display: flex; align-items: center; justify-content: center; padding: 6px 4px; border-right: 0.5px solid var(--border); transition: background .15s; }
+    .m-cell:last-child { border-right: none; }
+    .m-cell[data-mi] { cursor: pointer; position: relative; overflow: hidden; }
+    .m-cell[data-mi]:hover { background: var(--ultramarine-lt); }
+    .m-cell[data-mi]::after {
+      content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%;
+      background: var(--ultramarine); opacity: 0.2; transform: translate(-50%, -50%);
+      transition: width 0.4s ease-out, height 0.4s ease-out;
+    }
+    .m-cell[data-mi]:active::after { width: 200%; height: 200%; opacity: 0; transition: width 0s, height 0s, opacity 0.2s; }
+    .m-cell[data-mi]:hover .m-dot { opacity: 0.8; }
+    .m-hist-count {
+      position: absolute; top: 2px; right: 4px;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+      color: var(--ink-lt); opacity: 0.6;
+    }
+    .m-cell.now-col { background: rgba(0,0,0,0.05); }
+    .m-dot { color: var(--ink-lt); opacity: 0.3; font-size: 12px; }
+    .chip {
+      display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px;
+      border-radius: 1px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: .04em; white-space: nowrap; transition: all 0.2s var(--spring);
+    }
+    .c-given { background: var(--viridian-lt); color: var(--viridian); border: 0.5px solid var(--viridian-border); }
+    .c-due { background: var(--pure-black); color: var(--cold-white); animation: softPulse 3s infinite; }
+    .c-overdue { background: var(--vermillion); color: var(--cold-white); animation: softPulse 2s infinite; }
+    .c-held { background: var(--ochre-lt); color: var(--ochre); border: 0.5px solid var(--ochre-border); font-style: italic; }
+    @keyframes softPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+    .m-foot {
+      padding: 8px 22px 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid);
+      opacity: 0.85; transition: opacity 0.2s;
+    }
+    .m-card:hover .m-foot { opacity: 1; }
+    .m-foot b { font-weight: 400; color: var(--ink-mid); }
+    .m-foot div:nth-child(2) { text-align: center; }
+    .m-foot div:nth-child(3) { text-align: right; }
 
-.r-l{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#ababab;white-space:nowrap}
-.r-v{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a;text-align:right}
-.r-v.lg{font-size:15px;font-weight:500}
-.r-v.accent{color:#0a0a0a;font-weight:500}
-.r-v.rose{color:#0a0a0a}
-.r-v.dim{color:#ababab}
+    /* ORDERS & NOTES panels */
+    .orders-panel, .notes-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      width: 100%;
+      align-items: stretch;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Two-column polaroid pattern: outer frames match (driven by tallest sibling),
+       inner photo-overlay sizes to its own content, caption pinned to bottom of frame. */
+    .orders-panel .card-base, .notes-panel .card-base {
+      display: flex;
+      flex-direction: column;
+    }
+    .orders-panel .photo-overlay, .notes-panel .photo-overlay {
+      flex: 0 0 auto;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding: 20px 22px;
+    }
+    .orders-panel .card-caption, .notes-panel .card-caption {
+      position: static;
+      margin-top: auto;
+      padding: 12px 9px 0;
+    }
 
-.cx{padding:0.5rem 0;border-bottom:.5px solid rgba(10,10,10,.09)}
-.cx:last-child{border-bottom:none}
-.cx-top{display:flex;align-items:center;gap:0.5rem}
-.cx-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.cx-dot.a{background:#ababab}.cx-dot.w{background:#0a0a0a}.cx-dot.r{background:#ababab}
-.cx-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a}
-.cx-name.accent{color:#0a0a0a;font-weight:500}
-.cx-name.dim{color:#ababab}
-.cx-sub{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#5a5a5a;margin-top:2px;margin-left:1.1rem}
+    .order-category { margin-bottom: 28px; }
+    .order-cat-title {
+      font-family: 'Cormorant SC', serif; font-weight: 500; font-size: 14px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--ultramarine);
+      margin-bottom: 12px; padding-bottom: 6px;
+      border-bottom: 0.5px solid var(--ultramarine-border);
+      cursor: pointer; display: flex; align-items: center; gap: 8px;
+      transition: color .2s;
+    }
+    .order-cat-title:hover { color: var(--ink); }
+    .order-cat-title::after {
+      content: ''; display: inline-block; width: 6px; height: 6px; margin-left: auto;
+      border-right: 1px solid var(--ink-lt); border-bottom: 1px solid var(--ink-lt);
+      transform: rotate(45deg) translate(-2px, -2px); opacity: 0.5;
+      transition: transform var(--dur-hover, .25s), opacity var(--dur-hover, .25s);
+    }
+    .order-cat-title:hover::after { opacity: 1; }
+    .order-cat-title.collapsed::after { transform: rotate(-45deg) translate(-1px, 1px); }
+    .order-items { overflow: hidden; transition: height 0.35s var(--ease); }
+    .order-items.collapsed { height: 0 !important; }
+    .order-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 0.5px solid var(--border); gap: 20px; }
+    .order-row:last-child { border-bottom: none; }
+    .order-name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink); flex: 1; }
+    .order-name strong { font-weight: 500; }
+    .order-detail { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); margin-top: 3px; line-height: 1.5; }
+    .order-time { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-mid); letter-spacing: .04em; white-space: nowrap; }
 
-.ax{
-  background:rgba(10,10,10,.03);border:.5px solid rgba(10,10,10,.09);
-  border-radius:1px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;
-  display:flex;justify-content:space-between;align-items:baseline;
-}
-.ax:last-child{margin-bottom:0}
-.ax-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:#0a0a0a}
-.ax-rx{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#5a5a5a}
+    .notes-list .note-item {
+      display: flex; align-items: center; gap: 10px; padding: 11px 2px;
+      border-bottom: 0.5px solid var(--border); cursor: pointer;
+      transition: background .15s;
+    }
+    .notes-cat-title {
+      font-family: 'Cormorant SC', serif; font-weight: 500; font-size: 14px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--ultramarine);
+      margin: 22px 0 8px 0; padding-bottom: 6px;
+      border-bottom: 0.5px solid var(--ultramarine-border);
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .notes-cat-title:first-child { margin-top: 0; }
+    .notes-cat-count {
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+      color: var(--ink-lt); letter-spacing: .04em;
+    }
+    .notes-list .note-item:hover { background: rgba(0,0,0,0.018); border-radius: 1px; }
+    .notes-list .note-item.active {
+      background: var(--ultramarine-lt);
+      border-left: 3px solid var(--ultramarine);
+      padding-left: 14px;
+      margin-left: -5px;
+    }
+    .note-item-type { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); flex: 1; }
+    .note-item-date { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-lt); white-space: nowrap; }
+    .note-item-author { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink-mid); margin-left: 8px; }
 
-.mx{padding:0.4rem 0;border-bottom:.5px solid rgba(10,10,10,.09)}
-.mx:last-child{border-bottom:none}
-.mx-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#0a0a0a}
-.mx-info{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#ababab}
+    .note-viewer-title {
+      font-family: 'Cormorant SC', serif; font-size: 16px; letter-spacing: .1em;
+      color: var(--ultramarine); margin-bottom: 4px;
+    }
+    .note-viewer-meta {
+      display: flex; gap: 20px; margin-bottom: 18px; padding-bottom: 8px;
+      border-bottom: 0.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink-lt);
+    }
+    .note-viewer-body {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.7; color: var(--ink-mid);
+    }
+    .note-viewer-body p { margin-bottom: 16px; }
+    .note-viewer-body strong { font-weight: 500; color: var(--ink); }
 
-.iadd{
-  max-height:0;overflow:hidden;opacity:0;
-  transition:max-height .5s cubic-bezier(.23,1,.32,1),opacity .4s ease,padding .4s ease;
-}
-.iadd.open{max-height:250px;opacity:1;padding-top:0.6rem}
 
-.iadd input{
-  width:100%;background:transparent;border:none;
-  border-bottom:.5px solid rgba(10,10,10,.09);
-  padding:0.4rem 0;font-family:'DM Sans',sans-serif;
-  font-size:13px;font-weight:300;color:#0a0a0a;
-  outline:none;margin-bottom:0.4rem;
-  transition:border-color .4s ease;
-}
-.iadd input:focus{border-color:rgba(10,10,10,.35)}
-.iadd input::placeholder{color:#ababab}
 
-.ibtn{
-  background:none;border:none;
-  font-family:'DM Sans',sans-serif;
-  font-size:12px;font-weight:400;
-  letter-spacing:.04em;
-  cursor:pointer;transition:color .3s ease;padding:0;margin-right:1rem;
-}
-.ibtn.s{color:#0a0a0a}.ibtn.s:hover{color:#5a5a5a}
-.ibtn.c{color:#ababab}.ibtn.c:hover{color:#5a5a5a}
 
-.toast{
-  position:fixed;bottom:28px;left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:#fefdfb;border:.5px solid rgba(10,10,10,.09);
-  padding:0.55rem 1.5rem;
-  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;
-  color:#0a0a0a;border-radius:1px;z-index:70;
-  transition:transform .5s cubic-bezier(.23,1,.32,1);
-  box-shadow:0 4px 20px rgba(10,10,10,.06);
-}
-.toast.show{transform:translateX(-50%) translateY(0)}
+    .doc-bg {
+      position: fixed; inset: 0; z-index: 6000;
+      background: rgba(244,246,249,0.86);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
+    }
+    .doc-bg.open { opacity: 1; visibility: visible; }
+    .doc-box {
+      background: var(--cold-white);
+      border: 0.5px solid var(--border);
+      padding: 36px 40px; max-width: 460px; width: 92%;
+      border-radius: 1px; box-shadow: 0 24px 64px rgba(0,0,0,0.12);
+      transform: scale(0.96);
+      transition: transform 0.4s var(--spring), box-shadow 0.4s;
+    }
+    .doc-bg.open .doc-box { transform: scale(1); }
+    .doc-title {
+      font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+      font-size: 24px; color: var(--ink); margin-bottom: 6px;
+    }
+    .doc-sub { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink); margin-bottom: 4px; }
+    .doc-meta { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--ink-lt); margin-bottom: 22px; letter-spacing: .04em; }
+    .doc-ha {
+      display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap;
+      padding: 12px 14px; margin-bottom: 18px;
+      border: 1px solid var(--vermillion-border);
+      background: var(--vermillion-lt);
+      border-radius: 1px;
+    }
+    .doc-ha[hidden] { display: none; }
+    .doc-ha-icon {
+      flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--vermillion); color: var(--cold-white);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13px;
+      line-height: 1;
+    }
+    .doc-ha-text {
+      flex: 1 1 auto; min-width: 0;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.45;
+      color: var(--vermillion);
+    }
+    .doc-ha-text strong { font-weight: 500; }
+    .doc-ha-check {
+      flex: 0 0 100%;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      color: var(--vermillion); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .doc-ha-check input { cursor: pointer; }
+    .doc-field { margin-bottom: 14px; }
+    .doc-field label {
+      display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--ink-lt); margin-bottom: 5px;
+    }
+    .doc-field input {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      color: var(--ink); background: transparent; padding: 7px 0;
+      border: none; border-bottom: 0.5px solid var(--border); outline: none;
+      transition: border-bottom-color .25s ease;
+    }
+    .doc-field input:focus { border-bottom-color: var(--ink); }
+    .doc-err { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--vermillion); margin-top: 6px; font-style: italic; }
+    .doc-btns { display: flex; gap: 10px; margin-top: 22px; }
+    .doc-btn {
+      flex: 1; padding: 11px 16px; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase;
+      background: transparent; color: var(--ink);
+      border: 0.5px solid var(--border); cursor: pointer;
+      transition: background .25s ease, color .25s ease;
+    }
+    .doc-btn:hover { background: rgba(0,0,0,0.04); }
+    .doc-btn.go:hover { background: var(--ink); color: var(--cold-white); }
 
-.dark-bar{background:#0a0a0a;height:36px;width:100%;position:sticky;top:42px;z-index:44}
+    .global-footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 4000;
+      background: rgba(244,246,249,0.75); backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 0.5px solid var(--border);
+      padding: 14px 24px;
+      display: flex; justify-content: center; align-items: center; gap: 32px; flex-wrap: wrap;
+    }
+    .footer-btn {
+      background: none; border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--ink-mid); padding: 8px 20px; cursor: pointer;
+      transition: color .3s, background .3s; border-radius: 1px;
+    }
+    .footer-btn:hover { color: var(--ink); background: rgba(0,0,0,0.03); }
+    .footer-btn.active { color: var(--ink); font-weight: 500; border-bottom: 1px solid var(--ink); }
+    .page-select {
+      font-family: 'DM Sans', sans-serif; font-size: 14px; letter-spacing: .1em;
+      background: transparent; border: 0.5px solid var(--border); padding: 6px 12px;
+      color: var(--ink); border-radius: 1px; cursor: pointer; outline: none;
+    }
 
-footer{
-  padding:1rem 0;
-  border-top:.5px solid rgba(10,10,10,.09);
-  display:flex;justify-content:space-between;align-items:baseline;
-  position:sticky;bottom:0;background:#fefdfb;z-index:30;
-}
-footer .f-l{
-  font-family:'Cormorant Garamond',serif;font-weight:500;
-  font-size:11px;color:#ababab;letter-spacing:.38em;
-}
-footer .f-r{
-  font-family:'DM Sans',sans-serif;
-  font-size:11px;font-weight:300;color:#ababab;
-}
+    .chevron-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      z-index: 5000; display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; opacity: 0.5; transition: opacity 0.2s, transform 0.2s var(--spring);
+      font-family: 'DM Sans', sans-serif; text-decoration: none;
+    }
+    .chevron-nav:hover { opacity: 1; transform: translateY(-50%) scale(1.02); }
+    .chevron-left { left: 20px; }
+    .chevron-right { right: 20px; }
+    .chevron-glyph {
+      font-family: system-ui, sans-serif; font-size: 32px; font-weight: 300; line-height: 0.8;
+      color: var(--ink-lt); letter-spacing: -0.02em;
+    }
+    .chevron-label {
+      font-size: 14px; text-transform: uppercase; letter-spacing: .18em;
+      color: var(--ink-lt); margin-top: 4px;
+    }
+    .chevron-nav.hidden { display: none; }
 
-@media(max-width:1000px){.grid{grid-template-columns:1fr 1fr}}
-@media(max-width:650px){
-  .grid{grid-template-columns:1fr}
-  main{padding:20px 18px 40px}
-  .header-main{padding:12px 18px 6px}
-  .header-tags{padding:0 18px 8px}
-  .h-left{flex-wrap:wrap}
-}
-</style>
+    .toast {
+      position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: var(--cold-white);
+      padding: 12px 24px; border-radius: 2px; font-size: 14px;
+      opacity: 0; visibility: hidden; z-index: 10000;
+      transition: opacity 0.3s, visibility 0.3s, transform 0.4s var(--spring);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root { --spring: linear; --ease: linear; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .cards-grid { grid-template-columns: repeat(2,1fr); }
+      .orders-panel, .notes-panel, .results-panel { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .chevron-glyph { font-size: 24px; }
+      .chevron-left { left: 12px; }
+      .chevron-right { right: 12px; }
+    }
+  </style>
 </head>
-<body>
+<body class="has-cursor">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="site-logo" id="siteLogo" tabindex="0" role="button" aria-label="Home, Reeves Margaret A.">Reeves, Margaret A.</div>
+  <div class="cur-dot"></div><div class="cur-ring"></div>
 
-<header>
-  <div class="header-main">
-    <div class="h-left">
-      <span class="h-name">Reeves, Margaret A.</span>
-      <span class="h-demo">68 F · MRN 4819203 · Tele 712-A · HOD #1</span>
-    </div>
-    <span class="h-arc">ESSAYER</span>
+  <div id="chevronLeft" class="chevron-nav chevron-left" role="button" tabindex="0" aria-label="Previous page">
+    <div class="chevron-glyph" aria-hidden="true">‹</div><div class="chevron-label" id="prevLabel">Portrait</div>
   </div>
-  <div class="header-tags">
-    <span class="tag warn">Afib w/ RVR</span>
-    <span class="tag warn">Anticoagulated</span>
-    <span class="tag danger">ALLERGY: PCN</span>
-    <span class="tag">Full Code</span>
-    <span class="tag">Dr. Chen, Cardiology</span>
-    <span style="flex:1"></span>
-    <span class="b-clock" id="clock"></span>
-  </div>
-</header>
-
-<nav>
-  <a class="on">portrait</a>
-  <a href="arc-medication.html">medication</a>
-  <a>notes</a>
-  <a>nursing</a>
-  <a>results</a>
-  <a>orders</a>
-</nav>
-
-<div class="dark-bar"></div>
-
-<div class="toast" id="toast"></div>
-
-<main>
-  <div class="grid">
-
-    <div class="glass">
-      <div class="glass-label">Active Problems <span class="glass-add" onclick="tog('ap')">+ add</span></div>
-      <div id="plist">
-        <div class="cx"><div class="cx-top"><div class="cx-dot w"></div><div class="cx-name accent">Atrial fibrillation with RVR</div></div><div class="cx-sub">New onset 20 Mar · HR 148 on arrival · rate control initiated · diltiazem drip → PO metoprolol</div></div>
-        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Hypertension, essential</div></div><div class="cx-sub">Diagnosed 2008 · home meds: lisinopril 20mg, amlodipine 5mg · BP controlled on admit</div></div>
-        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Type 2 diabetes mellitus</div></div><div class="cx-sub">Diagnosed 2012 · A1c 7.2% Jan '26 · home metformin 1000mg BID · held on admission</div></div>
-        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Heart failure, HFpEF</div></div><div class="cx-sub">EF 55% echo Nov '25 · NYHA class II · mild LAE, grade I diastolic dysfunction</div></div>
-        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">Hyperlipidemia</div></div><div class="cx-sub">On atorvastatin 40mg · LDL 88 Jan '26</div></div>
-        <div class="cx"><div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">CHA₂DS₂-VASc: 4</div></div><div class="cx-sub">Age ≥65 (1) · female (1) · HTN (1) · DM (1) → anticoagulation indicated · heparin gtt initiated, transition to DOAC</div></div>
-      </div>
-      <div class="iadd" id="ap">
-        <input placeholder="Problem" id="pi1">
-        <input placeholder="Details / onset / management" id="pi2">
-        <div><button class="ibtn s" onclick="addP()">save</button><button class="ibtn c" onclick="tog('ap')">cancel</button></div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <div class="glass-label">Medical History <span class="glass-add" onclick="tog('mh')">+ add</span></div>
-      <div id="mhlist">
-        <div class="r"><span class="r-l">Hypertension</span><span class="r-v">Since 2008</span></div>
-        <div class="r"><span class="r-l">Type 2 DM</span><span class="r-v">Since 2012</span></div>
-        <div class="r"><span class="r-l">HFpEF</span><span class="r-v">Diagnosed 2023 · NYHA II</span></div>
-        <div class="r"><span class="r-l">Hyperlipidemia</span><span class="r-v">Since 2010</span></div>
-        <div class="r"><span class="r-l">Osteoarthritis</span><span class="r-v">Bilateral knees · R TKA 2022</span></div>
-        <div class="r"><span class="r-l">GERD</span><span class="r-v">Intermittent · no current meds</span></div>
-        <div class="r"><span class="r-l">Cholelithiasis</span><span class="r-v dim">Resolved — cholecystectomy 2019</span></div>
-        <div class="r"><span class="r-l">HF exacerbation</span><span class="r-v dim">Aug 2025 · 3-day admission</span></div>
-        <div class="r"><span class="r-l">Family Hx</span><span class="r-v">Mother: afib, CVA age 74</span></div>
-        <div class="r"><span class="r-l"></span><span class="r-v">Father: MI age 62, deceased</span></div>
-        <div class="r"><span class="r-l"></span><span class="r-v">Brother: T2DM, HTN</span></div>
-      </div>
-      <div class="iadd" id="mh">
-        <input placeholder="Condition" id="mhi1">
-        <input placeholder="Year / details" id="mhi2">
-        <div><button class="ibtn s" onclick="addMH()">save</button><button class="ibtn c" onclick="tog('mh')">cancel</button></div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <div class="glass-label">Surgical History <span class="glass-add" onclick="tog('sh')">+ add</span></div>
-      <div id="shlist">
-        <div class="r"><span class="r-l">2022</span><span class="r-v">Right total knee arthroplasty</span></div>
-        <div class="r"><span class="r-l">2019</span><span class="r-v">Laparoscopic cholecystectomy</span></div>
-        <div class="r"><span class="r-l">2004</span><span class="r-v">Hysterectomy (fibroids)</span></div>
-        <div class="r"><span class="r-l">1998</span><span class="r-v">Tonsillectomy</span></div>
-      </div>
-      <div style="margin-top:0.8rem;padding-top:0.6rem;border-top:.5px solid rgba(10,10,10,.09)">
-        <div class="r"><span class="r-l" style="font-weight:400">Anesthesia Hx</span><span class="r-v">No prior complications</span></div>
-        <div class="r"><span class="r-l" style="font-weight:400">Blood type</span><span class="r-v">O positive</span></div>
-      </div>
-      <div class="iadd" id="sh">
-        <input placeholder="Year" id="shi1">
-        <input placeholder="Procedure" id="shi2">
-        <div><button class="ibtn s" onclick="addSH()">save</button><button class="ibtn c" onclick="tog('sh')">cancel</button></div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <div class="glass-label">Allergies <span class="glass-add" onclick="tog('aa')">+ add</span></div>
-      <div id="alist">
-        <div class="ax"><span class="ax-name">Penicillin</span><span class="ax-rx">Anaphylaxis — documented 2003</span></div>
-        <div class="ax"><span class="ax-name">Codeine</span><span class="ax-rx">Nausea, vomiting</span></div>
-      </div>
-      <div style="margin-top:0.8rem;padding-top:0.5rem;border-top:.5px solid rgba(10,10,10,.09)">
-        <div class="r"><span class="r-l">Cross-reactivity</span><span class="r-v accent">Amoxicillin, ampicillin — avoid all PCN class</span></div>
-        <div class="r"><span class="r-l">Cephalosporins</span><span class="r-v">Tolerates — cefazolin given 2022 (TKA) without reaction</span></div>
-        <div class="r"><span class="r-l">Contrast</span><span class="r-v">No known reaction</span></div>
-        <div class="r"><span class="r-l">Latex</span><span class="r-v">No known reaction</span></div>
-        <div class="r"><span class="r-l">Food</span><span class="r-v dim">NKFA</span></div>
-      </div>
-      <div class="iadd" id="aa">
-        <input placeholder="Allergen" id="ai1">
-        <input placeholder="Reaction · severity · date" id="ai2">
-        <div><button class="ibtn s" onclick="addA()">save</button><button class="ibtn c" onclick="tog('aa')">cancel</button></div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <div class="glass-label">Social History</div>
-      <div class="r"><span class="r-l">Lives</span><span class="r-v">Alone · single-story home · son 10 min away</span></div>
-      <div class="r"><span class="r-l">Occupation</span><span class="r-v">Retired teacher (2020)</span></div>
-      <div class="r"><span class="r-l">ADLs</span><span class="r-v">Independent baseline · uses cane occasionally</span></div>
-      <div class="r"><span class="r-l">Tobacco</span><span class="r-v">Former · 1 PPD × 20 yrs · quit 2005</span></div>
-      <div class="r"><span class="r-l">Alcohol</span><span class="r-v">Occasional glass of wine</span></div>
-      <div class="r"><span class="r-l">Substances</span><span class="r-v dim">Denies</span></div>
-      <div class="r"><span class="r-l">Exercise</span><span class="r-v">Walks 20 min daily when feeling well</span></div>
-      <div class="r"><span class="r-l">Diet</span><span class="r-v">Low-sodium at home, inconsistent</span></div>
-      <div class="r"><span class="r-l">Support</span><span class="r-v">Son Thomas (DPOA), daughter Catherine · church community</span></div>
-      <div class="r"><span class="r-l">Advance directive</span><span class="r-v">On file · Full Code · DPOA: Thomas</span></div>
-    </div>
-
-    <div class="glass">
-      <div class="glass-label">Treatment Team</div>
-      <div class="r"><span class="r-l">Attending</span><span class="r-v lg">Dr. Sarah Chen, Cardiology</span></div>
-      <div class="r"><span class="r-l">PCP</span><span class="r-v">Dr. James Holloway, Internal Medicine</span></div>
-      <div class="r"><span class="r-l">Resident</span><span class="r-v">Dr. Marcus Rivera, PGY-2</span></div>
-      <div class="r"><span class="r-l">RN (day)</span><span class="r-v">Jessica Tran, RN</span></div>
-      <div class="r"><span class="r-l">RN (night)</span><span class="r-v">David Park, RN</span></div>
-      <div class="r"><span class="r-l">Pharmacist</span><span class="r-v">Linda Okafor, PharmD</span></div>
-      <div class="r"><span class="r-l">SW</span><span class="r-v">Maria Santos, LCSW</span></div>
-      <div class="r"><span class="r-l">PT</span><span class="r-v">Consult placed — pending eval</span></div>
-      <div class="r"><span class="r-l">Dietary</span><span class="r-v">Cardiac / diabetic diet ordered</span></div>
-      <div class="r"><span class="r-l">Son / DPOA</span><span class="r-v">Thomas Reeves · 614-555-0187</span></div>
-      <div class="r"><span class="r-l">Daughter</span><span class="r-v">Catherine Reeves-Park · 614-555-0234</span></div>
-      <div class="r"><span class="r-l">Pharmacy</span><span class="r-v">Walgreens Maple Ridge · 614-555-0300</span></div>
-    </div>
-
+  <div id="chevronRight" class="chevron-nav chevron-right" role="button" tabindex="0" aria-label="Next page">
+    <div class="chevron-glyph" aria-hidden="true">›</div><div class="chevron-label" id="nextLabel">Results</div>
   </div>
 
-  <footer>
-    <span class="f-l">ESSAYER</span>
-    <span class="f-r">Reeves, Margaret A. · MRN 4819203 · Tele 712-A · Dr. Chen</span>
+  <!-- PAGE 0 — PORTRAIT -->
+  <section class="page p-portrait alive" id="pg0" aria-labelledby="pg0-heading">
+    <div class="page-scroll">
+      <div class="patient-header">
+        <div class="patient-meta"><span class="bracelet" title="ID bracelet verified" aria-label="ID bracelet verified">✓</span> 68 F · MRN 4819203 · Tele 712-A · Hospital Day 1</div>
+        <div class="patient-tags">
+          <span class="tag warn">Afib w/ RVR</span><span class="tag warn">Anticoagulated</span><span class="tag danger">Allergy: PCN</span>
+          <span class="tag">Full Code</span><span class="tag">Dr. Chen, Cardiology</span>
+        </div>
+      </div>
+      <div class="portrait-inner">
+        <div class="cards-grid">
+          <div class="card-base" style="transition-delay: .06s" tabindex="0" role="region" aria-label="Presenting problem card"><div class="polaroid-photo photo-overlay"><div class="cx"><div class="cx-top"><div class="cx-dot w"></div><div class="cx-name accent">Atrial fibrillation with RVR</div></div><div class="cx-sub">New onset 20 Mar · HR 148 on arrival · diltiazem drip → PO metoprolol</div></div><div class="cx"><div class="cx-top"><div class="cx-dot"></div><div class="cx-name">Hypertension, essential</div></div><div class="cx-sub">Dx 2008 · home: lisinopril 20mg, amlodipine 5mg</div></div><div class="cx"><div class="cx-top"><div class="cx-dot"></div><div class="cx-name">Type 2 diabetes mellitus</div></div><div class="cx-sub">Dx 2012 · A1c 7.2% · metformin held</div></div><div class="cx"><div class="cx-top"><div class="cx-dot"></div><div class="cx-name">Heart failure, HFpEF</div></div><div class="cx-sub">EF 55% Nov '25 · NYHA class II</div></div><div class="cx"><div class="cx-top"><div class="cx-dot"></div><div class="cx-name">CHA₂DS₂-VASc: 4</div></div><div class="cx-sub">Heparin gtt initiated, transition to DOAC</div></div></div><div class="card-caption">the present trouble</div></div>
+          <div class="card-base" style="transition-delay: .12s" tabindex="0" role="region" aria-label="Past medical history"><div class="polaroid-photo photo-overlay"><div class="r"><span class="r-l">Hypertension</span><span class="r-v">Since 2008</span></div><div class="r"><span class="r-l">Type 2 DM</span><span class="r-v">Since 2012</span></div><div class="r"><span class="r-l">HFpEF</span><span class="r-v">Dx 2023 · NYHA II</span></div><div class="r"><span class="r-l">Hyperlipidemia</span><span class="r-v">Since 2010</span></div><div class="r"><span class="r-l">Osteoarthritis</span><span class="r-v">Bilateral knees · R TKA 2022</span></div><div class="r"><span class="r-l">GERD</span><span class="r-v">Intermittent</span></div><div class="r"><span class="r-l">Family Hx</span><span class="r-v">Mother: afib, CVA 74</span></div></div><div class="card-caption">a life in conditions</div></div>
+          <div class="card-base" style="transition-delay: .18s" tabindex="0" role="region" aria-label="Surgical history"><div class="polaroid-photo photo-overlay"><div class="r"><span class="r-l">2022</span><span class="r-v">Right total knee arthroplasty</span></div><div class="r"><span class="r-l">2019</span><span class="r-v">Lap cholecystectomy</span></div><div class="r"><span class="r-l">2004</span><span class="r-v">Hysterectomy (fibroids)</span></div><div class="r"><span class="r-l">1998</span><span class="r-v">Tonsillectomy</span></div><div class="r"><span class="r-l">Anesthesia</span><span class="r-v">No prior complications</span></div><div class="r"><span class="r-l">Blood type</span><span class="r-v">O positive</span></div></div><div class="card-caption">what has been opened, what closed</div></div>
+          <div class="card-base" style="transition-delay: .24s" tabindex="0" role="region" aria-label="Allergies and adverse reactions"><div class="polaroid-photo photo-overlay"><div class="ax"><span class="ax-name">Penicillin</span><span class="ax-rx">Anaphylaxis · 2003</span></div><div class="ax"><span class="ax-name">Codeine</span><span class="ax-rx">Nausea, vomiting</span></div><div class="r"><span class="r-l">Cross-react</span><span class="r-v">Avoid all PCN class</span></div><div class="r"><span class="r-l">Cephalosporin</span><span class="r-v">Tolerated 2022</span></div><div class="r"><span class="r-l">Contrast</span><span class="r-v">No reaction</span></div><div class="r"><span class="r-l">Latex</span><span class="r-v">No reaction</span></div></div><div class="card-caption">what the body refuses</div></div>
+          <div class="card-base" style="transition-delay: .30s" tabindex="0" role="region" aria-label="Social and functional history"><div class="polaroid-photo photo-overlay"><div class="r"><span class="r-l">Lives</span><span class="r-v">Alone · son nearby</span></div><div class="r"><span class="r-l">Occupation</span><span class="r-v">Retired teacher 2020</span></div><div class="r"><span class="r-l">ADLs</span><span class="r-v">Independent · cane</span></div><div class="r"><span class="r-l">Tobacco</span><span class="r-v">Quit 2005 · 20py</span></div><div class="r"><span class="r-l">Alcohol</span><span class="r-v">Occasional wine</span></div><div class="r"><span class="r-l">Exercise</span><span class="r-v">Walks 20 min daily</span></div><div class="r"><span class="r-l">Diet</span><span class="r-v">Low-sodium</span></div><div class="r"><span class="r-l">Support</span><span class="r-v">Son Thomas, daughter Catherine</span></div><div class="r"><span class="r-l">Code</span><span class="r-v">Full · DPOA: Thomas</span></div></div><div class="card-caption">the world she comes from</div></div>
+          <div class="card-base" style="transition-delay: .36s" tabindex="0" role="region" aria-label="Care team"><div class="polaroid-photo photo-overlay"><div class="r"><span class="r-l">Attending</span><span class="r-v lg">Dr. Sarah Chen</span></div><div class="r"><span class="r-l">PCP</span><span class="r-v">Dr. James Holloway</span></div><div class="r"><span class="r-l">Resident</span><span class="r-v">Dr. Marcus Rivera</span></div><div class="r"><span class="r-l">RN day</span><span class="r-v">Jessica Tran</span></div><div class="r"><span class="r-l">RN night</span><span class="r-v">David Park</span></div><div class="r"><span class="r-l">Pharmacist</span><span class="r-v">Linda Okafor</span></div><div class="r"><span class="r-l">SW</span><span class="r-v">Maria Santos, LCSW</span></div><div class="r"><span class="r-l">DPOA</span><span class="r-v">Thomas Reeves</span></div></div><div class="card-caption">the hands that hold her</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 1 — RESULTS -->
+  <section class="page p-results" id="pg1" aria-labelledby="pg1-heading">
+    <div class="page-scroll">
+      <div class="patient-header">
+        <div class="patient-meta"><span class="bracelet" title="ID bracelet verified" aria-label="ID bracelet verified">✓</span> 68 F · MRN 4819203 · Tele 712-A · Hospital Day 1</div>
+        <div class="patient-tags"><span class="tag warn">Afib w/ RVR</span><span class="tag warn">Anticoagulated</span><span class="tag danger">Allergy: PCN</span><span class="tag">Full Code</span><span class="tag">Dr. Chen, Cardiology</span></div>
+      </div>
+      <div class="results-inner"><div id="resultsRoot" aria-live="polite"></div></div>
+    </div>
+  </section>
+
+  <!-- PAGE 2 — MEDICATIONS -->
+  <section class="page p-medication" id="pg2" aria-labelledby="pg2-heading">
+    <div class="page-scroll">
+      <div class="patient-header">
+        <div class="patient-meta"><span class="bracelet" title="ID bracelet verified" aria-label="ID bracelet verified">✓</span> 68 F · MRN 4819203 · Tele 712-A · Hospital Day 1</div>
+        <div class="patient-tags"><span class="tag warn">Afib w/ RVR</span><span class="tag warn">Anticoagulated</span><span class="tag danger">Allergy: PCN</span><span class="tag">Full Code</span><span class="tag">Dr. Chen, Cardiology</span></div>
+      </div>
+      <div class="med-inner"><div class="t-row" id="marTimeRow"></div><div id="medList"></div></div>
+    </div>
+  </section>
+
+  <!-- PAGE 3 — ORDERS -->
+  <section class="page p-orders" id="pg3" aria-labelledby="pg3-heading">
+    <div class="page-scroll">
+      <div class="patient-header">
+        <div class="patient-meta"><span class="bracelet" title="ID bracelet verified" aria-label="ID bracelet verified">✓</span> 68 F · MRN 4819203 · Tele 712-A · Hospital Day 1</div>
+        <div class="patient-tags"><span class="tag warn">Afib w/ RVR</span><span class="tag warn">Anticoagulated</span><span class="tag danger">Allergy: PCN</span><span class="tag">Full Code</span><span class="tag">Dr. Chen, Cardiology</span></div>
+      </div>
+      <div class="orders-inner"><div id="ordersRoot"></div></div>
+    </div>
+  </section>
+
+  <!-- PAGE 4 — NOTES -->
+  <section class="page p-notes" id="pg4" aria-labelledby="pg4-heading">
+    <div class="page-scroll">
+      <div class="patient-header">
+        <div class="patient-meta"><span class="bracelet" title="ID bracelet verified" aria-label="ID bracelet verified">✓</span> 68 F · MRN 4819203 · Tele 712-A · Hospital Day 1</div>
+        <div class="patient-tags"><span class="tag warn">Afib w/ RVR</span><span class="tag warn">Anticoagulated</span><span class="tag danger">Allergy: PCN</span><span class="tag">Full Code</span><span class="tag">Dr. Chen, Cardiology</span></div>
+      </div>
+      <div class="notes-inner"><div id="notesRoot"></div></div>
+    </div>
+  </section>
+
+  <footer class="global-footer">
+    <button class="footer-btn" data-page="0">Portrait</button>
+    <button class="footer-btn" data-page="1">Results</button>
+    <button class="footer-btn" data-page="2">Medication</button>
+    <button class="footer-btn" data-page="3">Orders</button>
+    <button class="footer-btn" data-page="4">Notes</button>
+    <select class="page-select" id="pageSelect" aria-label="Jump to page">
+      <option value="" disabled selected>— jump to —</option>
+      <option value="0">Portrait</option><option value="1">Results</option><option value="2">Medication</option><option value="3">Orders</option><option value="4">Notes</option>
+    </select>
   </footer>
-</main>
 
-<script>
-function uc(){var n=new Date();document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+n.getMinutes().toString().padStart(2,'0')}
-setInterval(uc,1000);uc();
+  <div class="sim-clock" id="simClock" aria-label="Simulation clock">
+    <span class="sim-clock-label">Sim Time</span>
+    <button class="sim-clock-btn" id="simClockBack" aria-label="Rewind 15 minutes" title="Back 15 min">◂</button>
+    <span class="sim-clock-value" id="simClockValue" role="button" tabindex="0" title="Click to set sim time">21 Mar · 0700</span>
+    <button class="sim-clock-btn" id="simClockFwd" aria-label="Advance 15 minutes" title="Forward 15 min">▸</button>
+  </div>
 
-function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000)}
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="doc-bg" id="docBg" role="dialog" aria-modal="true" aria-label="Document medication administration">
+    <div class="doc-box">
+      <div class="doc-title">Document administration</div>
+      <div class="doc-sub" id="docDrug"></div>
+      <div class="doc-meta" id="docMeta"></div>
+      <div class="doc-ha" id="docHa" hidden>
+        <span class="doc-ha-icon" aria-hidden="true">!</span>
+        <span class="doc-ha-text"><strong>High-alert medication</strong> — verify dose and rate with second RN before administration.</span>
+        <label class="doc-ha-check"><input type="checkbox" id="docHaVerify"> 2nd RN verified</label>
+      </div>
+      <div class="doc-field"><label for="docTime">Time administered</label><input id="docTime" placeholder="HHMM" autocomplete="off"><div class="doc-err" id="docErr"></div></div>
+      <div class="doc-field"><label for="docBy">Administered by</label><input id="docBy" value="Student RN" autocomplete="off"></div>
+      <div class="doc-field"><label for="docNotes">Notes</label><input id="docNotes" placeholder="Assessment, site..." autocomplete="off"></div>
+      <div class="doc-btns"><button class="doc-btn go" id="docGo">Confirm given</button><button class="doc-btn hold" id="docHold">Hold</button><button class="doc-btn x" id="docX">Cancel</button></div>
+    </div>
+  </div>
 
-function tog(id){var el=document.getElementById(id);el.classList.toggle('open');if(el.classList.contains('open')){var i=el.querySelector('input');if(i)setTimeout(function(){i.focus()},150)}}
+  <script>
+    (function(){
+      "use strict";
 
-function addP(){
-  var n=document.getElementById('pi1').value.trim();if(!n)return;
-  var d=document.getElementById('pi2').value.trim();
-  var el=document.createElement('div');el.className='cx';
-  el.innerHTML='<div class="cx-top"><div class="cx-dot a"></div><div class="cx-name">'+n+'</div></div>'+(d?'<div class="cx-sub">'+d+'</div>':'');
-  document.getElementById('plist').appendChild(el);
-  document.getElementById('pi1').value='';document.getElementById('pi2').value='';
-  tog('ap');toast('problem added');
-}
+      // ---------- NAVIGATION ----------
+      const DUR = 720, EASE = 'cubic-bezier(0.77,0,0.175,1)';
+      const pages = [...document.querySelectorAll('.page')];
+      const N = pages.length;
+      let cur = 0, busy = false, zTop = N + 10;
+      let touchStartTime = 0, touchStartY = 0, touchVelocity = 0;
 
-function addMH(){
-  var n=document.getElementById('mhi1').value.trim();if(!n)return;
-  var d=document.getElementById('mhi2').value.trim();
-  var el=document.createElement('div');el.className='r';
-  el.innerHTML='<span class="r-l">'+n+'</span><span class="r-v">'+(d||'')+'</span>';
-  document.getElementById('mhlist').appendChild(el);
-  document.getElementById('mhi1').value='';document.getElementById('mhi2').value='';
-  tog('mh');toast('history added');
-}
+      const pageNames = ['Portrait','Results','Medication','Orders','Notes'];
 
-function addSH(){
-  var y=document.getElementById('shi1').value.trim();if(!y)return;
-  var p=document.getElementById('shi2').value.trim();
-  var el=document.createElement('div');el.className='r';
-  el.innerHTML='<span class="r-l">'+y+'</span><span class="r-v">'+(p||'')+'</span>';
-  document.getElementById('shlist').appendChild(el);
-  document.getElementById('shi1').value='';document.getElementById('shi2').value='';
-  tog('sh');toast('surgical history added');
-}
+      function updateUI(idx) {
+        pages.forEach((p,i)=> p.classList.toggle('alive', i===idx));
+        document.body.classList.toggle('logo-visible', idx>=0);
+        document.querySelectorAll('.footer-btn').forEach((b,i)=> {
+          b.classList.toggle('active', i===idx);
+          b.setAttribute('aria-current', i===idx ? 'page' : 'false');
+        });
+        const sel = document.getElementById('pageSelect');
+        for (let opt of sel.options) opt.disabled = (opt.value === String(idx));
+        sel.value = "";
+        const leftBtn = document.getElementById('chevronLeft'), rightBtn = document.getElementById('chevronRight');
+        leftBtn.classList.toggle('hidden', idx===0);
+        rightBtn.classList.toggle('hidden', idx===N-1);
+        leftBtn.setAttribute('aria-disabled', idx===0);
+        rightBtn.setAttribute('aria-disabled', idx===N-1);
+        if (idx>0) document.getElementById('prevLabel').textContent = pageNames[idx-1];
+        if (idx<N-1) document.getElementById('nextLabel').textContent = pageNames[idx+1];
+      }
 
-function addA(){
-  var n=document.getElementById('ai1').value.trim();if(!n)return;
-  var r=document.getElementById('ai2').value.trim();
-  var el=document.createElement('div');el.className='ax';
-  el.innerHTML='<span class="ax-name">'+n+'</span><span class="ax-rx">'+(r||'\u2014')+'</span>';
-  document.getElementById('alist').appendChild(el);
-  document.getElementById('ai1').value='';document.getElementById('ai2').value='';
-  tog('aa');toast('allergy added');
-}
-</script>
+      function go(to) {
+        if (busy || to===cur || to<0 || to>=N) return;
+        busy = true;
+        const target = pages[to], dir = to > cur ? 1 : -1;
+
+        pages.forEach((p,i)=> {
+          if (i===cur || i===to) return;
+          p.style.transition = 'none';
+          p.style.transform = i<to ? 'translateX(-100%)' : 'translateX(100%)';
+        });
+
+        target.classList.add('entering');
+        target.classList.remove('alive');
+        target.style.transition = 'none';
+        target.style.transform = dir>0 ? 'translateX(100%)' : 'translateX(-100%)';
+        target.style.zIndex = zTop++;
+        target.offsetHeight;
+        target.style.transition = `transform ${DUR}ms var(--ease)`;
+        target.style.transform = 'translateX(0)';
+        pages[cur].style.transition = `transform ${DUR}ms var(--ease)`;
+        pages[cur].style.transform = dir>0 ? 'translateX(-8%)' : 'translateX(100%)';
+
+        requestAnimationFrame(()=> requestAnimationFrame(()=> target.classList.add('alive')));
+
+        setTimeout(()=> {
+          pages[cur].style.transform = 'translateX(0)';
+          cur = to; busy = false;
+          const sc = target.querySelector('.page-scroll'); if(sc) sc.scrollTop = 0;
+          updateUI(cur);
+        }, DUR+80);
+        setTimeout(()=> target.classList.remove('entering'), DUR+1200);
+      }
+
+      window.addEventListener('touchstart', e=> { touchStartTime=performance.now(); touchStartY=e.touches[0].clientY; touchVelocity=0; }, {passive:true});
+      window.addEventListener('touchmove', e=> { const now=performance.now(), dy=touchStartY-e.touches[0].clientY, dt=now-touchStartTime; if(dt>0) touchVelocity=dy/dt; }, {passive:true});
+      window.addEventListener('touchend', e=> {
+        if (busy || document.activeElement.tagName==='INPUT') return;
+        const dy = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(dy)>40 || Math.abs(touchVelocity)>0.5) dy>0 ? go(cur+1) : go(cur-1);
+      });
+
+      window.addEventListener('wheel', e=> {}, {passive: false});
+
+      window.addEventListener('keydown', e=> {
+        if (document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA') return;
+        if (e.key==='ArrowLeft') { e.preventDefault(); go(cur-1); }
+        if (e.key==='ArrowRight') { e.preventDefault(); go(cur+1); }
+        if (e.key==='Escape' && document.getElementById('docBg').classList.contains('open')) { closeModal(); }
+      });
+
+      document.getElementById('siteLogo').addEventListener('click', ()=> go(0));
+      document.getElementById('siteLogo').addEventListener('keydown', e=> { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); go(0); } });
+      document.querySelectorAll('.footer-btn').forEach(b=> b.addEventListener('click', ()=> go(+b.dataset.page)));
+      document.getElementById('pageSelect').addEventListener('change', e=> { if(e.target.value) go(+e.target.value); });
+      document.getElementById('chevronLeft').addEventListener('click', ()=> go(cur-1));
+      document.getElementById('chevronRight').addEventListener('click', ()=> go(cur+1));
+      document.getElementById('chevronLeft').addEventListener('keydown', e=> { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); go(cur-1); } });
+      document.getElementById('chevronRight').addEventListener('keydown', e=> { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); go(cur+1); } });
+
+      if (typeof window.matchMedia === 'function' && window.matchMedia('(pointer:fine)').matches) {
+        const dot = document.querySelector('.cur-dot'), ring = document.querySelector('.cur-ring');
+        let mx=0, my=0, rx=0, ry=0;
+        document.addEventListener('mousemove', e=> { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+        document.querySelectorAll('a,button,input,.site-logo,.card-base,.m-cell[data-mi]').forEach(el=> {
+          el.addEventListener('mouseenter', ()=> { dot.classList.add('hover'); ring.classList.add('hover'); });
+          el.addEventListener('mouseleave', ()=> { dot.classList.remove('hover'); ring.classList.remove('hover'); });
+        });
+        const lerp = (a,b,t)=> a+(b-a)*t;
+        (function frame(){ rx=lerp(rx,mx,0.12); ry=lerp(ry,my,0.12); ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(frame); })();
+      }
+
+      pages.forEach((p,i)=> { p.style.zIndex = i===0?zTop++:i; p.style.transform = i===0?'translateX(0)':'translateX(100%)'; });
+      pages[0].classList.add('entering'); updateUI(0);
+      requestAnimationFrame(()=> requestAnimationFrame(()=> pages[0].classList.add('alive')));
+      setTimeout(()=> pages[0].classList.remove('entering'), 1400);
+      document.body.classList.add('logo-visible');
+
+      // ========================================================================
+      // SIM TIME — the clock the chart thinks it is. Drives MAR now-col and
+      // doc-modal default time. Starts at 21 Mar 2042 · 0700 (day-shift start).
+      // ========================================================================
+      const SIM_START_HOUR = 7;     // 0700 — day-shift start
+      const SIM_START_DAY  = 21;    // 21 Mar 2042
+      let simMinutes = SIM_START_HOUR * 60;  // minutes from midnight of SIM_START_DAY
+      let simEditOpen = false;
+
+      function pad(n, w=2) { return n.toString().padStart(w, '0'); }
+      function simHHMM() {
+        const m = ((simMinutes % 1440) + 1440) % 1440;
+        return pad(Math.floor(m/60)) + pad(m%60);
+      }
+      function simDayOffset() { return Math.floor(simMinutes / 1440); }
+      function simDateLabel() {
+        const day = SIM_START_DAY + simDayOffset();
+        return `${day} Mar · ${simHHMM()}`;
+      }
+
+      function renderSimClock() {
+        const val = document.getElementById('simClockValue');
+        if (val && !simEditOpen) val.textContent = simDateLabel();
+        // Also refresh MAR shading on every sim-time change
+        if (typeof renderMAR === 'function') renderMAR();
+      }
+
+      function setSimMinutes(newMin) {
+        simMinutes = newMin;
+        renderSimClock();
+      }
+
+      function openSimEdit() {
+        const valEl = document.getElementById('simClockValue');
+        if (!valEl || simEditOpen) return;
+        simEditOpen = true;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'sim-clock-edit';
+        input.value = simHHMM();
+        input.setAttribute('aria-label', 'Sim time HHMM');
+        input.placeholder = 'HHMM';
+        input.maxLength = 4;
+        valEl.replaceWith(input);
+        input.focus();
+        input.select();
+        const commit = () => {
+          const v = input.value.trim();
+          if (/^\d{4}$/.test(v)) {
+            const hh = parseInt(v.slice(0,2),10);
+            const mm = parseInt(v.slice(2),10);
+            if (hh>=0 && hh<=23 && mm>=0 && mm<=59) {
+              // Keep the same day offset, change HH:MM within it
+              const day = simDayOffset();
+              simMinutes = day*1440 + hh*60 + mm;
+            }
+          }
+          simEditOpen = false;
+          // Restore the span
+          const span = document.createElement('span');
+          span.className = 'sim-clock-value';
+          span.id = 'simClockValue';
+          span.setAttribute('role','button');
+          span.tabIndex = 0;
+          span.title = 'Click to set sim time';
+          span.textContent = simDateLabel();
+          span.addEventListener('click', openSimEdit);
+          span.addEventListener('keydown', e => { if (e.key==='Enter' || e.key===' ') { e.preventDefault(); openSimEdit(); } });
+          input.replaceWith(span);
+          renderSimClock();
+        };
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); commit(); }
+          else if (e.key === 'Escape') { e.preventDefault(); input.value = simHHMM(); commit(); }
+        });
+        input.addEventListener('blur', commit);
+      }
+
+      // Wire clock controls
+      document.getElementById('simClockFwd').addEventListener('click', () => setSimMinutes(simMinutes + 15));
+      document.getElementById('simClockBack').addEventListener('click', () => setSimMinutes(simMinutes - 15));
+      document.getElementById('simClockValue').addEventListener('click', openSimEdit);
+      document.getElementById('simClockValue').addEventListener('keydown', e => {
+        if (e.key==='Enter' || e.key===' ') { e.preventDefault(); openSimEdit(); }
+      });
+
+      // ---------- MAR DATA & RENDERING ----------
+      const MAR_TEMPLATE = [
+        {cat:'sched',sec:'Scheduled',n:'Amlodipine',        hdr:'<strong>Amlodipine</strong> 5 mg tablet · PO · Daily',                                         admin:'5 mg (1 tab)',  last:'20 Mar 0900 — given',         c:['','','due|0900','','','','','']},
+        {cat:'sched',                n:'Apixaban',           hdr:'<strong>Apixaban</strong> (Eliquis) 5 mg · PO · BID — Anticoagulation',  p:'D/C heparin 2h after first PO dose', ha:1, admin:'5 mg (1 tab)',  last:'New order — first dose pending', c:['','','due|0900','','','','','']},
+        {cat:'sched',                n:'Atorvastatin',       hdr:'<strong>Atorvastatin</strong> 40 mg · PO · qHS',                                                admin:'40 mg (1 tab)', last:'20 Mar 2100 — given',         c:['','','','','','','','']},
+        {cat:'sched',                n:'Diltiazem',          hdr:'<strong>Diltiazem</strong> (Cardizem) 30 mg · PO · Q6H',                  p:'Hold HR &lt;60 · Hold SBP &lt;90',  admin:'30 mg (1 tab)', last:'20 Mar 2200 — given',         c:['given|0700','','','due|1000','','','due|1300','']},
+        {cat:'sched',                n:'Furosemide',         hdr:'<strong>Furosemide</strong> (Lasix) 40 mg · IV · Daily',                  p:'Check K⁺ before admin · strict I&O', admin:'40 mg / 4 mL',  last:'New order',                    c:['','','','due|1000','','','','']},
+        {cat:'sched',                n:'Insulin Glargine',   hdr:'<strong>Insulin Glargine</strong> (Lantus) 18 units · SC · qHS',          p:'Verify with 2nd RN', ha:1,             admin:'18 units',      last:'20 Mar 2100 — given',         c:['','','','','','','','']},
+        {cat:'sched',                n:'Insulin Lispro',     hdr:'<strong>Insulin Lispro</strong> (Humalog) sliding scale · SC · AC + HS',  p:'Hold BG &lt;70 · D50W for hypoglycemia', ha:1, ss:'<b>Scale:</b> BG &lt;70 hold/D50W · 70–150 → 0u · 151–200 → 2u · 201–250 → 4u · 251–300 → 6u · 301–350 → 8u · &gt;350 → 10u + call MD', admin:'per scale · BG 15 min prior', last:'21 Mar 0645 — 2u given, BG 178', c:['','','','','','due|1200','','']},
+        {cat:'sched',                n:'Lisinopril',         hdr:'<strong>Lisinopril</strong> 20 mg · PO · Daily',                          p:'Hold SBP &lt;90',                    admin:'20 mg (1 tab)', last:'20 Mar 0900 — given',         c:['','','due|0900','','','','','']},
+        {cat:'sched',                n:'Metformin',          hdr:'<strong>Metformin</strong> 1000 mg · PO · BID — <em>HELD</em>',           p:'Held — acute illness · restart when eGFR &gt;45 × 48h', held:1, admin:'1000 mg (1 tab)', last:'Held since admission', c:['','','held|0900','','','','','']},
+        {cat:'sched',                n:'Metoprolol Succ.',   hdr:'<strong>Metoprolol Succinate</strong> (Toprol XL) 50 mg · PO · Daily',    p:'Hold HR &lt;60 · Hold SBP &lt;90',  admin:'50 mg (1 tab)', last:'20 Mar 0900 — given, HR 96',  c:['','','due|0900','','','','','']},
+        {cat:'sched',                n:'Pantoprazole',       hdr:'<strong>Pantoprazole</strong> 40 mg · PO · Daily',                                               admin:'40 mg (1 tab)', last:'20 Mar 0900 — given',         c:['','','given|0900','','','','','']},
+        {cat:'sched',                n:'Potassium Chloride', hdr:'<strong>Potassium Chloride</strong> 20 mEq · PO · BID',                                          admin:'20 mEq (1 tab)',last:'20 Mar 0900 — given',         c:['','','given|0900','','','','due|1300','']},
+        {cat:'cont', sec:'Continuous Infusions', n:'Heparin',hdr:'<strong>Heparin</strong> 25,000 units/500 mL D5W · IV Continuous',       p:'PTT q6h · Target 60–80 · Last PTT 0600: 68 sec', ha:1, admin:'18 units/kg/hr via PICC proximal', last:'Running since 20 Mar 1906', c:['run','run','run','run','run','run','run','run']},
+        {cat:'cont',                 n:'NS',                 hdr:'<strong>0.9% NaCl</strong> 1000 mL · 50 mL/hr · IV Continuous',                                 admin:'1000 mL bag',   last:'Bag 2 hung 0800',             c:['run','run','run','run','run','run','run','run']},
+        {cat:'prn',  sec:'PRN',      n:'Acetaminophen',      hdr:'<strong>Acetaminophen</strong> 650 mg · PO · Q6H PRN',                    ind:'Pain or Temp &gt;38°C · Max 4g/24h', admin:'650 mg (2×325 mg)', last:'21 Mar 0712 — given for HA', c:['given|0712','','','','','','','']},
+        {cat:'prn',                  n:'Lorazepam',          hdr:'<strong>Lorazepam</strong> (Ativan) 0.5 mg · IV · Q6H PRN',               ind:'Anxiety · Assess sedation + RR prior', admin:'0.5 mg / 0.5 mL', last:'Not given this admission', c:['','','','','','','','']},
+        {cat:'prn',                  n:'Metoprolol IV',      hdr:'<strong>Metoprolol Tartrate</strong> 5 mg · IV Push · PRN × 3',           ind:'HR &gt;120 bpm', p:'Hold SBP &lt;100', ha:1, admin:'5 mg / 5 mL', last:'20 Mar 1855 — given, HR 148', c:['','','','','','','','']},
+        {cat:'prn',                  n:'Ondansetron',        hdr:'<strong>Ondansetron</strong> (Zofran) 4 mg · IV · Q6H PRN',               ind:'Nausea/vomiting · Monitor QTc',       admin:'4 mg / 2 mL',    last:'Not given this shift',       c:['','','','','','','','']}
+      ];
+      let MAR_DATA = JSON.parse(JSON.stringify(MAR_TEMPLATE));
+      let currentEdit = {mi:-1, ci:-1};
+
+      function renderMAR() {
+        const list = document.getElementById('medList'); if(!list) return;
+        // Sim-time-driven now column: col 0 = 0700, col 7 = 1400
+        // If sim time is outside the 0700-1500 window, no column is highlighted.
+        const simHr = Math.floor(((simMinutes % 1440) + 1440) % 1440 / 60);
+        const nowColIdx = (simHr >= 7 && simHr <= 14) ? simHr - 7 : -1;
+        const simTotalMin = ((simMinutes % 1440) + 1440) % 1440;
+        // A "due" chip is overdue if its scheduled HHMM has strictly passed in sim time.
+        const isOverdueTime = (hhmm) => {
+          if (!hhmm || !/^\d{3,4}$/.test(hhmm)) return false;
+          const padded = hhmm.padStart(4, '0');
+          const due = parseInt(padded.slice(0,2),10)*60 + parseInt(padded.slice(2),10);
+          return simTotalMin > due;
+        };
+        // Render the time-row header so "now" tracks sim time
+        const timeRow = document.getElementById('marTimeRow');
+        if (timeRow) {
+          let trHtml = '';
+          for (let i=0; i<8; i++) {
+            const hr = pad(7+i) + '00';
+            const isNow = i === nowColIdx;
+            trHtml += `<div class="t-cell${isNow ? ' now' : ''}">${hr}</div>`;
+          }
+          timeRow.innerHTML = trHtml;
+        }
+        let html='', curSec='';
+        MAR_DATA.forEach((m,mi)=> {
+          // initialize per-row history store if missing
+          if (!m.hist) m.hist = m.c.map(()=>[]);
+          if(m.sec && m.sec!==curSec) { curSec=m.sec; html+=`<div class="m-sec"><div class="m-sec-dot"></div>${m.sec}</div>`; }
+          html+=`<div class="m-card${m.held?' held-card':''}"><div class="m-head"><span class="m-order">${m.hdr}</span><span class="m-tags">${m.ha?'<span class="m-tag-mini danger">High alert</span>':''}${m.held?'<span class="m-tag-mini warn">Held</span>':''}</span></div>`;
+          if(m.p||m.ind) html+=`<div class="m-params">${m.p?`<span>${m.p}</span>`:''}${m.ind?`<span>${m.ind}</span>`:''}</div>`;
+          if(m.ss) html+=`<div class="m-scale">${m.ss}</div>`;
+          html+=`<div class="m-grid">`;
+          m.c.forEach((cell,ci)=> {
+            const nc = ci===nowColIdx?' now-col':'';
+            const hist = m.hist[ci] || [];
+            const latest = hist[hist.length-1]; // show most recent entry if any
+            // Continuous infusions stay visually static but are clickable for rate docs
+            if(cell==='run') {
+              html+=`<div class="m-cell m-cell-click${nc}" data-mi="${mi}" data-ci="${ci}" role="button" tabindex="0" aria-label="${m.n} continuous column ${7+ci}:00"><span class="m-dot">→</span></div>`;
+            } else if (latest) {
+              // history wins over seed state
+              const type = latest.type;
+              const overdue = type === 'due' && isOverdueTime(latest.time);
+              const cls  = type==='given' ? 'c-given' : type==='held' ? 'c-held' : (overdue ? 'c-overdue' : 'c-due');
+              const lbl  = type==='given' ? '✓' : type==='held' ? 'Held' : (overdue ? 'Overdue' : 'Due');
+              const depth = hist.length>1 ? `<span class="m-hist-count" title="${hist.length} entries">${hist.length}</span>` : '';
+              html+=`<div class="m-cell m-cell-click${nc}" data-mi="${mi}" data-ci="${ci}" role="button" tabindex="0" aria-label="${m.n} ${overdue ? 'overdue' : type} ${latest.time}"><span class="chip ${cls}">${latest.time} ${lbl}</span>${depth}</div>`;
+            } else if (!cell) {
+              // empty cell — identical visuals, clickable, hover affordance via CSS
+              html+=`<div class="m-cell m-cell-click${nc}" data-mi="${mi}" data-ci="${ci}" role="button" tabindex="0" aria-label="${m.n} document at ${7+ci}:00"><span class="m-dot">·</span></div>`;
+            } else {
+              // seed state: 'due|0900', 'held|—', etc.
+              const [type,time]=cell.split('|');
+              const overdue = type === 'due' && isOverdueTime(time);
+              const cls = type==='given' ? 'c-given' : type==='held' ? 'c-held' : (overdue ? 'c-overdue' : 'c-due');
+              const lbl = type==='given' ? '✓' : type==='held' ? 'Held' : (overdue ? 'Overdue' : 'Due');
+              const ariaLabel = `${m.n} ${overdue ? 'overdue' : type} ${time?time:''}`;
+              html+=`<div class="m-cell m-cell-click${nc}" data-mi="${mi}" data-ci="${ci}" role="button" tabindex="0" aria-label="${ariaLabel}"><span class="chip ${cls}">${time} ${lbl}</span></div>`;
+            }
+          });
+          html+=`</div><div class="m-foot"><div>${m.admin}</div><div>Last: <b>${m.last||'—'}</b></div><div>Disp: <b>Pyxis</b></div></div></div>`;
+        });
+        list.innerHTML = html;
+      }
+
+      // Event delegation — one listener for the whole MAR list, survives re-renders
+      (function wireMAR(){
+        const list = document.getElementById('medList');
+        if (!list) return;
+        const handle = (el) => {
+          if (!el || !el.matches('.m-cell-click')) return;
+          openDocModal(+el.dataset.mi, +el.dataset.ci);
+        };
+        list.addEventListener('click', e => handle(e.target.closest('.m-cell-click')));
+        list.addEventListener('keydown', e => {
+          if (e.key==='Enter' || e.key===' ') {
+            const el = e.target.closest('.m-cell-click');
+            if (el) { e.preventDefault(); handle(el); }
+          }
+        });
+      })();
+
+      function openDocModal(mi,ci) {
+        currentEdit = {mi,ci};
+        const drug = MAR_DATA[mi];
+        const hist = (drug.hist && drug.hist[ci]) || [];
+        const latest = hist[hist.length-1];
+        const seedCell = drug.c[ci];
+        let defaultTime = '';
+        if (latest && latest.time) defaultTime = latest.time;
+        else if (seedCell && seedCell!=='run') defaultTime = (seedCell.split('|')[1] || '');
+        if (!defaultTime) {
+          // Empty cell — use exact sim time (hour and minute), not the column's rounded hour
+          defaultTime = simHHMM();
+        }
+        document.getElementById('docDrug').textContent = drug.n;
+        const histSummary = hist.length ? ` · ${hist.length} prior entr${hist.length===1?'y':'ies'} this cell` : '';
+        document.getElementById('docMeta').textContent = `${drug.admin} · ${drug.last}${histSummary}`;
+        document.getElementById('docTime').value = defaultTime;
+        document.getElementById('docBy').value = 'Student RN';
+        document.getElementById('docNotes').value = '';
+        document.getElementById('docErr').textContent = '';
+        // High-alert verification placeholder
+        const haBox = document.getElementById('docHa');
+        const haCheck = document.getElementById('docHaVerify');
+        if (haBox && haCheck) {
+          haCheck.checked = false;
+          haBox.hidden = !drug.ha;
+        }
+        const bg = document.getElementById('docBg'); bg.classList.add('open');
+        trapFocus(bg);
+        document.getElementById('docTime').focus();
+        document.getElementById('docTime').select();
+      }
+
+      function trapFocus(modal) {
+        const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        const first = focusable[0], last = focusable[focusable.length-1];
+        const handleKey = (e) => {
+          if (e.key === 'Escape') { closeModal(); return; }
+          if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey && document.activeElement.tagName!=='TEXTAREA') {
+            e.preventDefault(); document.getElementById('docGo').click();
+            return;
+          }
+          if (e.key !== 'Tab') return;
+          if (e.shiftKey) { if (document.activeElement===first) { e.preventDefault(); last.focus(); } }
+          else { if (document.activeElement===last) { e.preventDefault(); first.focus(); } }
+        };
+        modal.addEventListener('keydown', handleKey);
+        modal._trapHandler = handleKey;
+      }
+      function closeModal() {
+        const bg = document.getElementById('docBg');
+        bg.classList.remove('open');
+        if (bg._trapHandler) bg.removeEventListener('keydown', bg._trapHandler);
+        currentEdit={mi:-1,ci:-1};
+      }
+
+      function updateMedication(action) {
+        const {mi,ci} = currentEdit; if(mi===-1) return;
+        const drug = MAR_DATA[mi];
+        const timeInp = document.getElementById('docTime').value.trim();
+        const by = document.getElementById('docBy').value.trim()||'Student RN';
+        const notes = document.getElementById('docNotes').value.trim();
+        if (action==='given' && !/^\d{4}$/.test(timeInp)) {
+          document.getElementById('docErr').textContent='Enter HHMM (0000-2359)';
+          return;
+        }
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+        // Ensure history store
+        if (!drug.hist) drug.hist = drug.c.map(()=>[]);
+
+        // Route by parsed time (0700 = col 0, 0800 = col 1, ...)
+        let targetCi = ci;
+        let offGrid = false;
+        if (action==='given' && /^\d{4}$/.test(timeInp)) {
+          const hh = parseInt(timeInp.slice(0,2), 10);
+          const mm = parseInt(timeInp.slice(2,4), 10);
+          if (hh < 0 || hh > 23 || mm < 0 || mm > 59) {
+            document.getElementById('docErr').textContent = 'Invalid time — HH 00–23, MM 00–59';
+            return;
+          }
+          const col = hh - 7; // floor to hour, col 0 = 0700
+          if (col >= 0 && col < drug.c.length) targetCi = col;
+          else offGrid = true; // accept but don't display
+        }
+
+        const entry = {
+          type: action,
+          time: timeInp || '—',
+          by, notes,
+          at: `${dateStr} ${timeInp || ''}`.trim(),
+          offGrid
+        };
+
+        if (offGrid) {
+          // record into an off-grid bucket so it's preserved but not rendered on the 0700–1400 row
+          if (!drug.offGridHist) drug.offGridHist = [];
+          drug.offGridHist.push(entry);
+          drug.last = `${dateStr} ${timeInp} — ${action} by ${by} (off-grid)`;
+          showToast(`${drug.n} ${action} ${timeInp} — recorded off-grid`);
+        } else {
+          drug.hist[targetCi] = drug.hist[targetCi] || [];
+          drug.hist[targetCi].push(entry);
+          // Clear the "seed" only for the cell where admin landed — preserves original due flags on other cells
+          drug.c[targetCi] = ''; // history now drives display
+          const label = action==='given'?`given at ${timeInp}`:`held`;
+          drug.last = `${dateStr} ${timeInp || ''} — ${label} by ${by}`.replace(/\s+/g,' ').trim();
+          const moved = targetCi !== ci ? ` → moved to ${(7+targetCi).toString().padStart(2,'0')}00 cell` : '';
+          showToast(`${drug.n} ${label}${moved}`);
+        }
+        renderMAR(); closeModal();
+      }
+
+      function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+      document.getElementById('docGo').addEventListener('click', ()=> updateMedication('given'));
+      document.getElementById('docHold').addEventListener('click', ()=> updateMedication('hold'));
+      document.getElementById('docX').addEventListener('click', closeModal);
+      document.getElementById('docBg').addEventListener('click', e=> { if(e.target===document.getElementById('docBg')) closeModal(); });
+      document.getElementById('docTime').addEventListener('keydown', e=> { if(e.key==='Enter') { e.preventDefault(); updateMedication('given'); } });
+
+      // ---------- RESULTS ----------
+      function renderResults() {
+        const root = document.getElementById('resultsRoot'); if (!root) return;
+
+        const LABS = [
+          { group:'Chemistry · BMP', time:'0612' },
+          { n:'Sodium',    v:'138',   u:'mEq/L', cap:'within normal range',               flag:null, min:135, max:145, ref:'135–145' },
+          { n:'Potassium', v:'3.4',   u:'mEq/L', cap:'low — active KCl replacement', flag:'↓', min:3.5, max:5.0, ref:'3.5–5.0' },
+          { n:'Chloride',  v:'102',   u:'mEq/L', cap:'within normal range',               flag:null, min:96,  max:106, ref:'96–106' },
+          { n:'CO₂', v:'26',    u:'mEq/L', cap:'within normal range',               flag:null, min:22,  max:29,  ref:'22–29'  },
+          { n:'BUN',       v:'28',    u:'mg/dL', cap:'mildly elevated · likely prerenal', flag:'↑', min:7, max:25, ref:'7–25' },
+          { n:'Creatinine',v:'1.1',   u:'mg/dL', cap:'at baseline · eGFR 54',        flag:null, min:0.6, max:1.2, ref:'0.6–1.2' },
+          { n:'Glucose',   v:'178',   u:'mg/dL', cap:'elevated · 0645 fasting stick', flag:'↑', min:70, max:140, ref:'70–140' },
+          { n:'Magnesium', v:'1.8',   u:'mg/dL', cap:'low-normal · trend daily',      flag:null, min:1.7, max:2.3, ref:'1.7–2.3' },
+          { group:'Hematology · Coagulation', time:'0612' },
+          { n:'Hemoglobin',v:'11.8',  u:'g/dL',  cap:'stable · chronic anemia baseline', flag:null, min:12, max:16, ref:'12–16' },
+          { n:'Hematocrit',v:'35.2',  u:'%',     cap:'stable',                             flag:null, min:35,  max:45,  ref:'35–45'  },
+          { n:'WBC',       v:'9.2',   u:'K/µL', cap:'within normal range',            flag:null, min:4.5, max:11,  ref:'4.5–11' },
+          { n:'Platelets', v:'218',   u:'K/µL', cap:'within normal range',            flag:null, min:150, max:450, ref:'150–450'},
+          { n:'PTT',       v:'68',    u:'sec',   cap:'therapeutic · target 60–80', flag:null, min:60, max:80, ref:'60–80' },
+          { n:'INR',       v:'1.2',   u:'',      cap:'baseline · DOAC transition pending', flag:null, min:0.8, max:1.2, ref:'0.8–1.2' },
+          { n:'Fibrinogen',v:'342',   u:'mg/dL', cap:'within normal range',               flag:null, min:200, max:400, ref:'200–400'},
+          { n:'aPTT ratio',v:'2.3',   u:'',      cap:'heparin therapeutic range',         flag:null, min:1.5, max:2.5, ref:'1.5–2.5' },
+          { group:'Cardiac · Endocrine', time:'1902' },
+          { n:'Troponin I',v:'<0.04', u:'ng/mL', cap:'negative ×2 · no ACS pattern',  flag:null, min:0, max:0.04, ref:'<0.04' },
+          { n:'BNP',       v:'412',   u:'pg/mL', cap:'elevated · consistent with HFpEF',   flag:'↑', min:0, max:100, ref:'<100' },
+          { n:'CK-MB',     v:'2.1',   u:'ng/mL', cap:'within normal range',               flag:null, min:0,   max:5,    ref:'0–5'   },
+          { n:'Lactate',   v:'1.4',   u:'mmol/L',cap:'within normal range',               flag:null, min:0.5, max:2.2,  ref:'0.5–2.2' },
+          { n:'TSH',       v:'2.1',   u:'mIU/L', cap:'euthyroid',                         flag:null, min:0.4, max:4.0,  ref:'0.4–4.0' },
+          { n:'HbA1c',     v:'7.2',   u:'%',     cap:'above target · chronic DM2',   flag:'↑', min:4, max:6.5, ref:'<6.5' }
+        ];
+
+        const DIAGS = [
+          { n:'12-lead ECG', date:'20 Mar · 1847',
+            imp:'Atrial fibrillation with rapid ventricular response. Rate 138. No acute ST changes.',
+            finds:[['Rhythm','Irregularly irregular. No discernible P waves.'],
+                   ['Rate','Ventricular 138 bpm. Variable R-R intervals.'],
+                   ['Axis / Intervals','Normal axis. QRS 92 ms. QTc 448 ms.'],
+                   ['ST/T','Nonspecific lateral T-wave flattening — unchanged from 2023.'],
+                   ['Comparison','New onset Afib vs prior sinus rhythm (14 Nov 2025).']]},
+          { n:'Transthoracic Echo', date:'21 Mar · pending read',
+            imp:'Preserved LV systolic function, EF 52%. Mild LA enlargement. Mild mitral regurgitation.',
+            finds:[['LV','Normal cavity, wall thickness. No RWMA. EF 52% biplane.'],
+                   ['LA','Mildly dilated — volume index 36 mL/m². Chronic diastolic strain.'],
+                   ['Valves','Mild MR, structurally normal. Aortic: trileaflet, no stenosis. TR jet 2.6 m/s.'],
+                   ['RV / Pericardium','Normal RV size and function. No pericardial effusion.']]},
+          { n:'Chest X-Ray PA/lat', date:'20 Mar · 1920',
+            imp:'Mild pulmonary vascular congestion. No acute consolidation. Stable cardiomegaly.',
+            finds:[['Lungs','Mild upper-zone redistribution. Trace bilateral interstitial markings.'],
+                   ['Heart','CTR 0.54 — stable from prior.'],
+                   ['Pleura','Small right costophrenic blunting — possible trace effusion.'],
+                   ['Lines','Right PICC tip in lower SVC — satisfactory position.']]},
+          { n:'Blood Cultures ×2', date:'20 Mar · 1834',
+            imp:'No growth at 24 hours. Gram stain negative. Urine culture no growth.',
+            finds:[['Blood ×2','Peripheral + PICC lumen. No organisms on Gram stain. 24h negative.'],
+                   ['Urine Cx','Clean catch. <10,000 CFU/mL. No growth.'],
+                   ['Respiratory','Not collected — no productive cough.'],
+                   ['C. diff','Not indicated — no diarrhea.']]},
+          { n:'Urinalysis', date:'20 Mar · 1902',
+            imp:'Unremarkable. No evidence of infection or acute tubular injury.',
+            finds:[['Appearance','Yellow, clear. Specific gravity 1.018. pH 6.0.'],
+                   ['Chemistry','Trace protein. Glucose negative. Ketones negative.'],
+                   ['Infection','Leukocyte esterase negative. Nitrites negative.'],
+                   ['Microscopy','0–2 WBC/hpf. 0–1 RBC/hpf. No casts. No bacteria.']]}
+        ];
+
+        let labsHtml = '', labIdx = 0;
+        LABS.forEach(item => {
+          if (item.group) {
+            labsHtml += `<div class="rl-group"><div class="rl-group-dot"></div>${item.group}<span style="margin-left:auto;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:var(--ink-lt);text-transform:none;letter-spacing:.04em">${item.time}</span></div>`;
+            return;
+          }
+          const iF = !!item.flag;
+          const vCls = iF ? 'v-flag' : 'v-ok';
+          const num = parseFloat(item.v);
+          const pct = !isNaN(num) ? Math.min(100, Math.max(0, ((num - item.min) / (item.max - item.min)) * 100)) : 50;
+          const barCls = iF ? 'abnormal' : '';
+          const id = labIdx++;
+          labsHtml += `
+            <div class="rl-row" data-rl="${id}" role="button" tabindex="0" aria-expanded="false">
+              <span class="rl-name">${item.n}</span>
+              <span class="rl-val ${vCls}">${item.v}</span>
+              <span class="rl-unit">${item.u}</span>
+              <span class="rl-flag">${item.flag||''}</span>
+              <span class="rl-chev" aria-hidden="true">▾</span>
+            </div>
+            <div class="rl-detail" id="rld-${id}">
+              <div class="rl-detail-inner">
+                <div class="rl-cap ${vCls}">${item.cap}</div>
+                <div class="lab-range">
+                  <div class="range-bar">
+                    <div class="range-fill ${barCls}" style="width:${pct}%"></div>
+                    <div class="range-marker" style="left:${pct}%"></div>
+                  </div>
+                  <div class="range-labels"><span>${item.min}</span><span>ref ${item.ref} ${item.u}</span><span>${item.max}</span></div>
+                </div>
+              </div>
+            </div>`;
+        });
+
+        let diagsHtml = '';
+        DIAGS.forEach((d, i) => {
+          diagsHtml += `
+            <div class="rd-row" data-rd="${i}" role="button" tabindex="0" aria-expanded="false">
+              <span class="rd-name">${d.n}</span>
+              <span class="rd-date">${d.date}</span>
+              <span class="rd-chev" aria-hidden="true">▾</span>
+            </div>
+            <div class="rd-detail" id="rdd-${i}">
+              <div class="rd-detail-inner">
+                <div class="rd-imp">${d.imp}</div>
+                ${d.finds.map(([k,v])=>`<div class="rd-find"><b>${k}</b> — ${v}</div>`).join('')}
+              </div>
+            </div>`;
+        });
+
+        root.innerHTML = `
+          <div class="results-panel">
+            <div class="card-base" style="cursor:default">
+              <div class="photo-overlay results-labs-photo">${labsHtml}</div>
+              <div class="card-caption">laboratory results · 20 Mar 2042</div>
+            </div>
+            <div class="card-base" style="cursor:default">
+              <div class="photo-overlay results-diag-photo">${diagsHtml}</div>
+              <div class="card-caption">diagnostics &amp; imaging · 20 Mar 2042</div>
+            </div>
+          </div>`;
+
+        function setupAccordion(rowSelector, detailIdPrefix) {
+          const rows = root.querySelectorAll(rowSelector);
+          rows.forEach(row => {
+            const detailId = detailIdPrefix(row);
+            const detail = document.getElementById(detailId);
+            if (!detail) return;
+            
+            detail.style.height = '0px';
+            row.setAttribute('aria-expanded', 'false');
+
+            const toggle = (e) => {
+              e?.stopPropagation();
+              const isOpen = row.classList.contains('open');
+
+              if (!isOpen) {
+                // Single measurement read, then schedule writes in rAF
+                detail.style.transition = 'none';
+                detail.style.height = 'auto';
+                const target = detail.scrollHeight;
+                detail.style.height = '0px';
+                row.classList.add('open');
+                row.setAttribute('aria-expanded', 'true');
+                requestAnimationFrame(() => {
+                  detail.style.transition = '';
+                  detail.style.height = target + 'px';
+                });
+                const onTransitionEnd = (ev) => {
+                  if (ev.propertyName !== 'height') return;
+                  if (row.classList.contains('open')) detail.style.height = 'auto';
+                  detail.removeEventListener('transitionend', onTransitionEnd);
+                };
+                detail.addEventListener('transitionend', onTransitionEnd);
+              } else {
+                // Single measurement, writes in rAF
+                detail.style.transition = 'none';
+                const h = detail.scrollHeight;
+                detail.style.height = h + 'px';
+                row.classList.remove('open');
+                row.setAttribute('aria-expanded', 'false');
+                requestAnimationFrame(() => {
+                  detail.style.transition = '';
+                  detail.style.height = '0px';
+                });
+              }
+            };
+
+            row.addEventListener('click', toggle);
+            row.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+            });
+          });
+        }
+
+        setupAccordion('.rl-row', (row) => `rld-${row.dataset.rl}`);
+        setupAccordion('.rd-row', (row) => `rdd-${row.dataset.rd}`);
+      }
+
+      // ---------- ORDERS ----------
+      const ordersData = [
+        { cat: 'Admission', items: [['Admit to Telemetry','Cardiology service','20 Mar 1834'],['Attending: Dr. S. Chen','Cardiology','20 Mar 1834'],['Code Status: Full Code','Discussed with patient and son','20 Mar 1834']] },
+        { cat: 'Diet', items: [['Cardiac diet','2g sodium, low cholesterol','20 Mar 1842'],['Fluid restriction','1.5 L/day','20 Mar 1842']] },
+        { cat: 'Activity', items: [['Up ad lib with assistance','Fall precautions','20 Mar 1842'],['PT/OT eval','For discharge planning','21 Mar 0800']] },
+        { cat: 'Monitoring', items: [['Telemetry','Continuous, notify for HR <60 or >120','20 Mar 1834'],['Vital signs','Q4H, include orthostatics','20 Mar 1834'],['Daily weight','Strict I&O','20 Mar 1834'],['Neuro checks','Q4H while on anticoagulation','20 Mar 1834']] },
+        { cat: 'Laboratory', items: [['BMP','Daily AM','21 Mar 0600'],['Magnesium','Daily','21 Mar 0600'],['PTT','Q6H while on heparin','21 Mar 0600, 1200, 1800'],['CBC','Daily','21 Mar 0600'],['HbA1c','Once (if not within 3 months)','Pending']] },
+        { cat: 'Imaging', items: [['Chest X-ray','PA/lat, assess for congestion','20 Mar 1920 – done'],['Echocardiogram','TTE with Doppler','21 Mar – pending read'],['ECG','Daily, compare to prior','21 Mar 0600']] },
+        { cat: 'Consults', items: [['Cardiology','Dr. Chen following','20 Mar 1834'],['Pharmacy','Anticoagulation management','21 Mar 0900'],['Case Management','Discharge planning','21 Mar 1030'],['PT/OT','Evaluate for rehab needs','Ordered']] },
+        { cat: 'Medications', items: [['See MAR','Active medication list','—'],['Heparin gtt','Per pharmacy protocol','20 Mar 1906'],['Apixaban 5 mg BID','Start after heparin discontinued','Pending']] },
+        { cat: 'Nursing', items: [['Fall precautions','Bed alarm, call light within reach','20 Mar 1834'],['Skin assessment','Q shift, Braden score 19','20 Mar 1834'],['Patient education','Afib, anticoagulation, diet','Ongoing']] },
+        { cat: 'Discharge Planning', items: [['Anticipated DC','1-2 days if rate controlled','21 Mar'],['Home PT referral','For gait/balance','Ordered'],['Follow-up: Cardiology','1 week post-discharge','Scheduled'],['Medication reconciliation','To be completed prior to DC','Pending']] }
+      ];
+
+      function renderOrders() {
+        const cont = document.getElementById('ordersRoot');
+        if (!cont) return;
+        const half = Math.ceil(ordersData.length / 2);
+        const leftData = ordersData.slice(0, half);
+        const rightData = ordersData.slice(half);
+
+        const buildCard = (data) => {
+          // Categories that stay expanded by default — what a student needs at first glance
+          const OPEN_BY_DEFAULT = new Set(['Medications', 'Diet', 'Activity']);
+          let html = '';
+          data.forEach(({cat, items}) => {
+            const isOpen = OPEN_BY_DEFAULT.has(cat);
+            const collapsedCls = isOpen ? '' : ' collapsed';
+            const itemsStyle = isOpen ? 'style="height:auto"' : 'style="height:0"';
+            html += `<div class="order-category">`;
+            html += `<div class="order-cat-title${collapsedCls}" role="button" tabindex="0" aria-expanded="${isOpen}">${cat}</div>`;
+            html += `<div class="order-items${collapsedCls}" ${itemsStyle}>`;
+            items.forEach(([name, detail, time]) => {
+              html += `<div class="order-row"><div class="order-name"><strong>${name}</strong>${detail?`<div class="order-detail">${detail}</div>`:''}</div><div class="order-time">${time}</div></div>`;
+            });
+            html += `</div></div>`;
+          });
+          return html;
+        };
+
+        cont.innerHTML = `
+          <div class="orders-panel">
+            <div class="card-base">
+              <div class="photo-overlay">${buildCard(leftData)}</div>
+              <div class="card-caption">active orders · page 1</div>
+            </div>
+            <div class="card-base">
+              <div class="photo-overlay">${buildCard(rightData)}</div>
+              <div class="card-caption">active orders · page 2</div>
+            </div>
+          </div>`;
+
+        cont.querySelectorAll('.order-cat-title').forEach(title => {
+          title.addEventListener('click', function(e) {
+            const items = this.nextElementSibling;
+            const collapsed = items.classList.contains('collapsed');
+            items.style.transition = 'height 0.35s var(--ease)';
+            if (!collapsed) {
+              const h = items.scrollHeight;
+              items.style.height = h + 'px';
+              requestAnimationFrame(() => {
+                items.style.height = '0';
+              });
+              items.addEventListener('transitionend', () => {
+                items.classList.add('collapsed');
+                items.style.height = '';
+              }, {once: true});
+            } else {
+              items.classList.remove('collapsed');
+              items.style.height = '0';
+              const h = items.scrollHeight;
+              requestAnimationFrame(() => {
+                items.style.height = h + 'px';
+              });
+              items.addEventListener('transitionend', () => {
+                items.style.height = '';
+              }, {once: true});
+            }
+            this.classList.toggle('collapsed', !collapsed);
+            this.setAttribute('aria-expanded', !collapsed);
+          });
+          title.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); title.click(); }
+          });
+        });
+      }
+
+      // ---------- NOTES ----------
+      const notesData = [
+        { cat: 'Provider', type: 'Progress Note', date: '21 Mar 2042 · 0845', author: 'Dr. S. Chen',
+          body: `<p><strong>S:</strong> Patient reports feeling "a bit tired but better than yesterday." Denies chest pain, palpitations. Mild dyspnea on exertion.</p><p><strong>O:</strong> VSS. HR 88, BP 128/76, RR 16, SpO₂ 96% RA. Telemetry: Afib, rate controlled. Lungs clear. No edema.</p><p><strong>A/P:</strong> Rate controlled on metoprolol. Transition to apixaban planned. Continue diuresis. Awaiting PT eval.</p>` },
+        { cat: 'Nursing', type: 'Nursing Note', date: '21 Mar 2042 · 0712', author: 'J. Tran, RN',
+          body: `<p>Awake, alert, oriented ×3. Up to chair with standby assist, tolerated ×20 min. Tolerated full breakfast. Telemetry monitoring continues — afib controlled HR 78–88. Heparin gtt infusing via PICC proximal at 18 u/kg/hr, site clean/dry, no bleeding. Education provided on bleeding precautions, teach-back confirmed. Son at bedside, supportive, asking appropriate questions.</p>` },
+        { cat: 'Allied Health', type: 'Pharmacy Note', date: '21 Mar 2042 · 0900', author: 'L. Okafor, PharmD',
+          body: `<p>Anticoagulation bridge plan: Heparin to continue until 2 hours after first apixaban dose. Apixaban 5 mg BID ordered — dose appropriate given age ≥65, weight &gt;60 kg, Cr &lt;1.5. No interacting medications on profile. NSAIDs hard-stop noted. Patient educated on DOAC adherence, bleeding signs, ID bracelet. Will follow for conversion.</p>` },
+        { cat: 'Allied Health', type: 'Case Management', date: '21 Mar 2042 · 1030', author: 'M. Santos, LCSW',
+          body: `<p>Met with patient and son Thomas. Discussed anticipated discharge in 1-2 days. Home PT referral placed. Patient independent at baseline with cane, son will stay for first few days post-discharge. DME: walker ordered for transition period. Follow-up with cardiology Dr. Chen in 1 week arranged. Patient verbalizes understanding of new anticoagulant and return precautions.</p>` },
+        { cat: 'Allied Health', type: 'PT Evaluation', date: '21 Mar 2042 · 1115', author: 'K. Walsh, DPT',
+          body: `<p><strong>Eval:</strong> Seen at bedside. Baseline independent with cane at home, walks 20 min daily per patient report. Today: bed-to-chair transfer with SBA ×1, gait in room 20 ft ×2 with rolling walker, Borg 2/10, no chest pain or palpitations on exertion. Orthostatics negative. Morse fall score 55 today (down from 65 on admission).</p><p><strong>Plan:</strong> DC recommendation: home with PT, rolling walker ×2 weeks while on anticoagulation bridge. Home exercise handout provided.</p>` },
+        { cat: 'Nursing', type: 'Nursing Note', date: '21 Mar 2042 · 0600', author: 'D. Park, RN',
+          body: `<p>End of shift. Overnight uneventful. Slept 2230–0500. Telemetry afib 72–95, asymptomatic. aPTT 0400 = 68 sec, therapeutic, no rate change. Fingerstick 0500 = 142. I&amp;O: in 480 mL / out 720 mL, net negative 240 mL × shift. Denies pain. Skin intact, Braden 21. Report given to J. Tran, RN.</p>` },
+        { cat: 'Diagnostics', type: 'Radiology Read', date: '20 Mar 2042 · 2015', author: 'Dr. A. Okonkwo, Rad',
+          body: `<p><strong>CXR PA/lateral:</strong> Mild pulmonary vascular congestion. No acute consolidation. Stable cardiomegaly, CT ratio 0.54. Small right costophrenic blunting, possible trace effusion. Right PICC tip in lower SVC, satisfactory position.</p><p><strong>Impression:</strong> Findings compatible with mild volume overload. No acute process. PICC satisfactory for infusion.</p>` },
+        { cat: 'Provider', type: 'Cardiology Consult', date: '20 Mar 2042 · 1920', author: 'Dr. S. Chen',
+          body: `<p>Consulted for new-onset afib with RVR. Seen at bedside with patient and son.</p><p><strong>Impression:</strong> New onset paroxysmal atrial fibrillation with RVR in setting of chronic HFpEF. No precipitant identified (no fever, no active ischemia by serial troponin, TSH pending). CHA₂DS₂-VASc 4, HAS-BLED 2.</p><p><strong>Plan:</strong> (1) Rate control — diltiazem drip now, transition to PO metoprolol in AM. (2) Anticoagulation — heparin gtt now, bridge to apixaban 5 mg BID once stable. (3) TTE in AM to reassess EF, valve function. (4) If persistent afib at 48 h, discuss rhythm control strategy vs accept rate control.</p>` },
+        { cat: 'Provider', type: 'ED Note', date: '20 Mar 2042 · 1812', author: 'Dr. P. Ndiaye, ED',
+          body: `<p><strong>CC:</strong> Palpitations, dyspnea ×3 h.</p><p><strong>HPI:</strong> 68F with HTN, DM2, HFpEF ambulating at home at ~1730 when onset of "racing heart" and shortness of breath. No CP, no syncope. Son drove her in. Denies trigger, fever, recent illness.</p><p><strong>Exam:</strong> A&amp;O×3, mild respiratory effort. BP 148/92, HR 138 irregular, RR 20, SpO₂ 94% RA → 96% on 2L NC. Lungs scattered crackles bases. No edema.</p><p><strong>ED course:</strong> ECG — new afib RVR, no ischemia. Troponin ×1 neg. Started diltiazem drip, rate 138 → 108. Heparin bolus 80 u/kg + 18 u/kg/hr gtt. IV access: 20g R forearm. CXR ordered. Admit cardiology tele.</p>` },
+        { cat: 'Provider', type: 'Admission H&amp;P', date: '20 Mar 2042 · 1900', author: 'Dr. M. Rivera',
+          body: `<p><strong>HPI:</strong> 68F with HTN, DM2, HFpEF presented with palpitations and dyspnea. Found to be in Afib with RVR (rate 138). Initiated diltiazem drip in ED, plan to transition to PO metoprolol. Anticoagulation with heparin bridge planned, target apixaban.</p><p><strong>PMH:</strong> HTN (2008), T2DM (2012), HFpEF (Dx 2023, EF 55% Nov '25), hyperlipidemia, osteoarthritis, GERD. <strong>PSH:</strong> R TKA 2022, lap chole 2019, hysterectomy 2004, T&amp;A 1998. <strong>Allergies:</strong> PCN — anaphylaxis 2003. Codeine — nausea.</p><p><strong>Physical:</strong> Vitals as charted. Cardiac: irregularly irregular, rate ~110 on diltiazem. Lungs: scattered bibasilar crackles, clearing. Abd soft NT. Ext: no edema, pulses 2+. Neuro: A&amp;O×3, nonfocal.</p><p><strong>A/P:</strong> (1) Afib w/ RVR — rate control, anticoagulation per cards. (2) HTN/T2DM/HFpEF — hold home lisinopril for now, hold metformin, continue amlodipine. (3) Fall risk — Morse 65, precautions active. (4) Dispo — likely 2–3 days pending rate control, safe anticoagulation transition.</p>` },
+        { cat: 'Nursing', type: 'Social History', date: '20 Mar 2042 · 1945', author: 'J. Tran, RN',
+          body: `<p>Retired schoolteacher, stopped working 2020. Widowed 2019. Lives alone in single-story home, son Thomas checks daily, daughter Catherine out of state but calls. Uses cane for balance, ADLs independent. Walks 20 min daily for exercise, attends church weekly. Former smoker — quit 2005, 20 pack-year hx. Occasional wine (1 glass, 1–2×/week). Follows low-sodium diet "most of the time." No illicit drugs. Advance directive on file, DPOA: Thomas. Full code status confirmed with patient.</p>` },
+        { cat: 'Nursing', type: 'Patient Education', date: '21 Mar 2042 · 1400', author: 'J. Tran, RN',
+          body: `<p><strong>Topics covered:</strong> (1) Atrial fibrillation — rhythm vs rate, what to feel for, when to call 911. (2) Anticoagulation with apixaban — twice daily dosing, bleeding precautions, ID bracelet, dietary consistency, missed dose rules. (3) Heart failure self-management — daily weights, sodium limit, fluid awareness.</p><p><strong>Teach-back:</strong> Patient correctly identified three signs requiring 911 (chest pain, sudden weakness, heavy bleeding). Son present and engaged. Written materials provided in English at 8th-grade reading level. Plan for pharmacy re-education at discharge.</p>` }
+      ];
+
+      // Sort newest first by parsing the date string "DD Mon YYYY · HHMM"
+      notesData.sort((a, b) => {
+        const parse = s => {
+          const m = s.match(/(\d+)\s+(\w+)\s+(\d+)\s*·\s*(\d+)/);
+          if (!m) return 0;
+          const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+          return new Date(+m[3], months[m[2]]||0, +m[1], Math.floor(+m[4]/100), +m[4]%100).getTime();
+        };
+        return parse(b.date) - parse(a.date);
+      });
+
+      function renderNotes() {
+        const root = document.getElementById('notesRoot');
+        if (!root) return;
+
+        // Group by category, preserving sort order within each
+        const CAT_ORDER = ['Provider', 'Nursing', 'Allied Health', 'Diagnostics'];
+        const grouped = {};
+        notesData.forEach((note, idx) => {
+          const c = note.cat || 'Other';
+          if (!grouped[c]) grouped[c] = [];
+          grouped[c].push({ note, idx });
+        });
+
+        let listHtml = '';
+        CAT_ORDER.forEach(cat => {
+          if (!grouped[cat]) return;
+          listHtml += `<div class="notes-cat-title">${cat} <span class="notes-cat-count">${grouped[cat].length}</span></div>`;
+          grouped[cat].forEach(({note, idx}) => {
+            listHtml += `<div class="note-item" data-note-index="${idx}" role="button" tabindex="0">
+              <span class="note-item-type">${note.type}</span>
+              <span class="note-item-date">${note.date}</span>
+              <span class="note-item-author">${note.author}</span>
+            </div>`;
+          });
+        });
+
+        root.innerHTML = `
+          <div class="notes-panel">
+            <div class="card-base">
+              <div class="photo-overlay notes-list">
+                ${listHtml}
+              </div>
+              <div class="card-caption">clinical notes</div>
+            </div>
+            <div class="card-base">
+              <div class="photo-overlay note-viewer" id="noteViewer">
+                <div class="note-viewer-title">Select a note</div>
+                <div class="note-viewer-meta"></div>
+                <div class="note-viewer-body"></div>
+              </div>
+              <div class="card-caption">note detail</div>
+            </div>
+          </div>`;
+
+        const viewerTitle = root.querySelector('.note-viewer-title');
+        const viewerMeta = root.querySelector('.note-viewer-meta');
+        const viewerBody = root.querySelector('.note-viewer-body');
+        const items = root.querySelectorAll('.note-item');
+
+        function selectNote(index) {
+          const note = notesData[index];
+          viewerTitle.textContent = note.type;
+          viewerMeta.innerHTML = `<span>${note.date}</span><span>${note.author}</span>`;
+          viewerBody.innerHTML = note.body;
+          items.forEach(item => {
+            const isMatch = +item.dataset.noteIndex === index;
+            item.classList.toggle('active', isMatch);
+            item.setAttribute('aria-selected', isMatch);
+          });
+        }
+
+        items.forEach(item => {
+          const idx = +item.dataset.noteIndex;
+          item.addEventListener('click', () => selectNote(idx));
+          item.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectNote(idx); }
+          });
+        });
+
+        if (notesData.length) selectNote(0);
+      }
+
+      // Initialize all views
+      renderSimClock();
+      renderMAR();
+      renderResults();
+      renderOrders();
+      renderNotes();
+    })();
+  </script>
 </body>
 </html>
