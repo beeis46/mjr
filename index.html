@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARC · Clinical Simulation</title>
+<meta name="description" content="ARC — a simulated clinical environment for nursing education. The record that holds the light.">
+<meta name="theme-color" content="#f4f6f9">
+<meta property="og:title" content="ARC · Clinical Simulation">
+<meta property="og:description" content="A simulated clinical environment for educational use only.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ARC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ARC · Clinical Simulation">
+<meta name="twitter:description" content="A simulated clinical environment for educational use only.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f4f6f9'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='500' text-anchor='middle' fill='%23000'%3EA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="rebel-angels-card.webp" type="image/webp">
@@ -31,11 +41,34 @@
   --ochre: #b87c1a;
   --ochre-lt: rgba(184,124,26,0.06);
   --ochre-border: rgba(184,124,26,0.25);
+  --viridian: #3d7249;
+  --viridian-lt: rgba(61,114,73,0.08);
+  --viridian-border: rgba(61,114,73,0.3);
   --ease: cubic-bezier(0.77,0,0.175,1);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold-white); -webkit-font-smoothing: antialiased; color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+/* Visually hidden but available to screen readers */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Wordmark italic R — semantic-neutral replacement for <em> inside the mark */
+.wm-r { font-style: italic; }
+.site-logo .wm-r { font-weight: 300; font-family: 'Cormorant Garamond', serif; }
+
+/* Honor prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ambient { animation: none; }
+}
 
 /* ── PERSISTENT ── */
 .site-logo {
@@ -48,7 +81,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 }
 .logo-visible .site-logo { opacity: 1; }
 .dark-cur .site-logo { opacity: 0; pointer-events: none; }
-.site-logo em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; }
 
 .grain {
   position: fixed; inset: 0; z-index: 9990; pointer-events: none;
@@ -67,6 +99,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
   transition: background .4s, transform .4s;
 }
 .dot.on { background: var(--ink); transform: scale(1.8); }
+.dot.flash { background: var(--vermillion); transform: scale(2); animation: dotFlash .6s ease; }
+@keyframes dotFlash {
+  0%, 100% { transform: scale(1.8); background: var(--ink); }
+  20%, 60% { transform: scale(2.2); background: var(--vermillion); }
+}
 
 /* ── CUSTOM CURSOR ── */
 @media (pointer: fine) {
@@ -252,7 +289,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 }
 .p2-panel-form {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 60px 48px; overflow-y: auto; order: 1;
+  padding: 40px 48px; overflow-y: auto; order: 1;
 }
 .p2-panel-img {
   flex: 0 0 48%; position: relative; overflow: hidden; order: 2;
@@ -294,37 +331,37 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 .p2.alive .p2-inner { opacity: 1; transform: translateY(0); }
 .p2-heading {
   font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
-  font-size: clamp(24px,2.8vw,36px); letter-spacing: .04em; line-height: 1.3;
-  color: var(--cold-white); margin-bottom: 32px;
+  font-size: clamp(22px,2.2vw,28px); letter-spacing: .04em; line-height: 1.25;
+  color: var(--cold-white); margin-bottom: 20px;
 }
-.p2-rule { width: 22px; height: 1px; background: rgba(244,246,249,0.15); margin-bottom: 28px; }
-.p2-section { margin-bottom: 28px; }
+.p2-rule { width: 22px; height: 1px; background: rgba(244,246,249,0.15); margin-bottom: 18px; }
+.p2-section { margin-bottom: 16px; }
 .p2-section-title {
-  font-family: 'Cormorant SC', serif; font-weight: 400; font-size: 12px;
+  font-family: 'Cormorant SC', serif; font-weight: 400; font-size: 11px;
   letter-spacing: .28em; text-transform: uppercase; color: var(--ochre);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .p2-body {
-  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 16px;
-  letter-spacing: .02em; line-height: 1.7; color: rgba(244,246,249,0.85);
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 15px;
+  letter-spacing: .02em; line-height: 1.55; color: rgba(244,246,249,0.85);
 }
 .p2-list {
-  list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 8px;
+  list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 5px;
 }
 .p2-list li {
-  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 15px;
-  line-height: 1.6; color: rgba(244,246,249,0.8);
-  padding-left: 20px; position: relative;
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 14.5px;
+  line-height: 1.5; color: rgba(244,246,249,0.8);
+  padding-left: 18px; position: relative;
 }
 .p2-list li::before { content: '—'; position: absolute; left: 0; color: var(--ochre); opacity: 0.7; }
 .p2-inacsl {
-  margin-top: 32px; padding-top: 20px;
+  margin-top: 18px; padding-top: 14px;
   border-top: 1px solid rgba(244,246,249,0.08);
-  font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 12px;
-  letter-spacing: .1em; line-height: 1.8; color: rgba(244,246,249,0.3);
+  font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 11px;
+  letter-spacing: .1em; line-height: 1.7; color: rgba(244,246,249,0.3);
 }
 .p2-cta {
-  margin-top: 36px; padding: 15px 40px; width: 100%;
+  margin-top: 20px; padding: 13px 40px; width: 100%;
   background: var(--pure-black); border: 1px solid var(--pure-black);
   font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 13px;
   letter-spacing: .18em; text-transform: uppercase; color: var(--cold-white);
@@ -473,11 +510,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 <body>
 
 <div class="grain" aria-hidden="true"></div>
-<div class="site-logo" id="siteLogo">A<em>R</em>C</div>
+<div class="site-logo" id="siteLogo">A<span class="wm-r">R</span>C</div>
 <nav class="dots" id="dots" aria-label="Pages"></nav>
 
 <!-- PAGE 0 — HERO -->
 <section class="page p0" id="pg0">
+  <h1 class="sr-only">ARC — A Simulated Clinical Environment</h1>
   <div class="ambient" aria-hidden="true"></div>
   <div class="p0-line" aria-hidden="true"></div>
   <div class="scene" id="scene">
@@ -508,7 +546,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 <!-- PAGE 1 — VIDEO -->
 <section class="page p1" id="pg1">
   <div class="crt">
-    <video class="p1-video" id="vid" autoplay muted playsinline loop preload="auto">
+    <video class="p1-video" id="vid" autoplay muted playsinline loop preload="metadata">
       <source src="arc-bg.webm" type="video/webm">
       <source src="arc-bg.mp4" type="video/mp4">
     </video>
@@ -532,7 +570,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 <section class="page p2" id="pg2">
   <div class="p2-panel-form">
     <div class="p2-inner">
-      <h1 class="p2-heading">On Entering a Space<br>That Requires Everything of You</h1>
+      <h2 class="p2-heading">On Entering a Space<br>That Requires Everything of You</h2>
       <div class="p2-rule"></div>
       <div class="p2-section">
         <div class="p2-section-title">The Threshold</div>
@@ -567,7 +605,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
     </picture>
     <div class="p2-panel-brand">
       <div class="brand-eye">Fiction Contract</div>
-      <div class="brand-logo">A<em>R</em>C</div>
+      <div class="brand-logo">A<span class="wm-r">R</span>C</div>
     </div>
     <div class="p2-panel-caption">
       <span>You are crossing into a space<br>that is both real and imagined.</span>
@@ -584,7 +622,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
     </picture>
     <div class="p3-panel-brand">
       <div class="brand-eye">Electronic Health Record</div>
-      <div class="brand-logo">A<em>R</em>C</div>
+      <div class="brand-logo">A<span class="wm-r">R</span>C</div>
     </div>
     <div class="p3-panel-caption">
       <span>You are entering a space that is<br>both real and imagined.</span>
@@ -592,7 +630,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
   </div>
   <div class="p3-panel-form">
     <div class="p3-inner">
-      <div class="p3-sub">A<em>R</em>C</div>
+      <div class="p3-sub">A<span class="wm-r">R</span>C</div>
       <div class="p3-hospital">Electronic Health Record</div>
       <div class="p3-rule"></div>
       <div class="p3-login">
@@ -608,7 +646,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 <section class="page p4" id="pg4">
   <div class="ft-inner">
     <div class="ft-title">The record that holds the light</div>
-    <div class="ft-logo">A<em>R</em>C</div>
+    <div class="ft-logo">A<span class="wm-r">R</span>C</div>
     <div class="ft-rule"></div>
     <div class="ft-cols">
       <div>
@@ -634,7 +672,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 (function() {
   'use strict';
 
-  const DUR = 720, EASE = 'cubic-bezier(0.77,0,0.175,1)';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DUR = reducedMotion ? 1 : 720, EASE = 'cubic-bezier(0.77,0,0.175,1)';
   const pages = [...document.querySelectorAll('.page')];
   const N = pages.length;
   let cur = 0, busy = false, zTop = N + 10;
@@ -655,7 +694,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
   });
 
   function syncUI() {
-    [...dotsEl.children].forEach((d, i) => d.classList.toggle('on', i === cur));
+    [...dotsEl.children].forEach((d, i) => {
+      const active = i === cur;
+      d.classList.toggle('on', active);
+      if (active) d.setAttribute('aria-current', 'page');
+      else d.removeAttribute('aria-current');
+    });
     pages.forEach((p, i) => p.classList.toggle('alive', i === cur));
     document.body.classList.toggle('dark-cur', cur >= 1);
     handleVideo();
@@ -667,9 +711,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
     return true;
   }
 
+  function flashContractDot() {
+    const d = dotsEl.children[2];
+    if (!d) return;
+    d.classList.remove('flash');
+    // force reflow so the animation restarts if re-triggered quickly
+    void d.offsetWidth;
+    d.classList.add('flash');
+    setTimeout(() => d.classList.remove('flash'), 700);
+  }
+
   function go(to) {
     if (busy || to === cur || to < 0 || to >= N) return;
-    if (!canAdvance(cur, to)) return;
+    if (!canAdvance(cur, to)) { flashContractDot(); return; }
     busy = true;
     const target = pages[to];
     const dir = to > cur ? 1 : -1;
@@ -738,11 +792,27 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
 
   document.getElementById('siteLogo').addEventListener('click', () => go(0));
 
+  // If the current page has an inner scrollable container that still has room
+  // to scroll in the given direction, return true so we yield to native scroll
+  // instead of hijacking the gesture.
+  function innerScrollBlocks(page, dir) {
+    const sc = page.querySelector('.p2-panel-form, .page-scroll');
+    if (!sc) return false;
+    if (sc.scrollHeight <= sc.clientHeight) return false;
+    const atEnd = sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 1;
+    const atStart = sc.scrollTop <= 1;
+    if (dir > 0 && !atEnd) return true;
+    if (dir < 0 && !atStart) return true;
+    return false;
+  }
+
   // Wheel navigation
   let wheelAcc = 0, wheelTimer = null;
   window.addEventListener('wheel', (e) => {
-    e.preventDefault();
     if (busy || isInputFocused()) return;
+    const dir = e.deltaY > 0 ? 1 : -1;
+    if (innerScrollBlocks(pages[cur], dir)) return; // let native scroll happen
+    e.preventDefault();
     wheelAcc += e.deltaY;
     clearTimeout(wheelTimer);
     wheelTimer = setTimeout(() => { wheelAcc = 0; }, 200);
@@ -751,13 +821,19 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
   }, { passive: false });
 
   // Touch navigation
-  let touchStartY = 0;
-  window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+  let touchStartY = 0, touchStartTarget = null;
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartTarget = e.target;
+  }, { passive: true });
   window.addEventListener('touchend', (e) => {
     if (busy || isInputFocused()) return;
     const dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) < 50) return;
+    const dir = dy > 0 ? 1 : -1;
+    if (innerScrollBlocks(pages[cur], dir)) return; // inner content is scrolling
     if (dy > 50) go(cur + 1);
-    if (dy < -50) go(cur - 1);
+    else if (dy < -50) go(cur - 1);
   }, { passive: true });
 
   // Keyboard navigation
@@ -768,7 +844,10 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--cold
   });
 
   function isInputFocused() {
-    return document.activeElement && document.activeElement.tagName === 'INPUT';
+    const el = document.activeElement;
+    if (!el) return false;
+    const tag = el.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable === true;
   }
 
   // Login logic
