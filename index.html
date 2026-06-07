@@ -91,14 +91,13 @@
   .person-j { width: 168px; }
   .person-j .letter { font-size: clamp(72px, 10.2vw, 132px); color: #111a28; }
   .person-j .fig { width: clamp(92px, 11.4vw, 132px); }
-  /* R — italic and lighter, echoing the R in the ARC wordmark; the one that remains */
-  .person-r .letter {
-    font-style: italic; color: #000000;
-    animation: r-breathe 6s ease-in-out 14s infinite;
-  }
-  @keyframes r-breathe {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+  /* R — italic, echoing the R in the ARC wordmark; the last one, who very slowly
+     fades into oblivion */
+  .person-r .letter { font-style: italic; color: #000000; }
+  .person-r { animation: r-oblivion 28s cubic-bezier(0.55, 0, 0.85, 0.35) 17s forwards; }
+  @keyframes r-oblivion {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
   }
   .person .fig { width: clamp(80px, 10vw, 116px); height: auto; display: block; }
 
@@ -111,15 +110,7 @@
   .person-j { animation: person-vanish 4s cubic-bezier(0.4, 0, 0.2, 1) 4.5s forwards; }
   .person-m { animation: person-vanish 4s cubic-bezier(0.4, 0, 0.2, 1) 10s forwards; }
 
-  /* When the R is left alone, the whole figure breathes — present, but ephemeral */
-  .fig-inner {
-    animation: fig-breathe 8.5s ease-in-out 14s infinite;
-  }
-  @keyframes fig-breathe {
-    0%   { opacity: 1; }
-    50%  { opacity: 0.8; }
-    100% { opacity: 1; }
-  }
+  /* the lone figure carries its grain quietly while the R dissolves */
   /* The grain arrives with the solitude — fine film noise across the lone figure */
   .fig-grain {
     mix-blend-mode: screen;
@@ -127,6 +118,13 @@
     animation: grain-in 4.5s ease 14s forwards;
   }
   @keyframes grain-in { to { opacity: 0.32; } }
+
+  /* ── The multitude — tiny silhouettes that gather in the background once R is
+        alone, then multiply until the entire screen is black ── */
+  .crowd {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+  }
 
   /* ── Faint colorful overlays — random pastels, very subtle.
         Cool gathers around J, warm around M. The color belongs to the company:
@@ -195,6 +193,7 @@
     <span class="tint tint-lav"></span>
     <span class="tint tint-mint"></span>
   </div>
+  <canvas class="crowd" aria-hidden="true"></canvas>
 
   <!-- Shared definitions: one silhouette, reused; gradients, grain, clip, fade ── -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -280,5 +279,108 @@
       </div>
     </div>
   </main>
+
+  <script>
+  (function () {
+    const canvas = document.querySelector('.crowd');
+    if (!canvas || !canvas.getContext) return;
+    const ctx = canvas.getContext('2d');
+
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let W = 0, H = 0, started = false;
+
+    function size() {
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = Math.floor(W * dpr);
+      canvas.height = Math.floor(H * dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+    // Resizing clears the accumulated canvas, so only honor it before the crowd begins.
+    window.addEventListener('resize', function () { if (!started) size(); });
+
+    // Timeline (ms from load). R is alone at ~14s.
+    const START = 15000;        // the first few tiny silhouettes appear
+    const BLACK_START = 38000;  // they begin to multiply in earnest
+    const BLACK_END = 48000;    // the screen is entirely black
+    const t0 = performance.now();
+
+    ctx.fillStyle = '#000';
+
+    // A single tiny silhouette — head + sloping shoulders, echoing the main figure
+    function drawPerson(cx, topY, h, alpha) {
+      ctx.globalAlpha = alpha;
+      const hx = 0.16 * h, hy = 0.19 * h;
+      const headCy = topY + hy + 0.02 * h;
+      ctx.beginPath();
+      ctx.ellipse(cx, headCy, hx, hy, 0, 0, Math.PI * 2);
+      ctx.fill();
+      const shTop = headCy + hy * 0.72;
+      const bot = topY + h;
+      const sh = 0.30 * h, bw = 0.24 * h;
+      ctx.beginPath();
+      ctx.moveTo(cx - 0.05 * h, shTop);
+      ctx.quadraticCurveTo(cx - sh, shTop + 0.04 * h, cx - sh, shTop + 0.32 * h);
+      ctx.lineTo(cx - bw, bot);
+      ctx.lineTo(cx + bw, bot);
+      ctx.lineTo(cx + sh, shTop + 0.32 * h);
+      ctx.quadraticCurveTo(cx + sh, shTop + 0.04 * h, cx + 0.05 * h, shTop);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    let carry = 0; // fractional spawn accumulator
+
+    function frame() {
+      const t = performance.now() - t0;
+
+      if (t >= START) {
+        started = true;
+        const inBlack = t >= BLACK_START;
+
+        // spawn rate (per frame), accelerating
+        let rate;
+        if (!inBlack) {
+          const p = (t - START) / (BLACK_START - START); // 0..1
+          rate = 0.5 + 13 * p * p;
+        } else {
+          const bp = Math.min((t - BLACK_START) / (BLACK_END - BLACK_START), 1);
+          rate = 10 + 70 * bp;
+        }
+
+        carry += rate;
+        let n = Math.floor(carry);
+        carry -= n;
+
+        for (let i = 0; i < n; i++) {
+          const cx = Math.random() * W;
+          let h = inBlack ? (12 + Math.random() * 22) : (10 + Math.random() * 16);
+          const topY = Math.random() * (H - h);
+          const a = inBlack ? 0.92 : (0.45 + Math.random() * 0.4);
+          drawPerson(cx, topY, h, a);
+        }
+
+        // only in the final seconds, a gentle wash closes the last gaps to pure black
+        if (t >= BLACK_END - 4000) {
+          ctx.globalAlpha = 0.012;
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, W, H);
+        }
+      }
+
+      if (performance.now() - t0 < BLACK_END) {
+        requestAnimationFrame(frame);
+      } else {
+        // guarantee a fully black screen at the end
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+    requestAnimationFrame(frame);
+  })();
+  </script>
 </body>
 </html>
