@@ -40,91 +40,195 @@
     background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0/180px;
   }
 
-  /* ── Soft museum lighting — a single warm pool, very faint ── */
+  /* ── Soft museum lighting — a warm pool that, once the others are gone,
+        slowly recedes and dims, leaving the lone figure in cold emptiness ── */
   .ambient {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,248,235,0.55), transparent 70%);
-    animation: ambient-breathe 11s ease-in-out infinite;
+    position: fixed; inset: -10%; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 55% at 50% 42%, rgba(255,248,235,0.5), transparent 72%);
+    filter: blur(34px);
+    animation: ambient-arc 28s ease-in-out forwards;
   }
-  @keyframes ambient-breathe {
-    0%, 100% { opacity: 0.85; }
-    50% { opacity: 1; }
+  @keyframes ambient-arc {
+    0%   { opacity: 0.85; }
+    5%   { opacity: 1; }
+    18%  { opacity: 0.9; }
+    32%  { opacity: 1; }
+    50%  { opacity: 0.92; }
+    100% { opacity: 0.05; }
   }
 
   /* ── The centered stage ── */
   .stage {
     position: fixed; inset: 0; z-index: 1;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: clamp(14px, 3vh, 34px);
+    display: flex; align-items: center; justify-content: center;
     padding: 40px 24px;
   }
 
-  /* ── The MJR monogram ── */
-  .monogram {
-    display: inline-flex; justify-content: center; align-items: baseline;
-    font-family: 'Cormorant Garamond', serif; font-weight: 300;
-    font-size: clamp(76px, 12vw, 150px); line-height: 1;
-    color: var(--ink);
-    opacity: 0; animation: fade-in 2s ease 0.2s forwards;
-  }
   @keyframes fade-in { to { opacity: 1; } }
-  .letter {
-    display: inline-block; overflow: hidden;
-    letter-spacing: .12em; padding-right: .12em;
-    will-change: opacity, max-width;
+
+  /* ── The trio — M, J, R, each standing above its own silhouette ── */
+  .trio {
+    display: inline-flex; justify-content: center; align-items: flex-end;
+    opacity: 0; animation: fade-in 2.2s ease 0.2s forwards;
   }
+  .person {
+    width: 150px;
+    margin: 0 16px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: clamp(16px, 3.4vh, 34px);
+    overflow: hidden;
+    flex: 0 0 auto;
+    will-change: opacity, max-width, margin;
+  }
+  .person .letter {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(64px, 9vw, 116px); line-height: 1;
+    letter-spacing: .04em; color: var(--ink);
+  }
+  /* M — a breath warmer than neutral (only while present) */
+  .person-m .letter { color: #1c1310; }
+  /* J — slightly bigger and cooler than the other two (only while present) */
+  .person-j { width: 168px; }
+  .person-j .letter { font-size: clamp(72px, 10.2vw, 132px); color: #111a28; }
+  .person-j .fig { width: clamp(92px, 11.4vw, 132px); }
   /* R — italic and lighter, echoing the R in the ARC wordmark; the one that remains */
-  .letter-r {
-    font-style: italic; font-weight: 300;
-    animation: r-breathe 6s ease-in-out 13.5s infinite;
+  .person-r .letter {
+    font-style: italic; color: #000000;
+    animation: r-breathe 6s ease-in-out 14s infinite;
   }
-
-  /* J fades and closes first, then M — the space gently collapses so R settles to center */
-  @keyframes fade-collapse {
-    0%   { opacity: 1; max-width: 1.1em; }
-    100% { opacity: 0; max-width: 0; letter-spacing: 0; padding-right: 0; }
-  }
-  .letter-j { animation: fade-collapse 4s cubic-bezier(0.4, 0, 0.2, 1) 4s forwards; }
-  .letter-m { animation: fade-collapse 4s cubic-bezier(0.4, 0, 0.2, 1) 9.5s forwards; }
-
   @keyframes r-breathe {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.62; }
+    50% { opacity: 0.6; }
+  }
+  .person .fig { width: clamp(80px, 10vw, 116px); height: auto; display: block; }
+
+  /* J vanishes first, then M — each letter AND its silhouette fade and close
+     together, the space collapsing so the surviving R settles to center */
+  @keyframes person-vanish {
+    0%   { opacity: 1; max-width: 170px; margin-left: 16px; margin-right: 16px; }
+    100% { opacity: 0; max-width: 0;     margin-left: 0;    margin-right: 0; }
+  }
+  .person-j { animation: person-vanish 4s cubic-bezier(0.4, 0, 0.2, 1) 4.5s forwards; }
+  .person-m { animation: person-vanish 4s cubic-bezier(0.4, 0, 0.2, 1) 10s forwards; }
+
+  /* When the R is left alone, the whole figure breathes — present, but ephemeral */
+  .fig-inner {
+    animation: fig-breathe 8.5s ease-in-out 14s infinite;
+  }
+  @keyframes fig-breathe {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.8; }
+    100% { opacity: 1; }
+  }
+  /* The grain arrives with the solitude — fine film noise across the lone figure */
+  .fig-grain {
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: grain-in 4.5s ease 14s forwards;
+  }
+  @keyframes grain-in { to { opacity: 0.32; } }
+
+  /* ── Faint colorful overlays — random pastels, very subtle.
+        Cool gathers around J, warm around M. The color belongs to the company:
+        each wash recedes as its person vanishes, so when only R remains,
+        all color is gone. ── */
+  .tints { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .tint {
+    position: absolute; border-radius: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(72px);
+    opacity: 0;
+  }
+  /* cool — with J (center); leaves when J leaves */
+  .tint-cool {
+    left: 50%; top: 43%; width: 480px; height: 430px;
+    background: radial-gradient(circle, rgba(150,178,228,0.5), transparent 68%);
+    animation: tint-with-j 8.5s ease forwards;
+  }
+  /* warm — with M (left); leaves when M leaves */
+  .tint-warm {
+    left: 39%; top: 47%; width: 440px; height: 390px;
+    background: radial-gradient(circle, rgba(233,176,158,0.5), transparent 68%);
+    animation: tint-with-m 14s ease forwards;
+  }
+  /* random pastels — lavender and mint, faint, gone by the time R is alone */
+  .tint-lav {
+    left: 45%; top: 37%; width: 360px; height: 340px;
+    background: radial-gradient(circle, rgba(202,178,226,0.42), transparent 68%);
+    animation: tint-with-m 14s ease forwards;
+  }
+  .tint-mint {
+    left: 44%; top: 55%; width: 340px; height: 320px;
+    background: radial-gradient(circle, rgba(172,214,193,0.4), transparent 68%);
+    animation: tint-with-m-late 13s ease forwards;
+  }
+  @keyframes tint-with-j {
+    0%   { opacity: 0; }
+    18%  { opacity: 0.5; }
+    53%  { opacity: 0.5; }
+    100% { opacity: 0; }
+  }
+  @keyframes tint-with-m {
+    0%   { opacity: 0; }
+    11%  { opacity: 0.46; }
+    71%  { opacity: 0.46; }
+    100% { opacity: 0; }
+  }
+  @keyframes tint-with-m-late {
+    0%   { opacity: 0; }
+    12%  { opacity: 0.4; }
+    77%  { opacity: 0.4; }
+    100% { opacity: 0; }
   }
 
-  /* ── The man — a silhouette beneath the monogram ── */
-  .figure {
-    width: clamp(150px, 22vw, 230px); height: auto; display: block;
-    opacity: 0; animation: fade-in 2.4s ease 0.5s forwards;
-  }
-
-  @media (max-width: 520px) {
-    .stage { gap: 18px; }
+  @media (max-width: 640px) {
+    .trio { transform: scale(0.62); }
   }
 </style>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
   <div class="ambient" aria-hidden="true"></div>
+  <div class="tints" aria-hidden="true">
+    <span class="tint tint-warm"></span>
+    <span class="tint tint-cool"></span>
+    <span class="tint tint-lav"></span>
+    <span class="tint tint-mint"></span>
+  </div>
 
-  <main class="stage">
-    <div class="monogram" aria-label="MJR">
-      <span class="letter letter-m">M</span><span class="letter letter-j">J</span><span class="letter letter-r">R</span>
-    </div>
-
-    <!-- The man — a dignified head-and-shoulders silhouette, dissolving at the base -->
-    <svg class="figure" viewBox="0 0 260 300" aria-hidden="true">
-      <defs>
-        <linearGradient id="figFade" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#000000" stop-opacity="1"/>
-          <stop offset="62%"  stop-color="#0a0a0a" stop-opacity="1"/>
-          <stop offset="88%"  stop-color="#1a1a1a" stop-opacity="0.55"/>
-          <stop offset="100%" stop-color="#1a1a1a" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <g fill="url(#figFade)">
-        <!-- Head: an oval cranium tapering through cheek and jaw to a soft chin -->
+  <!-- Shared definitions: one silhouette, reused; gradients, grain, clip, fade ── -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="figFade" gradientUnits="userSpaceOnUse" x1="130" y1="20" x2="130" y2="300">
+        <stop offset="0"    stop-color="#000000" stop-opacity="1"/>
+        <stop offset="0.62" stop-color="#0a0a0a" stop-opacity="1"/>
+        <stop offset="0.88" stop-color="#1a1a1a" stop-opacity="0.55"/>
+        <stop offset="1"    stop-color="#1a1a1a" stop-opacity="0"/>
+      </linearGradient>
+      <!-- J: cooler-toned dark -->
+      <linearGradient id="figFadeCool" gradientUnits="userSpaceOnUse" x1="130" y1="20" x2="130" y2="300">
+        <stop offset="0"    stop-color="#070d1a" stop-opacity="1"/>
+        <stop offset="0.62" stop-color="#0c1422" stop-opacity="1"/>
+        <stop offset="0.88" stop-color="#18222f" stop-opacity="0.55"/>
+        <stop offset="1"    stop-color="#18222f" stop-opacity="0"/>
+      </linearGradient>
+      <!-- M: warmer-toned dark -->
+      <linearGradient id="figFadeWarm" gradientUnits="userSpaceOnUse" x1="130" y1="20" x2="130" y2="300">
+        <stop offset="0"    stop-color="#160c06" stop-opacity="1"/>
+        <stop offset="0.62" stop-color="#1b1009" stop-opacity="1"/>
+        <stop offset="0.88" stop-color="#241a12" stop-opacity="0.55"/>
+        <stop offset="1"    stop-color="#241a12" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="figGrain" x="-6%" y="-6%" width="112%" height="112%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" seed="11" result="noise"/>
+        <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+        <feComponentTransfer in="mono" result="opaqueGrain">
+          <feFuncA type="discrete" tableValues="1"/>
+        </feComponentTransfer>
+        <feComposite in="opaqueGrain" in2="SourceGraphic" operator="in"/>
+      </filter>
+      <!-- The one silhouette, reused by all three; fill is set per figure -->
+      <g id="manBody">
         <path d="M130 28
                  C 160 28 182 52 182 86
                  C 182 106 175 123 162 134
@@ -132,15 +236,12 @@
                  C 118 145 107 141 98 134
                  C 85 123 78 106 78 86
                  C 78 52 100 28 130 28 Z"/>
-        <!-- Neck: clearly narrower than the head, with a hint of trapezius -->
         <path d="M115 139
                  L 115 166
                  C 115 172 121 176 130 176
                  C 139 176 145 172 145 166
                  L 145 139
                  C 139 149 121 149 115 139 Z"/>
-        <!-- Shoulders and upper chest: a graceful slope from the neck out to the
-             shoulder, then down the arm, dissolving softly at the base -->
         <path d="M130 167
                  C 117 168 106 171 96 178
                  C 80 188 65 197 54 209
@@ -152,7 +253,32 @@
                  C 195 197 180 188 164 178
                  C 154 171 143 168 130 167 Z"/>
       </g>
-    </svg>
+    </defs>
+  </svg>
+
+  <main class="stage">
+    <div class="trio" aria-label="MJR">
+      <!-- M — warm-toned; vanishes second -->
+      <div class="person person-m">
+        <span class="letter">M</span>
+        <svg class="fig" viewBox="0 0 260 300" aria-hidden="true"><use href="#manBody" fill="url(#figFadeWarm)"/></svg>
+      </div>
+      <!-- J — slightly bigger, cooler-toned; vanishes first -->
+      <div class="person person-j">
+        <span class="letter">J</span>
+        <svg class="fig" viewBox="0 0 260 300" aria-hidden="true"><use href="#manBody" fill="url(#figFadeCool)"/></svg>
+      </div>
+      <!-- R — neutral; the one who remains, alone, drained of color -->
+      <div class="person person-r">
+        <span class="letter">R</span>
+        <svg class="fig" viewBox="0 0 260 300" aria-hidden="true">
+          <g class="fig-inner">
+            <use href="#manBody" fill="url(#figFade)"/>
+            <use href="#manBody" class="fig-grain" filter="url(#figGrain)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
   </main>
 </body>
 </html>
